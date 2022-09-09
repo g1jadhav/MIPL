@@ -1,0 +1,124 @@
+<resources>
+    <string name="app_name">IQC</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="title_activity_main">MainActivity</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <string name="menu_download">Download</string>
+    <string name="menu_upload">Upload</string>
+    <string name="menu_reports">View Report</string>
+    <string name="menu_logout">Logout</string>
+    <string name="menu_new_market_demo">New Market Demo</string>
+    <string name="menu_update_existing_demo">Update existing demo</string>
+    <string name="upload_new_market_demo">Upload New Market Demo [0]</string>
+    <string name="upload_update_existing_demo">Upload Updated Existing Demo [0]</string>
+
+    <string name="enter_emp_code">Enter Employee Code</string>
+    <string name="enter_pass">Enter Password</string>
+    <string name="login">Login</string>
+    <string name="register">Register New User</string>
+    <string name="forgot_pass">Forgot Password</string>
+    <string name="enter_pass_set">Set Password</string>
+    <string name="register_rg">Register</string>
+    <string name="e_sign">E-Sign</string>
+    <string name="reset_pass">Reset Password</string>
+    <string name="skip_login">Skip Login</string>
+
+    <string name="digital_agreement">Digital Agreement</string>
+    <string name="download_grower_list">Download Grower List</string>
+    <string name="download_cmr_data">Download CMR Data</string>
+    <string name="field_area_tagging">Field Area Tagging</string>
+    <string name="cmr_entry">CMR Entry</string>
+    <string name="cmr_validation">CMR Validation</string>
+    <string name="cmr_update">CMR Update</string>
+    <string name="data_upload_sync">Data Upload/Sync</string>
+    <string name="grower_info">Grower Info</string>
+    <string name="grower_issue">Grower Issues</string>
+    <string name="my_travel">My Travel</string>
+    <string name="be_voice_of_grower">BE - Voice of Grower</string>
+    <string name="voct">VOCT</string>
+    <string name="proceed">Proceed</string>
+
+    <string name="server_error">Something went wrong, Please try again later</string>
+    <string name="no_internet">No Internet</string>
+    <string name="select_season">Please Select Year with season</string>
+    <string name="select_center">"Select center "</string>
+    <string name="select_vender">Select Vendor</string>
+    <string name="select_product">Select Product</string>
+    <string name="get_details">Get Details</string>
+
+    <string name="btn_download_data">Download Data</string>
+    <string name="download_data">Download Data</string>
+    <string name="download">Download</string>
+    <string name="enter_staff_code">Enter Staff Code</string>
+    <string name="enter_tfa_code">Enter TFA Code</string>
+    <string name="download_survey_gw">Download Survey Grower</string>
+    <string name="next">Next</string>
+
+    <string name="upload">Upload</string>
+    <string name="upload_success">Data Uploaded Successfully</string>
+    <string name="saved_to_db">Data Saved to Database Successfully</string>
+
+
+    <!--Image library string-->
+    <string name="no_providers">No providers available to show.</string>
+    <string name="wrong_authority">FileProvider not declared or has wrong authority. (Must be ${applicationId}.com.mahyco.cmr_app.provider, check your AndroidManifest.xml)</string>
+    <string name="activity_destroyed">Activity was destroyed, can\'t handle pick image result.</string>
+    <string name="gallery_app_not_found">Gallery app not found.</string>
+    <string name="loading">Loading...</string>
+    <string name="choose">Choose</string>
+    <string name="camera">Camera</string>
+    <string name="cancel">Cancel</string>
+    <string name="menu_testdata">Test Data</string>
+    <string name="pendingdownload">Pending / Download</string>
+    <string name="menu_pending_actions">Pending Actions</string>
+
+    <string name="trial_code">Trial Code</string>
+    <string name="year">Year</string>
+    <string name="season">Season</string>
+    <string name="crop">Crop</string>
+    <string name="segment">Segment</string>
+    <string name="md_hybrid">MD Hybrid</string>
+    <string name="zone">Zone</string>
+    <string name="state">State</string>
+    <string name="district">District</string>
+    <string name="kit_size">Kit Size</string>
+    <string name="status">Status</string>
+    <string name="Label">Label</string>
+    <string name="action">Action</string>
+    <string name="target_market">Target Market/District Location</string>
+    <string name="sample_kit">Sample Kit Size(in grams)</string>
+    <string name="asign_to">Assign to</string>
+    <string name="blocktaluka">Block / Taluka</string>
+    <string name="village">Village</string>
+    <string name="farmername">Farmer Name</string>
+    <string name="submit">Submit</string>
+    <string name="farmer_mo_no">Farmer Mobile No.</string>
+    <string name="farmer_wa_no">Farmer Whatsapp No.</string>
+    <string name="md_hybrid_name">Market Demo Hybrid Name</string>
+    <string name="check_hybrid_name">Check Hybrid Name</string>
+    <string name="check_hybrid_company">Check Hybrid Company</string>
+    <string name="dos">DOS</string>
+    <string name="dos_full">Date of Sowing(DOS)</string>
+    <string name="dos_underline"><u>Date of Sowing(DOS)</u></string>
+    <string name="geo_tagging">Geo Tagging (only if you are in the field)</string>
+    <string name="geo_tagging_underline"><u>Geo Tagging (only if you are in the field)</u></string>
+    <string name="option">Option</string>
+    <string name="namehybrid">Name of Hybrid</string>
+    <string name="checkhybrid">Check Hybrid</string>
+    <string name="compaycheckhybrid">Company of Check Hyb</string>
+    <string name="demo_quantity">Demo quantity (g)</string>
+    <string name="uniqueSrNo">UniqueSrNo</string>
+    <string name="MDDispatchSegmetnId">MDDispatchSegmetnId</string>
+</resources>

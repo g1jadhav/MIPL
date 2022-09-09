@@ -1,0 +1,524 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.createcorrection.CreateCorrection">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/ll_contractplant"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/textView2ds"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:fontFamily="@font/comforta"
+                            android:text="Contract Plant" />
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/border_style"
+                            android:padding="3dp"
+                            app:cardCornerRadius="3dp"
+                            app:cardPreventCornerOverlap="true"
+                            app:cardUseCompatPadding="true"
+                            app:contentPadding="3dp">
+
+                            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                                android:id="@+id/spinner_contractplant"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+
+
+                        </androidx.cardview.widget.CardView>
+                    </LinearLayout>
+
+
+
+                    <TextView
+                        android:id="@+id/textView1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="@font/comforta"
+                        android:text="Inspection Date" />
+
+                    <EditText
+                        android:id="@+id/et_investigationdate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/border_style"
+                        android:focusable="false"
+                        android:padding="10dp"></EditText>
+
+                    <TextView
+                        android:id="@+id/textView2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="@font/comforta"
+                        android:text="Process" />
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/border_style"
+                        android:padding="3dp"
+                        app:cardCornerRadius="3dp"
+                        app:cardPreventCornerOverlap="true"
+                        app:cardUseCompatPadding="true"
+                        app:contentPadding="3dp">
+
+                        <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                            android:id="@+id/spinner_process"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:id="@+id/textView3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="@font/comforta"
+                        android:text="Crop" />
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="3dp"
+                        app:cardCornerRadius="3dp"
+                        app:cardPreventCornerOverlap="true"
+                        app:cardUseCompatPadding="true"
+                        app:contentPadding="3dp">
+
+                        <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                            android:id="@+id/spinner_crop"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:id="@+id/textView4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="@font/comforta"
+                        android:text="Hybrid" />
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="3dp"
+                        app:cardCornerRadius="3dp"
+                        app:cardPreventCornerOverlap="true"
+                        app:cardUseCompatPadding="true"
+                        app:contentPadding="3dp">
+
+                        <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                            android:id="@+id/spinner_hybrid"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:id="@+id/textView5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="@font/comforta"
+                        android:text="Batch No." />
+
+                    <EditText
+                        android:id="@+id/et_batchno"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/border_style"
+                        android:inputType="text"
+                        android:padding="10dp"></EditText>
+
+                    <TextView
+                        android:id="@+id/textView6"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="@font/comforta"
+                        android:text="Check Points" />
+
+                    <Button
+                        android:id="@+id/btn_checkpoint"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Add Check Points" />
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:padding="3dp"
+                        app:cardCornerRadius="3dp"
+                        app:cardPreventCornerOverlap="true"
+                        app:cardUseCompatPadding="true"
+                        app:contentPadding="3dp">
+
+                        <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                            android:id="@+id/spinner_checkpoint"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:soundEffectsEnabled="true" />
+
+                        <LinearLayout
+                            android:id="@+id/ll_checkpoint"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/txt_selectedCheckPoint"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:fontFamily="@font/comforta"
+                                android:text="Check Point List"
+
+                                />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:id="@+id/textView7"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="@font/comforta"
+                        android:text="Is NC Type" />
+
+                    <Switch
+                        android:id="@+id/switch_isinctype"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:fontFamily="@font/comforta"
+                        android:padding="10dp"
+                        android:text="Is NC type Enabled ?" />
+
+                    <LinearLayout
+                        android:id="@+id/ll"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/textView7s"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_marginTop="5dp"
+                            android:fontFamily="@font/comforta"
+                            android:text="NC Type" />
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:padding="3dp"
+                            app:cardCornerRadius="3dp"
+                            app:cardPreventCornerOverlap="true"
+                            app:cardUseCompatPadding="true"
+                            app:contentPadding="3dp">
+
+                            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                                android:id="@+id/spinner_nc_type"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+                        </androidx.cardview.widget.CardView>
+
+                        <TextView
+                            android:id="@+id/textView8"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_marginTop="5dp"
+                            android:fontFamily="@font/comforta"
+                            android:text="Upoad Images" />
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:padding="5dp"
+                            app:cardCornerRadius="5dp"
+                            app:cardPreventCornerOverlap="true"
+                            app:cardUseCompatPadding="true"
+                            app:contentPadding="5dp">
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:orientation="horizontal"
+                                android:weightSum="12">
+
+                                <ImageButton
+                                    android:id="@+id/imageButton"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="2"
+                                    android:background="#00000000"
+                                    android:onClick="capture_image"
+                                    android:padding="7dp"
+                                    android:scaleType="fitCenter"
+                                    app:srcCompat="@drawable/ic_baseline_photo_camera_24" />
+
+                                <TextView
+                                    android:id="@+id/txt_img_nctype"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="8"
+                                    android:fontFamily="@font/comforta"
+                                    android:gravity="center_vertical"
+                                    android:onClick="capture_image"
+                                    android:padding="5dp"
+                                    android:text="Capture Image"
+                                    android:textColor="#2E7D32"
+                                    android:textSize="10sp" />
+
+                                <ImageButton
+                                    android:id="@+id/imageButton2"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="2"
+                                    android:background="#00000000"
+                                    android:onClick="uploadncimage"
+                                    android:padding="7dp"
+                                    android:scaleType="fitCenter"
+                                    app:srcCompat="@drawable/ic_baseline_cloud_upload_24" />
+
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+
+                        <TextView
+                            android:id="@+id/textView9"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_marginTop="5dp"
+                            android:fontFamily="@font/comforta"
+                            android:text="Upload Videos" />
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:padding="5dp"
+                            app:cardCornerRadius="5dp"
+                            app:cardPreventCornerOverlap="true"
+                            app:cardUseCompatPadding="true"
+                            app:contentPadding="5dp">
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:orientation="horizontal"
+                                android:weightSum="12">
+
+                                <ImageButton
+                                    android:id="@+id/imageButtoan"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="2"
+                                    android:background="#00000000"
+                                    android:onClick="capture_video"
+                                    android:padding="7dp"
+                                    android:scaleType="fitCenter"
+                                    app:srcCompat="@drawable/ic_baseline_videocam_24" />
+
+                                <TextView
+                                    android:id="@+id/txt_video_nctype"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="8"
+                                    android:fontFamily="@font/comforta"
+                                    android:gravity="center_vertical"
+                                    android:onClick="capture_video"
+                                    android:padding="5dp"
+                                    android:text="Capture Video"
+                                    android:textColor="#2E7D32"
+                                    android:textSize="10sp" />
+
+                                <ImageButton
+
+                                    android:id="@+id/imageButtaon2"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="2"
+                                    android:background="#00000000"
+                                    android:onClick="uploadvideo"
+                                    android:padding="7dp"
+                                    android:scaleType="fitCenter"
+                                    app:srcCompat="@drawable/ic_baseline_cloud_upload_24" />
+
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+
+                        <TextView
+                            android:id="@+id/textView10"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:fontFamily="@font/comforta"
+                            android:text="Observation" />
+
+                        <EditText
+                            android:id="@+id/et_observation"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/border_style"
+                            android:padding="10dp"></EditText>
+
+                        <TextView
+                            android:id="@+id/textView11"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_marginTop="5dp"
+                            android:fontFamily="@font/comforta"
+                            android:text="Activity Owner" />
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:padding="5dp"
+                            app:cardCornerRadius="5dp"
+                            app:cardPreventCornerOverlap="true"
+                            app:cardUseCompatPadding="true"
+                            app:contentPadding="10dp">
+
+                            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                                android:id="@+id/spinner_owner"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+                        </androidx.cardview.widget.CardView>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_remark"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/textView12"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:fontFamily="@font/comforta"
+                            android:text="Remark" />
+
+                        <EditText
+                            android:id="@+id/et_remark"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/border_style"
+                            android:padding="10dp"></EditText>
+
+                        <TextView
+                            android:id="@+id/textView13"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:fontFamily="@font/comforta"
+                            android:text="Uplaod Image" />
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            app:cardCornerRadius="5dp"
+                            app:cardPreventCornerOverlap="true"
+                            app:cardUseCompatPadding="true"
+                            app:contentPadding="10dp">
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:orientation="horizontal"
+                                android:weightSum="12">
+
+                                <ImageButton
+                                    android:id="@+id/imageButdtons"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="2"
+                                    android:background="#00000000"
+                                    android:onClick="imagecapture"
+                                    android:padding="7dp"
+                                    android:scaleType="fitCenter"
+                                    app:srcCompat="@drawable/ic_baseline_photo_camera_24" />
+
+                                <TextView
+                                    android:id="@+id/txt_img"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="8"
+                                    android:fontFamily="@font/comforta"
+                                    android:gravity="center_vertical"
+                                    android:onClick="imagecapture"
+                                    android:padding="5dp"
+                                    android:text="Capture Image"
+                                    android:textColor="#2E7D32"
+                                    android:textSize="10sp" />
+
+                                <ImageButton
+                                    android:id="@+id/imageBssutton2"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="2"
+                                    android:background="#00000000"
+                                    android:onClick="uploadimage"
+                                    android:padding="7dp"
+                                    android:scaleType="fitCenter"
+                                    app:srcCompat="@drawable/ic_baseline_cloud_upload_24" />
+
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+                    </LinearLayout>
+
+
+                    <Button
+                        android:id="@+id/btn_submit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+
+
+                        android:text="Submit" />
+
+
+                </LinearLayout>
+            </ScrollView>
+
+
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

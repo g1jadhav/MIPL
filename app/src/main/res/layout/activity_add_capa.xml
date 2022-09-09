@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.rca_capa.AddCapaActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center|top"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btn_choosefile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableRight="@drawable/ic_menu_gallery"
+            android:text="Choose File " />
+
+        <TextView
+            android:id="@+id/txt_selectedfilepath"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="-" />
+
+        <Button
+            android:id="@+id/btn_uploadfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableRight="@drawable/ic_baseline_cloud_upload_24"
+            android:text="Upload" />
+
+        <TextView
+            android:id="@+id/txt_uploadstatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/comforta"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="-"
+            android:textColor="#FF8F00"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+</RelativeLayout>

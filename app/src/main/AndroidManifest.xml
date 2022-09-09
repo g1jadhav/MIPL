@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="mahyco.iqc.nxg">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/logo"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/logo"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.MahycoMarketDemo"
+        android:usesCleartextTraffic="true">
+
+        <activity android:name=".view.createcorrection.CreateCorrection"
+            android:screenOrientation="portrait"></activity>
+
+        <activity android:name=".view.correctionlist.CorrectionList"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".view.rca_capa.AddCapaActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".view.observationlist.ObservationList"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".view.investigation.CreateInvestigation"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".view.login.Login"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.MahycoMarketDemo.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.MahycoMarketDemo.NoActionBar" />
+
+        <activity
+            android:name=".view.actionlist.PendingActionList"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.MahycoMarketDemo.NoActionBar" />
+
+        <provider
+            android:name="com.vansuita.pickimage.provider.PickImageFileProvider"
+            android:authorities="${applicationId}.com.vansuita.pickimage.provider"
+            android:exported="false"
+            android:grantUriPermissions="true"
+            tools:replace="android:authorities">
+
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/picker_provider_paths" />
+
+        </provider>
+
+    </application>
+
+</manifest>
