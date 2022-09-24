@@ -16,11 +16,16 @@ import android.os.StrictMode;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.JsonObject;
+import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 import com.vansuita.pickimage.bean.PickResult;
 import com.vansuita.pickimage.bundle.PickSetup;
 import com.vansuita.pickimage.dialog.PickImageDialog;
@@ -31,9 +36,13 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import mahyco.iqc.nxg.R;
+import mahyco.iqc.nxg.model.ActionTypeModel;
+import mahyco.iqc.nxg.model.CheckPoint;
+import mahyco.iqc.nxg.model.FileModel;
 import mahyco.iqc.nxg.util.Constants;
 import mahyco.iqc.nxg.util.FileHelper;
 import mahyco.iqc.nxg.util.MultipartUtility;
@@ -48,6 +57,13 @@ public class AddCapaActivity extends AppCompatActivity implements View.OnClickLi
      String file_path="";
 String inspectionid="0";
 String userCode;
+String str_remark="",str_actiontype_value="";
+int str_actiontype_id=0;
+ArrayList<ActionTypeModel> action_type;
+EditText et_remark;
+SearchableSpinner spinner_action_type;
+ArrayAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,14 +71,48 @@ String userCode;
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle("RCA/CAPA");
         context=AddCapaActivity.this;
+        action_type=new ArrayList<>();
+        ActionTypeModel actionTypeModel0=new ActionTypeModel();
+        actionTypeModel0.setId(0);
+        actionTypeModel0.setValue("Select");
+
+        ActionTypeModel actionTypeModel1=new ActionTypeModel();
+        actionTypeModel1.setId(1);
+        actionTypeModel1.setValue("RCA");
+
+        ActionTypeModel actionTypeModel2=new ActionTypeModel();
+        actionTypeModel2.setId(2);
+        actionTypeModel2.setValue("CAPA");
+ action_type.add(actionTypeModel0);
+ action_type.add(actionTypeModel1);
+ action_type.add(actionTypeModel2);
 
         btn_choosefile=findViewById(R.id.btn_choosefile);
                 btn_uplaodfile=findViewById(R.id.btn_uploadfile);
         txt_uploadstatus=findViewById(R.id.txt_uploadstatus);
                 txt_filepath=findViewById(R.id.txt_selectedfilepath);
+                et_remark=findViewById(R.id.et_remark);
+                spinner_action_type=findViewById(R.id.spinner_actiontype);
+                adapter=  new ArrayAdapter(context, android.R.layout.simple_list_item_1, action_type);
+spinner_action_type.setTitle("Select Action Type");
+spinner_action_type.setAdapter(adapter);
+spinner_action_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        ActionTypeModel actionTypeModel = (ActionTypeModel) adapterView.getSelectedItem();
+        Toast.makeText(context, actionTypeModel.getId()+"-"+actionTypeModel.getValue(), Toast.LENGTH_SHORT).show();
+    str_actiontype_id=actionTypeModel.getId();
+    str_actiontype_value=""+actionTypeModel.getValue();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
+});
 
 
-         btn_choosefile.setOnClickListener(this);
+        btn_choosefile.setOnClickListener(this);
          btn_uplaodfile.setOnClickListener(this);
 
         inspectionid= Preferences.get(context,Preferences.PROCESSINSPECTIONID).toString().trim();
@@ -97,7 +147,24 @@ String userCode;
     void uploadFile() {
 
         try {
-            new UploadFile().execute(file_path);
+
+
+            str_remark=et_remark.getText().toString().trim();
+
+            if(str_actiontype_id==0)
+            {
+                Toast.makeText(context, "Choose Action type.", Toast.LENGTH_SHORT).show();
+            }else if(str_remark.equals(""))
+            {
+                et_remark.setError("Please enter something...");
+            }
+            else if(file_path.trim().equals(""))
+            {
+                Toast.makeText(context, "Choose File..", Toast.LENGTH_SHORT).show();
+            }
+            else {
+                new UploadFile().execute(file_path);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -131,8 +198,10 @@ String userCode;
 
                                 String filePath= FileHelper.getRealPathFromURI(context,uri);
                                 file_path = filePath;
+                                File file=new File(filePath);
+
                                 txt_filepath.setText(filePath);
-                                Log.i("File path",filePath);
+                                Log.i("File path",filePath+" Size"+file.exists());
 
                             }
 
@@ -162,9 +231,9 @@ String userCode;
             progressDialog.dismiss();
             try {
                 List<String> response = (List) o;
-                Log.v("rht", "SERVER REPLIED:");
+                Log.v("rht", "SERVER REPLIED:"+response.size());
                 for (String line : response) {
-                    Log.v("rht", "Line : " + line);
+                    Log.i("rht", "Line : " + line);
                   /*  try {
                         JSONArray jsonArray = new JSONArray(line);
                         for (int i = 0; i < jsonArray.length(); i++) {
@@ -187,7 +256,7 @@ String userCode;
                     txt_uploadstatus.setText("File Uploaded Successfully..");
 
             } catch (Exception e) {
-
+Log.i("Post Execute",e.getMessage());
             }
         }
 
@@ -210,32 +279,30 @@ String userCode;
                 StrictMode.setThreadPolicy(policy);
                 String charset = "UTF-8";
                 File uploadFile1 = new File(objects[0].toString().trim());
-                String requestURL = Constants.BASE_URL + "rCA_CAPA/create";
+                String requestURL = "http://10.80.50.153/IQCTest/api/rCA_CAPA/create";
                 MultipartUtility multipart = new MultipartUtility(requestURL, charset);
 //            multipart.addHeaderField("User-Agent", "CodeJava");
 //            multipart.addHeaderField("Test-Header", "Header-Value");
                 // multipart.addFormField("friend_id", "Cool Pictures");
                 String UplaodType = "PDF";
-
+Log.i("Added",uploadFile1.exists()+" "+UplaodType+" "+inspectionid+" "+userCode+" "+str_remark+" "+str_actiontype_value );
                 multipart.addFormField("FileType", UplaodType);
                 multipart.addFormField("PlantInspectionId", inspectionid);
                 multipart.addFormField("CreatedBy", userCode);
+                multipart.addFormField("Remark", str_remark);
+                multipart.addFormField("CategoryType", str_actiontype_value);
                 multipart.addFilePart("UploadFile", uploadFile1);
-                multipart.addFormField("Status", "");
-/*
+                multipart.addFormField("Status", "True");
 
-                for(FileModel fileModel:files) {
-                    multipart.addFormField("FileType", fileModel.getType());
-                    multipart.addFilePart("UploadFile", fileModel.getFile());
-                }
 
- */
+
 
 
                 List<String> response = multipart.finish();
+               // Log.i("Response",response);
                 return response;
             } catch (Exception e) {
-
+                Log.i("Error",e.getMessage());
             }
 
             return null;

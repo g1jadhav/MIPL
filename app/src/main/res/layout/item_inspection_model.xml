@@ -36,11 +36,33 @@
 
 
             <!--Download Button-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/comforta"
+                    android:text="Ref.No.:" />
+
+                <TextView
+                    android:id="@+id/txt_code"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/comforta"
+                    android:paddingLeft="10dp"
+                    android:text="-"
+                    android:textColor="#EF6C00" />
+            </LinearLayout>
+
             <View
 
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="?android:attr/listDivider" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -224,7 +246,7 @@
                     android:id="@+id/btn_addcapa"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Add CAPA" />
+                    android:text="ACTION" />
 
             </LinearLayout>
 

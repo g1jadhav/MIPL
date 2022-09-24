@@ -72,7 +72,7 @@ public class ProcessInspectionAdapter extends RecyclerView.Adapter<ProcessInspec
     public void onBindViewHolder(final DataObjectHolder holder, final int position) {
         try {
             ProcessInspectionModel actionModel = actionModelArrayList.get(position);
-
+            holder.txt_code.setText(""+actionModel.getPlantInspectionId());
             holder.txt_planttitle.setText(actionModel.getPlantTitle());
             holder.txt_processtitle.setText(actionModel.getProcessTitle());
             holder.txt_remark.setText(actionModel.getRemark());
@@ -102,11 +102,12 @@ public class ProcessInspectionAdapter extends RecyclerView.Adapter<ProcessInspec
         LinearLayout ll;
 
 
-        TextView txt_planttitle,txt_processtitle,txt_remark,txt_hybridtitle,txt_croptitle;
+        TextView txt_planttitle,txt_processtitle,txt_remark,txt_hybridtitle,txt_croptitle,txt_code;
 Button btn_addcapa;
         public DataObjectHolder(View itemView) {
             super(itemView);
             txt_planttitle=(TextView) itemView.findViewById(R.id.txt_planttitle);
+            txt_code=(TextView) itemView.findViewById(R.id.txt_code);
                     txt_processtitle=(TextView) itemView.findViewById(R.id.txt_processtitle);
             txt_remark=(TextView) itemView.findViewById(R.id.txt_remark);
                     txt_hybridtitle=(TextView) itemView.findViewById(R.id.txt_hybridtitle);

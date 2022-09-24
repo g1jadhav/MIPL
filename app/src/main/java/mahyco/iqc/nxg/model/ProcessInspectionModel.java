@@ -121,6 +121,15 @@ public class ProcessInspectionModel {
         HybridTitle = hybridTitle;
     }
 
+    public int getPlantInspectionId() {
+        return PlantInspectionId;
+    }
+
+    public void setPlantInspectionId(int plantInspectionId) {
+        PlantInspectionId = plantInspectionId;
+    }
+
+    int PlantInspectionId;
     int PlantId;//": 1,
     int ActivityOwnerId;//": 1,
     int ProcessId;//": 1,

@@ -55,6 +55,7 @@ import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -167,6 +168,15 @@ public class CreateInvestigation extends AppCompatActivity implements CreateInve
         sp_checkpoint = findViewById(R.id.spinner_checkpoint);
         sp_nctype = findViewById(R.id.spinner_nc_type);
         sp_owner = findViewById(R.id.spinner_owner);
+
+        sp_process.setTitle("Select Process");
+        sp_crop.setTitle("Select Crop");
+        sp_hybrid.setTitle("Select Hybrid");
+        sp_checkpoint.setTitle("Select Checkpoint");
+        sp_nctype.setTitle("Select NC Type");
+        sp_owner.setTitle("Select Activity Owner");
+
+
         switch_isNCType = findViewById(R.id.switch_isinctype);
         sp_contractplant = findViewById(R.id.spinner_contractplant);
         ll = findViewById(R.id.ll);
@@ -376,6 +386,7 @@ public class CreateInvestigation extends AppCompatActivity implements CreateInve
 
                     dialog_checkpoints = new Dialog(context);
                     dialog_checkpoints.setContentView(R.layout.popup_checkpointlist);
+                    dialog_checkpoints.setCanceledOnTouchOutside(false);
                     ImageView img_close = dialog_checkpoints.findViewById(R.id.img_close);
                     img_close.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -435,8 +446,8 @@ public class CreateInvestigation extends AppCompatActivity implements CreateInve
             ImageView imageView1, imageView2, imageView3, imageView4, imageView5;
             Button upload1, upload2, upload3, upload4, upload5;
             TextView txt_title;
-            Toast.makeText(context, "hi", Toast.LENGTH_SHORT).show();
             dialog_checkpointimages = new Dialog(context);
+
             dialog_checkpointimages.setCanceledOnTouchOutside(false);
             dialog_checkpointimages.setContentView(R.layout.popup_checkpointlist_images);
 
@@ -846,6 +857,7 @@ public class CreateInvestigation extends AppCompatActivity implements CreateInve
         try {
 
             ArrayAdapter userAdapter = new ArrayAdapter(this, R.layout.spinner, result);
+            sp_owner.setTitle("Select Activity Owner");
             sp_owner.setAdapter(userAdapter);
             sp_owner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
