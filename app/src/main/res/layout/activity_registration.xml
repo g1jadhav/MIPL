@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/login_background">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/registration_version_code"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:orientation="vertical">
+
+            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                android:id="@+id/registration_country_drop_down"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/login_spinner_style"
+                android:entries="@array/country_array"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:spinnerMode="dropdown" />
+
+            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                android:id="@+id/usertype"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/login_spinner_style"
+                android:entries="@array/usertype"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:spinnerMode="dropdown" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                app:boxBackgroundMode="none">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/staff_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:background="@drawable/login_screen_edittext"
+                    android:drawableStart="@drawable/user_name"
+                    android:drawablePadding="20dp"
+                    android:hint="@string/staff_name"
+                    android:imeOptions="actionNext"
+                    android:inputType="textCapCharacters"
+                    android:padding="10dp"
+                    android:textColor="@color/black_color" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                app:boxBackgroundMode="none">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/staff_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:background="@drawable/login_screen_edittext"
+                    android:drawableStart="@drawable/user_name"
+                    android:drawablePadding="20dp"
+                    android:hint="@string/staff_id"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:padding="10dp"
+                    android:textColor="@color/black_color" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                app:boxBackgroundMode="none">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/mobile_no"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:background="@drawable/login_screen_edittext"
+                    android:drawableStart="@drawable/phone_android"
+                    android:drawablePadding="20dp"
+                    android:hint="@string/mobile_number"
+                    android:imeOptions="actionNext"
+                    android:inputType="phone"
+                    android:padding="10dp"
+                    android:textColor="@color/black_color" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                app:boxBackgroundMode="none">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/emailid"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:background="@drawable/login_screen_edittext"
+                    android:drawableStart="@drawable/email"
+                    android:drawablePadding="20dp"
+                    android:hint="Email Id"
+                    android:imeOptions="actionNext"
+                    android:inputType="textEmailAddress"
+                    android:padding="10dp"
+                    android:textColor="@color/black_color" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                app:boxBackgroundMode="none">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/registration_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:background="@drawable/login_screen_edittext"
+                    android:drawableStart="@drawable/password"
+                    android:drawablePadding="20dp"
+                    android:hint="@string/password"
+                    android:imeOptions="actionNext"
+                    android:inputType="textPassword"
+                    android:padding="10dp"
+                    android:textColor="@color/black_color" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                app:boxBackgroundMode="none">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/registration_confirm_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:background="@drawable/login_screen_edittext"
+                    android:drawableStart="@drawable/password"
+                    android:drawablePadding="20dp"
+                    android:hint="@string/confirm_password"
+                    android:imeOptions="actionDone"
+                    android:inputType="textPassword"
+                    android:padding="10dp"
+                    android:textColor="@color/black_color" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/registration_submit_btn"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/login_btn"
+                android:text="@string/submit"
+                android:onClick="submit"
+                android:textColor="@color/white_color" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/registration_version_code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="end"
+        android:padding="10dp"
+        android:textColor="@color/btn_color"
+        android:textSize="15sp"
+        android:textStyle="bold" />
+</RelativeLayout>

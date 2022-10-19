@@ -1,15 +1,5 @@
 <resources>
-    <string name="app_name">IQC</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
 
-    <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
     <string name="title_activity_main">MainActivity</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -26,7 +16,6 @@
 
     <string name="enter_emp_code">Enter Employee Code</string>
     <string name="enter_pass">Enter Password</string>
-    <string name="login">Login</string>
     <string name="register">Register New User</string>
     <string name="forgot_pass">Forgot Password</string>
     <string name="enter_pass_set">Set Password</string>
@@ -36,7 +25,6 @@
     <string name="skip_login">Skip Login</string>
 
     <string name="digital_agreement">Digital Agreement</string>
-    <string name="download_grower_list">Download Grower List</string>
     <string name="download_cmr_data">Download CMR Data</string>
     <string name="field_area_tagging">Field Area Tagging</string>
     <string name="cmr_entry">CMR Entry</string>
@@ -49,8 +37,6 @@
     <string name="be_voice_of_grower">BE - Voice of Grower</string>
     <string name="voct">VOCT</string>
     <string name="proceed">Proceed</string>
-
-    <string name="server_error">Something went wrong, Please try again later</string>
     <string name="no_internet">No Internet</string>
     <string name="select_season">Please Select Year with season</string>
     <string name="select_center">"Select center "</string>
@@ -60,13 +46,13 @@
 
     <string name="btn_download_data">Download Data</string>
     <string name="download_data">Download Data</string>
-    <string name="download">Download</string>
+
     <string name="enter_staff_code">Enter Staff Code</string>
     <string name="enter_tfa_code">Enter TFA Code</string>
     <string name="download_survey_gw">Download Survey Grower</string>
     <string name="next">Next</string>
 
-    <string name="upload">Upload</string>
+
     <string name="upload_success">Data Uploaded Successfully</string>
     <string name="saved_to_db">Data Saved to Database Successfully</string>
 
@@ -86,24 +72,23 @@
 
     <string name="trial_code">Trial Code</string>
     <string name="year">Year</string>
-    <string name="season">Season</string>
-    <string name="crop">Crop</string>
+
     <string name="segment">Segment</string>
     <string name="md_hybrid">MD Hybrid</string>
     <string name="zone">Zone</string>
     <string name="state">State</string>
-    <string name="district">District</string>
+
     <string name="kit_size">Kit Size</string>
     <string name="status">Status</string>
-    <string name="Label">Label</string>
+    <string name="Label">Label</string>6
     <string name="action">Action</string>
     <string name="target_market">Target Market/District Location</string>
     <string name="sample_kit">Sample Kit Size(in grams)</string>
     <string name="asign_to">Assign to</string>
     <string name="blocktaluka">Block / Taluka</string>
-    <string name="village">Village</string>
+
     <string name="farmername">Farmer Name</string>
-    <string name="submit">Submit</string>
+
     <string name="farmer_mo_no">Farmer Mobile No.</string>
     <string name="farmer_wa_no">Farmer Whatsapp No.</string>
     <string name="md_hybrid_name">Market Demo Hybrid Name</string>
@@ -121,4 +106,210 @@
     <string name="demo_quantity">Demo quantity (g)</string>
     <string name="uniqueSrNo">UniqueSrNo</string>
     <string name="MDDispatchSegmetnId">MDDispatchSegmetnId</string>
+
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="app_name">MIPL Production</string>
+
+    <string name="logout">Logout</string>
+    <string name="logout_msg">Are you sure you want to logout?</string>
+    <string name="permission_string">You have forcefully denied some of the required permissions for this action. Please open settings, go to permissions and allow them.</string>
+
+    <string name="went_wrong">Something went wrong.</string>
+    <string name="server_error">Server error please try again</string>
+
+    <string name="err_internet">Please check your internet connection!</string>
+    <string name="err_request_timeout">Request Timeout!</string>
+    <string name="err_common">Please try again!</string>
+    <string name="login">Login</string>
+    <string name="user_name">User Name</string>
+    <string name="password">Password</string>
+    <string name="version_code"> Version: %d</string>
+    <string name="welcome_back">Welcome back!</string>
+    <string name="sign_in_to_your_account">Sign in to your account</string>
+    <string name="new_user_registration">User\nRegistration</string>
+    <string name="staff_name">Staff Name</string>
+    <string name="staff_id">Staff Id</string>
+    <string name="mobile_no">Mobile No.<font color='#FF0000'>*</font></string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="submit">Submit</string>
+    <string name="Please_enter_user_name">Please enter user name</string>
+    <string name="Please_enter_password">Please enter password</string>
+    <string name="Please_enter_staff_name">Please enter staff name</string>
+    <string name="Please_enter_staff_id">Please enter staff id</string>
+    <string name="Please_enter_mobile_no">Please enter mobile no.</string>
+    <string name="Please_enter_unique_code">Please enter unique code</string>
+    <string name="Please_enter_confirm_password">Please enter confirm password</string>
+    <string name="password_confirm_password_not_match">Your password and confirmation password do not match.</string>
+    <string name="Please_select_country">Please select country</string>
+    <string name="Please_select_district">Please select district</string>
+    <string name="Please_select_epa_ward">Please select EPA (Ward)</string>
+    <string name="Please_select_section">Please select section</string>
+    <string name="Please_select_village">Please select village</string>
+    <string name="Please_select_province">Please select province</string>
+    <string name="Please_select_region">Please select region</string>
+    <string name="Please_select_planting_year">Please select planting year</string>
+    <string name="Please_enter_landmark">Please enter landmark</string>
+    <string name="Please_enter_farmer_name">Please enter farmer name</string>
+    <string name="Please_enter_gender">Please enter gender</string>
+    <string name="Please_enter_date_of_birth">Please enter date of birth</string>
+    <string name="please_wait">Please wait.....</string>
+    <string name="empty_device_id">Empty device id</string>
+    <string name="forgot_password">Forgot Password</string>
+    <string name="enter_email_address">Enter email address</string>
+    <string name="Please_enter_email_address">Please enter email address</string>
+    <string name="Please_enter_valid_email_address">Please valid enter email address</string>
+    <string name="new_grower_registration">New Grower Registration</string>
+    <string name="new_organizer_registration">New Organizer Registration</string>
+    <string name="download_parent_seed_stock">Download Parent Seed Stock</string>
+    <string name="parent_seed_distribution">Parent Seed Distribution</string>
+    <string name="download_grower_list">Download Grower List</string>
+    <string name="home">Home</string>
+    <string name="country">Country<font color='#FF0000'>*</font></string>
+    <string name="region">Region<font color='#FF0000'>*</font></string>
+    <string name="province">ADD (Province)<font color='#FF0000'>*</font></string>
+    <string name="district">District<font color='#FF0000'>*</font></string>
+    <string name="epa">EPA (Ward)<font color='#FF0000'>*</font></string>
+    <string name="section">Section<font color='#FF0000'>*</font></string>
+    <string name="village">Village<font color='#FF0000'>*</font></string>
+    <string name="landmark">Landmark<font color='#FF0000'>*</font></string>
+    <string name="enter_landmark">Enter Landmark</string>
+    <string name="farmer_name">Farmer Name<font color='#FF0000'>*</font></string>
+    <string name="grower_name">Grower Name<font color='#FF0000'>*</font></string>
+    <string name="enter_farmer_name">Enter Full Name</string>
+    <string name="dob">DOB<font color='#FF0000'>*</font></string>
+    <string name="enter_dob">Enter DOB</string>
+    <string name="enter_mobile_no">Enter Mobile No.</string>
+    <string name="unique_code">Unique Code<font color='#FF0000'>*</font></string>
+    <string name="unique_id">Unique Id<font color='#FF0000'>*</font></string>
+    <string name="enter_unique_id">Enter Unique Id</string>
+    <string name="enter_unique_code">Enter Unique Code</string>
+    <string name="date_of_registration">Date of Registration<font color='#FF0000'>*</font></string>
+    <string name="enter_date_of_registration">Enter Date of Registration</string>
+    <string name="staff_name_and_id">Staff Name and ID<font color='#FF0000'>*</font></string>
+    <string name="scan">Open Scanner</string>
+    <string name="grower_photo">Capture Photo<font color='#FF0000'>*</font></string>
+    <string name="organizer_photo">Organizer Photo<font color='#FF0000'>*</font></string>
+    <string name="Please_enter_organizer_name">Please enter organizer name</string>
+    <string name="please_grower_photo">Please Capture Photo</string>
+    <string name="photo_not_captured">No photo captured<font color='#FF0000'>*</font></string>
+    <string name="national_id_photo_front">Capture National ID Photo Front Side</string>
+    <string name="please_capture_national_id_photo_front">Please Capture National ID Photo Front Side</string>
+    <string name="please_capture_national_id_photo_back">Please Capture National ID Photo Back Side</string>
+    <string name="national_id_photo_back">Capture National ID Photo Back Side</string>
+    <string name="address">Address<font color='#FF0000'>*</font></string>
+    <string name="planting_year">Planting Year<font color='#FF0000'>*</font></string>
+    <string name="season">Season<font color='#FF0000'>*</font></string>
+    <string name="crop">Crop<font color='#FF0000'>*</font></string>
+    <string name="production_code">Production Code<font color='#FF0000'>*</font></string>
+    <string name="seed_production_area_ha">Seed Production area (Ha)<font color='#FF0000'>*</font></string>
+    <string name="parent_seed_issue_location">Parent Seed Issue Location<font color='#FF0000'>*</font></string>
+    <string name="parent_seed_batch_no_female_variety">Parent Seed Batch No. Female/Variety<font color='#FF0000'>*</font></string>
+    <string name="parent_seed_batch_no_male">Parent Seed Batch No. Male<font color='#FF0000'>*</font></string>
+    <string name="parent_seed_issue_date">Parent seed Issue Date<font color='#FF0000'>*</font></string>
+    <string name="parent_seed_distribution_by_staff">Parent Seed Distribution By Staff<font color='#FF0000'>*</font></string>
+    <string name="Please_select_season">Please select season</string>
+    <string name="Please_select_crop">Please select crop</string>
+    <string name="Please_select_production_code">Please select production code</string>
+    <string name="Please_select_seed_prod_area">Please select seed production area</string>
+    <string name="Please_select_parent_seed_location">Please select parent seed issue location</string>
+    <string name="Please_select_female_batch_no">Please select parent seed batch no. female/variety</string>
+    <string name="Please_select_male_batch_no">Please select parent seed batch no. male</string>
+    <string name="field_monitoring_report_entry">Field Monitoring Report Entry</string>
+    <string name="upload_data">Data Upload</string>
+    <string name="user_registration">User Registration</string>
+    <string name="grower_search">Grower Search</string>
+    <string name="download">Download</string>
+    <string name="production_cluster">Production Cluster<font color='#FF0000'>*</font></string>
+    <string name="center">Center<font color='#FF0000'>*</font></string>
+    <string name="staff_code">Staff Code<font color='#FF0000'>*</font></string>
+    <string name="field_staff_code">Field Staff Code<font color='#FF0000'>*</font></string>
+    <string name="mobile_number">Mobile No.</string>
+    <string name="gender">Gender<font color='#FF0000'>*</font></string>
+    <string name="enter_gender">Enter Gender</string>
+    <string name="direct_to_grower">Direct to Grower</string>
+    <string name="by_organiser">By Organizer</string>
+    <string name="organizer_name">Organizer Name<font color='#FF0000'>*</font></string>
+    <string name="enter_organizer_name">Enter Organizer Name</string>
+    <string name="Please_select_organizer_name">Please select organizer name</string>
+    <string name="please_organizer_photo">Please capture organizer photo</string>
+    <string name="no_of_records_for_upload">No. of Records for upload =</string>
+    <string name="upload">Upload</string>
+    <string name="mandatory_field_visit_1st">Mandatory Field Visit-1st</string>
+    <string name="mandatory_field_visit_2nd">Mandatory Field Visit-2nd</string>
+    <string name="mandatory_field_visit_3rd">Mandatory Field Visit-3rd</string>
+    <string name="mandatory_field_visit_4th">Mandatory Field Visit-4th</string>
+    <string name="optional_field_visit">Optional Field Visit </string>
+    <string name="filter">Filter</string>
+    <string name="save">Save</string>
+    <string name="issued_seed_area_ha">Issued Seed area (Ha:)<font color='#FF0000'>*</font></string>
+    <string name="seed_area_is_totally_lost">Seed area is totally lost<font color='#FF0000'>*</font></string>
+    <string name="seed_production_area_tagging">Seed Production Area Tagging</string>
+    <string name="field_no">Field No.<font color='#FF0000'>*</font></string>
+    <string name="tagged_area_ha">Tagged area (Ha)<font color='#FF0000'>*</font></string>
+    <string name="optional_field_visit_no">Optional Field Visit No.<font color='#FF0000'>*</font></string>
+    <string name="crop_stage">Crop Stage<font color='#FF0000'>*</font></string>
+    <string name="reason_for_optional_visit">Reason for Optional Visit<font color='#FF0000'>*</font></string>
+    <string name="enter_reason_for_optional_visit">Enter Reason for Optional Visit</string>
+    <string name="grower_s_mobile_no">Mobile No.<font color='#FF0000'>*</font></string>
+    <string name="recommendations_and_observations">Recommendations and Observations<font color='#FF0000'>*</font></string>
+    <string name="date_of_field_visit">Date of field visit<font color='#FF0000'>*</font></string>
+    <string name="geotag_of_location">Geotag of location<font color='#FF0000'>*</font></string>
+    <string name="enter_grower_mobile_no">Enter Mobile No.</string>
+    <string name="enter_recommendations_and_observations">Enter Recommendations And Observations</string>
+
+    <string-array name="country_array">
+        <item>Select Country</item>
+        <item>Zimbabwe</item>
+        <item>Malawi</item>
+        <item>India</item>
+
+    </string-array>
+
+    <string-array name="usertype">
+
+        <item>MDO</item>
+        <item>TBM</item>
+
+
+    </string-array>
+    <string-array name="filter_options">
+        <item>Select Filter Option</item>
+        <item>Village Wise</item>
+        <item>Section Wise</item>
+        <item>EPA Wise</item>
+        <item>Product Code Wise</item>
+    </string-array>
+
+    <string-array name="yes_no_array">
+        <item>No</item>
+        <item>Yes</item>
+    </string-array>
+
+    <string-array name="one_to_five_numbers_array">
+        <item>Select Field No.</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+
+    <string-array name="select_crop_stage">
+        <item>Select Crop Stage</item>
+        <item>Vegetative</item>
+        <item>Preflowering</item>
+        <item>Flowering</item>
+        <item>Postflowering</item>
+        <item>Harvesting</item>
+    </string-array>
 </resources>

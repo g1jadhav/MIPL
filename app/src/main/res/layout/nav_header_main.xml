@@ -19,7 +19,7 @@
         android:fontFamily="@font/comforta"
         android:gravity="center"
         android:padding="10dp"
-        android:text="IQC"
+        android:text="MIPL"
         android:textColor="#2E7D32"
         android:textSize="20sp"
         android:textStyle="bold" />

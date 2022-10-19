@@ -16,9 +16,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="10dp">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/txt_lbl"
@@ -29,23 +27,397 @@
                 android:text="Welcome - Guest User"
                 android:textSize="18sp" />
 
-            <LinearLayout
+            <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center|right"
-                android:orientation="vertical">
+                android:layout_weight="1">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rc_viewiqcplant"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                </androidx.recyclerview.widget.RecyclerView>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="10dp">
 
-            </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center|right"
+                            android:orientation="vertical">
 
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/rc_viewiqcplant"
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp">
+
+                            </androidx.recyclerview.widget.RecyclerView>
+
+                            <GridLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginTop="20dp"
+                                android:layout_marginRight="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:alignmentMode="alignMargins"
+                                android:columnCount="1"
+                                android:columnOrderPreserved="false"
+                                android:rowCount="13">
+
+                                <androidx.cardview.widget.CardView
+                                    android:id="@+id/new_grower_registration_layout"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:layout_margin="10dp"
+                                    app:cardBackgroundColor="@color/colorPrimary"
+                                    app:cardCornerRadius="12dp"
+                                    app:cardElevation="5dp">
+
+                                    <RelativeLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+
+                                        android:orientation="horizontal">
+
+                                        <ImageView
+                                            android:layout_width="40dp"
+
+                                            android:layout_height="40dp"
+                                            android:layout_centerVertical="true"
+                                            android:layout_marginStart="15dp"
+                                            android:src="@drawable/add_user" />
+
+                                        <TextView
+
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerInParent="true"
+                                            android:text="@string/new_grower_registration"
+                                            android:textColor="@color/white"
+                                            android:textSize="16sp"
+                                            android:textStyle="bold" />
+
+                                        <ImageView
+
+                                            android:layout_width="30dp"
+                                            android:layout_height="30dp"
+                                            android:layout_alignParentEnd="true"
+                                            android:layout_centerInParent="true"
+                                            android:layout_marginEnd="10dp"
+                                            android:src="@drawable/iarrow_forward" />
+
+                                    </RelativeLayout>
+                                </androidx.cardview.widget.CardView>
+
+                                <androidx.cardview.widget.CardView
+                                    android:id="@+id/new_organizer_registration_layout"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:layout_margin="10dp"
+                                    android:visibility="visible"
+                                    app:cardBackgroundColor="@color/colorPrimary"
+                                    app:cardCornerRadius="12dp"
+                                    app:cardElevation="5dp">
+
+                                    <RelativeLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:orientation="horizontal">
+
+                                        <ImageView
+                                            android:layout_width="40dp"
+                                            android:layout_height="40dp"
+                                            android:layout_centerVertical="true"
+                                            android:layout_marginStart="15dp"
+                                            android:src="@drawable/add_user" />
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerInParent="true"
+                                            android:text="@string/new_organizer_registration"
+                                            android:textColor="@color/white"
+                                            android:textSize="16sp"
+                                            android:textStyle="bold" />
+
+                                        <ImageView
+                                            android:layout_width="30dp"
+                                            android:layout_height="30dp"
+                                            android:layout_alignParentEnd="true"
+                                            android:layout_centerInParent="true"
+                                            android:layout_marginEnd="10dp"
+                                            android:src="@drawable/iarrow_forward" />
+
+                                    </RelativeLayout>
+                                </androidx.cardview.widget.CardView>
+
+
+                                <androidx.cardview.widget.CardView
+                                    android:id="@+id/download_parent_seed_stock_layout"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:layout_margin="10dp"
+                                    android:visibility="visible"
+                                    app:cardBackgroundColor="@color/colorPrimary"
+                                    app:cardCornerRadius="12dp"
+                                    app:cardElevation="5dp">
+
+                                    <RelativeLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:orientation="horizontal">
+
+                                        <ImageView
+                                            android:layout_width="40dp"
+                                            android:layout_height="40dp"
+                                            android:layout_centerVertical="true"
+                                            android:layout_marginStart="15dp"
+                                            android:src="@drawable/download" />
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerInParent="true"
+                                            android:text="@string/download_parent_seed_stock"
+                                            android:textColor="@color/white"
+                                            android:textSize="16sp"
+                                            android:textStyle="bold" />
+
+                                        <ImageView
+                                            android:layout_width="30dp"
+                                            android:layout_height="30dp"
+                                            android:layout_alignParentEnd="true"
+                                            android:layout_centerInParent="true"
+                                            android:layout_marginEnd="10dp"
+                                            android:src="@drawable/iarrow_forward" />
+
+                                    </RelativeLayout>
+                                </androidx.cardview.widget.CardView>
+
+                                <androidx.cardview.widget.CardView
+                                    android:id="@+id/parent_seed_distribution_layout"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:layout_margin="10dp"
+                                    android:visibility="visible"
+                                    app:cardBackgroundColor="@color/colorPrimary"
+                                    app:cardCornerRadius="12dp"
+                                    app:cardElevation="5dp">
+
+                                    <RelativeLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:orientation="horizontal">
+
+                                        <ImageView
+                                            android:layout_width="40dp"
+                                            android:layout_height="40dp"
+                                            android:layout_centerVertical="true"
+                                            android:layout_marginStart="15dp"
+                                            android:src="@drawable/parent_seed_distribution" />
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerInParent="true"
+                                            android:text="@string/parent_seed_distribution"
+                                            android:textColor="@color/white"
+                                            android:textSize="16sp"
+                                            android:textStyle="bold" />
+
+                                        <ImageView
+                                            android:layout_width="30dp"
+                                            android:layout_height="30dp"
+                                            android:layout_alignParentEnd="true"
+                                            android:layout_centerInParent="true"
+                                            android:layout_marginEnd="10dp"
+                                            android:src="@drawable/iarrow_forward" />
+
+                                    </RelativeLayout>
+                                </androidx.cardview.widget.CardView>
+
+                                <androidx.cardview.widget.CardView
+                                    android:id="@+id/download_grower_list_layout"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:layout_margin="10dp"
+                                    android:visibility="visible"
+                                    app:cardBackgroundColor="@color/colorPrimary"
+                                    app:cardCornerRadius="12dp"
+                                    app:cardElevation="5dp">
+
+                                    <RelativeLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:orientation="horizontal">
+
+                                        <ImageView
+                                            android:layout_width="40dp"
+                                            android:layout_height="40dp"
+                                            android:layout_centerVertical="true"
+                                            android:layout_marginStart="15dp"
+                                            android:src="@drawable/downloadgrowerlist" />
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerInParent="true"
+                                            android:text="@string/download_grower_list"
+                                            android:textColor="@color/white"
+                                            android:textSize="16sp"
+                                            android:textStyle="bold" />
+
+                                        <ImageView
+                                            android:layout_width="30dp"
+                                            android:layout_height="30dp"
+                                            android:layout_alignParentEnd="true"
+                                            android:layout_centerInParent="true"
+                                            android:layout_marginEnd="10dp"
+                                            android:src="@drawable/iarrow_forward" />
+
+                                    </RelativeLayout>
+                                </androidx.cardview.widget.CardView>
+
+                                <androidx.cardview.widget.CardView
+                                    android:id="@+id/field_monitoring_report_entry_layout"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:layout_margin="10dp"
+                                    android:visibility="visible"
+                                    app:cardBackgroundColor="@color/colorPrimary"
+                                    app:cardCornerRadius="12dp"
+                                    app:cardElevation="5dp">
+
+                                    <RelativeLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:orientation="horizontal">
+
+                                        <ImageView
+                                            android:layout_width="40dp"
+                                            android:layout_height="40dp"
+                                            android:layout_centerVertical="true"
+                                            android:layout_marginStart="15dp"
+                                            android:src="@drawable/field_monitoring_report" />
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerInParent="true"
+                                            android:text="@string/field_monitoring_report_entry"
+                                            android:textColor="@color/white"
+                                            android:textSize="16sp"
+                                            android:textStyle="bold" />
+
+                                        <ImageView
+                                            android:layout_width="30dp"
+                                            android:layout_height="30dp"
+                                            android:layout_alignParentEnd="true"
+                                            android:layout_centerInParent="true"
+                                            android:layout_marginEnd="10dp"
+                                            android:src="@drawable/iarrow_forward" />
+
+                                    </RelativeLayout>
+                                </androidx.cardview.widget.CardView>
+
+                                <androidx.cardview.widget.CardView
+                                    android:id="@+id/upload_data_layout"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:layout_margin="10dp"
+                                    android:visibility="visible"
+                                    app:cardBackgroundColor="@color/colorPrimary"
+                                    app:cardCornerRadius="12dp"
+                                    app:cardElevation="5dp">
+
+                                    <RelativeLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:orientation="horizontal">
+
+                                        <ImageView
+                                            android:layout_width="40dp"
+                                            android:layout_height="40dp"
+                                            android:layout_centerVertical="true"
+                                            android:layout_marginStart="15dp"
+                                            android:src="@drawable/upload_24" />
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerInParent="true"
+                                            android:text="@string/upload_data"
+                                            android:textColor="@color/white"
+                                            android:textSize="16sp"
+                                            android:textStyle="bold" />
+
+                                        <ImageView
+                                            android:layout_width="30dp"
+                                            android:layout_height="30dp"
+                                            android:layout_alignParentEnd="true"
+                                            android:layout_centerInParent="true"
+                                            android:layout_marginEnd="10dp"
+                                            android:src="@drawable/iarrow_forward" />
+
+                                    </RelativeLayout>
+                                </androidx.cardview.widget.CardView>
+
+                                <androidx.cardview.widget.CardView
+                                    android:id="@+id/downloadmaster"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:layout_margin="10dp"
+                                    android:visibility="visible"
+                                    app:cardBackgroundColor="@color/colorPrimary"
+                                    app:cardCornerRadius="12dp"
+                                    app:cardElevation="5dp">
+
+                                    <RelativeLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:orientation="horizontal">
+
+                                        <ImageView
+                                            android:layout_width="40dp"
+                                            android:layout_height="40dp"
+                                            android:layout_centerVertical="true"
+                                            android:layout_marginStart="15dp"
+                                            android:src="@drawable/download" />
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerInParent="true"
+                                            android:text="Download Master Data"
+                                            android:textColor="@color/white"
+                                            android:textSize="16sp"
+                                            android:textStyle="bold" />
+
+                                        <ImageView
+                                            android:layout_width="30dp"
+                                            android:layout_height="30dp"
+                                            android:layout_alignParentEnd="true"
+                                            android:layout_centerInParent="true"
+                                            android:layout_marginEnd="10dp"
+                                            android:src="@drawable/iarrow_forward" />
+
+                                    </RelativeLayout>
+                                </androidx.cardview.widget.CardView>
+
+                            </GridLayout>
+
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </LinearLayout>
+            </ScrollView>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -62,15 +434,10 @@
                     android:padding="10dp"
                     android:text="V 1.0.0" />
 
-                <Button
-                    android:id="@+id/button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawableRight="@drawable/ic_logout"
-                    android:onClick="showlist"
-                    android:text="My Observation" />
             </LinearLayout>
-
         </LinearLayout>
+
     </RelativeLayout>
+
+
 </RelativeLayout>
