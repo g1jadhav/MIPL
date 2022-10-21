@@ -266,6 +266,10 @@
     <string name="geotag_of_location">Geotag of location<font color='#FF0000'>*</font></string>
     <string name="enter_grower_mobile_no">Enter Mobile No.</string>
     <string name="enter_recommendations_and_observations">Enter Recommendations And Observations</string>
+    <string name="download_category_master">Download Category Master</string>
+    <string name="download_location_master">Download Location Master</string>
+    <string name="download_season_master">Download Season Master</string>
+    <string name="download_grower_master">Download Grower Master</string>
 
     <string-array name="country_array">
         <item>Select Country</item>

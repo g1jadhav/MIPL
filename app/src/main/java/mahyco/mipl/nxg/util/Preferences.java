@@ -48,7 +48,8 @@ public class Preferences {
     public static final String COUNTRYCODE ="COUNTRYCODE" ;
     public static final String COUNTRYNAME = "CountryName";
     public static String IQCPlantId="IQCPlantId";
-
+    public static final String COUNTRY_MASTER_ID = "CountryParentId";
+    public static final String STORED_CATEGORY_SIZE = "CategorySize";
     public Preferences(Context context) {
     }
 

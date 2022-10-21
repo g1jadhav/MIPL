@@ -28,6 +28,15 @@ public interface Api {
     @POST(Constants.GETCATEGORY)
     Call<List<CategoryModel>> getCategory(@Body JsonObject jsonObject);
 
+    @POST(Constants.GET_LOCATION)
+    Call<List<CategoryChildModel>> getLocation(@Body JsonObject jsonObject);
+
+    @POST(Constants.GET_GROWER)
+    Call<List<CategoryModel>> getGrower(@Body JsonObject jsonObject);
+
+    @POST(Constants.GET_SEASON)
+    Call<List<CategoryModel>> getSeason(@Body JsonObject jsonObject);
+
     @Multipart
     @POST("processInspection/uploadFile?FileType=Image")
     Call<String> uploadProductQualityImage(@Part MultipartBody.Part file, @Part("files") RequestBody items);
