@@ -13,15 +13,24 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.budiyev.android.codescanner.AutoFocusMode;
+import com.budiyev.android.codescanner.CodeScanner;
+import com.budiyev.android.codescanner.CodeScannerView;
+import com.budiyev.android.codescanner.DecodeCallback;
+import com.budiyev.android.codescanner.ErrorCallback;
+import com.budiyev.android.codescanner.ScanMode;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.zxing.Result;
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 import com.vansuita.pickimage.bean.PickResult;
 import com.vansuita.pickimage.bundle.PickSetup;
@@ -41,7 +50,16 @@ import java.util.Locale;
 import de.hdodenhof.circleimageview.CircleImageView;
 import mahyco.mipl.nxg.R;
 import mahyco.mipl.nxg.adapter.CategoryLoadingAdapter;
+import mahyco.mipl.nxg.adapter.Spinner10Adapter;
 import mahyco.mipl.nxg.adapter.Spinner1Adapter;
+import mahyco.mipl.nxg.adapter.Spinner2Adapter;
+import mahyco.mipl.nxg.adapter.Spinner3Adapter;
+import mahyco.mipl.nxg.adapter.Spinner4Adapter;
+import mahyco.mipl.nxg.adapter.Spinner5Adapter;
+import mahyco.mipl.nxg.adapter.Spinner6Adapter;
+import mahyco.mipl.nxg.adapter.Spinner7Adapter;
+import mahyco.mipl.nxg.adapter.Spinner8Adapter;
+import mahyco.mipl.nxg.adapter.Spinner9Adapter;
 import mahyco.mipl.nxg.model.CategoryChildModel;
 import mahyco.mipl.nxg.model.CategoryModel;
 import mahyco.mipl.nxg.model.GrowerModel;
@@ -51,6 +69,7 @@ import mahyco.mipl.nxg.util.Constants;
 import mahyco.mipl.nxg.util.MultipartUtility;
 import mahyco.mipl.nxg.util.Preferences;
 import mahyco.mipl.nxg.util.SqlightDatabase;
+import mahyco.mipl.nxg.view.downloadcategories.DownloadCategoryActivity;
 
 public class NewGrowerRegistration extends BaseActivity implements Listener, View.OnClickListener {
 
@@ -64,7 +83,7 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
             et_mobile, et_uniqcode, /*et_regdate,*/
             et_satffname;
     String str_et_landmark, str_et_fullname, str_et_gender, str_et_dob, str_et_mobile, str_et_uniqcode, str_et_regdate, str_et_satffname;
-    Button grower_registration_submit_btn;
+    Button grower_registration_submit_btn, scan_qr_code_btn;
     CircleImageView iv_dp;
     ImageView imageView_front, imageView_back;
     String str_Lable = "";
@@ -75,10 +94,10 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
     GrowerModel growerModel = new GrowerModel();
     String counrtyId = "0", countryName = "";
 
-    private int mSpinnerArray[];
+    private SearchableSpinner mSpinnerArray[];
     private int[] mSpinnerHeadingTextView;
 
-    /*private SearchableSpinner mSearchableSpinner1;
+    private SearchableSpinner mSearchableSpinner1;
     private SearchableSpinner mSearchableSpinner2;
     private SearchableSpinner mSearchableSpinner3;
     private SearchableSpinner mSearchableSpinner4;
@@ -87,42 +106,39 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
     private SearchableSpinner mSearchableSpinner7;
     private SearchableSpinner mSearchableSpinner8;
     private SearchableSpinner mSearchableSpinner9;
-    private SearchableSpinner mSearchableSpinner10;*/
+    private SearchableSpinner mSearchableSpinner10;
 
     private DatePickerDialog mDatePickerDialog = null;
+
+    private ArrayList<CategoryChildModel> mSpinner1List;
+    private ArrayList<CategoryChildModel> mSpinner2List;
+    private ArrayList<CategoryChildModel> mSpinner3List;
+    private ArrayList<CategoryChildModel> mSpinner4List;
+    private ArrayList<CategoryChildModel> mSpinner5List;
+    private ArrayList<CategoryChildModel> mSpinner6List;
+    private ArrayList<CategoryChildModel> mSpinner7List;
+    private ArrayList<CategoryChildModel> mSpinner8List;
+    private ArrayList<CategoryChildModel> mSpinner9List;
+    private ArrayList<CategoryChildModel> mSpinner10List;
+
+    private CodeScanner mCodeScanner;
+    private CodeScannerView mCodeScannerView;
+    private ScrollView mScrollView;
+
+    private int mCountryMasterIdAsPerSelection = 0;
+    private int mSpinnerPosition = 1;
 
     @Override
     protected int getLayout() {
         return R.layout.activity_new_grower_registration;
     }
 
-    /*@Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_grower_registration);
-        context = NewGrowerRegistration.this;
-        str_Lable = getIntent().getExtras().getString("title");
-        counrtyId = Preferences.get(context, Preferences.COUNTRYCODE);
-        countryName = Preferences.get(context, Preferences.COUNTRYNAME);
-
-        setTitle("New " + str_Lable + " Registration");
-        dp_path = front_path = back_path = "";
-        init();
-        //registrationAPI = new GrowerRegistrationAPI(context, this);
-        *//*categoryJson = new JsonObject();
-        categoryJson.addProperty("filterValue", countryName);
-        categoryJson.addProperty("FilterOption", "GetCountry");
-        registrationAPI.getCategory(categoryJson);*//*
-        Log.e("temporary", "new grower registration init called");
-        new GetCategoriesAsyncTask().execute();
-    }*/
 
     @Override
     protected void init() {
         try {
-            // rc_list = findViewById(R.id.rc_list);
 
-            mContext = /*NewGrowerRegistration.*/this;
+            mContext = this;
             str_Lable = getIntent().getExtras().getString("title");
             counrtyId = Preferences.get(mContext, Preferences.COUNTRYCODE);
             countryName = Preferences.get(mContext, Preferences.COUNTRYNAME);
@@ -132,7 +148,7 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
 
             new GetCategoriesAsyncTask().execute();
 
-            /*mSearchableSpinner1 = findViewById(R.id.sp1);
+            mSearchableSpinner1 = findViewById(R.id.sp1);
             mSearchableSpinner2 = findViewById(R.id.sp2);
             mSearchableSpinner3 = findViewById(R.id.sp3);
             mSearchableSpinner4 = findViewById(R.id.sp4);
@@ -141,13 +157,26 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
             mSearchableSpinner7 = findViewById(R.id.sp7);
             mSearchableSpinner8 = findViewById(R.id.sp8);
             mSearchableSpinner9 = findViewById(R.id.sp9);
-            mSearchableSpinner10 = findViewById(R.id.sp10);*/
+            mSearchableSpinner10 = findViewById(R.id.sp10);
 
-            mSpinnerArray = new int[]{R.id.sp1, R.id.sp2, R.id.sp3, R.id.sp4, R.id.sp5, R.id.sp6, R.id.sp7, R.id.sp8, R.id.sp9, R.id.sp10};
+            mSearchableSpinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                    if (mSpinner1List != null && mSpinner1List.size() > 0) {
+                        mSpinnerPosition = 2;
+                        mCountryMasterIdAsPerSelection = mSpinner1List.get(i).getCountryMasterId();
+                        new GetLocationMasterAsyncTask().execute();
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+
+                }
+            });
+
+            mSpinnerArray = new SearchableSpinner[]{mSearchableSpinner1, mSearchableSpinner2, mSearchableSpinner3, mSearchableSpinner4, mSearchableSpinner5, mSearchableSpinner6, mSearchableSpinner7, mSearchableSpinner8, mSearchableSpinner9, mSearchableSpinner10};
             mSpinnerHeadingTextView = new int[]{R.id.textview1, R.id.textview2, R.id.textview3, R.id.textview4, R.id.textview5, R.id.textview6, R.id.textview7, R.id.textview8, R.id.textview9, R.id.textview10};
-
-            // mManager = new LinearLayoutManager(mContext);
-            // rc_list.setLayoutManager(mManager);
 
             et_landmark = (EditText) findViewById(R.id.landmark_edittext);
             et_fullname = (EditText) findViewById(R.id.farmer_name_edittext);
@@ -168,6 +197,15 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
             imageView_front = findViewById(R.id.national_id_photo_front_side_image_view);
             imageView_back = findViewById(R.id.national_id_photo_back_side_image_view);
 
+            scan_qr_code_btn = findViewById(R.id.scan_qr_code);
+            mCodeScannerView = findViewById(R.id.scanner_view);
+            mCodeScanner = new CodeScanner(this, mCodeScannerView);
+            mScrollView = findViewById(R.id.main_scrollview);
+
+            if (countryName.equalsIgnoreCase("Malawi")){
+                scan_qr_code_btn.setVisibility(View.VISIBLE);
+                scan_qr_code_btn.setOnClickListener(this);
+            }
             grower_registration_submit_btn = (Button) findViewById(R.id.grower_registration_submit_btn);
             /*
 
@@ -187,7 +225,6 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
 
     @Override
     public void onClick(View view) {
-        Log.e("temporary", "onClick called");
         switch (view.getId()) {
             case R.id.date_of_birth_textview:
 
@@ -214,7 +251,61 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
                 mDatePickerDialog.getDatePicker().setMaxDate(mCalendar.getTimeInMillis());
                 mDatePickerDialog.show();
                 break;
+            case R.id.scan_qr_code: {
+                // open scanner
+                hideKeyboard(mContext);
+                mCodeScanner.startPreview();
+                visibleScannerLayout();
+
+                mCodeScanner.setCamera(CodeScanner.CAMERA_BACK);
+                         // or CAMERA_FRONT or specific camera id
+                mCodeScanner.setFormats( CodeScanner.ALL_FORMATS); // list of type BarcodeFormat,
+                mCodeScanner.setAutoFocusMode(AutoFocusMode.SAFE); // or CONTINUOUS
+                mCodeScanner.setScanMode(ScanMode.SINGLE );// or CONTINUOUS or PREVIEW
+                mCodeScanner.setAutoFocusEnabled(true );// Whether to enable auto focus or not
+                mCodeScanner.setFlashEnabled( false );// Whether to enable flash or not
+                mCodeScanner.setDecodeCallback(result -> runOnUiThread(() -> {
+                    if(!result.getText().isEmpty()){
+                        hideScannerLayout();
+                        String[] results = result.getText().split("~");
+
+                        if (results.length > 10 && results[1].contains( "MWI")
+                        ) {
+                            showToast("Scanner successfully !!");
+                            et_dob.setText(results[9]);
+                            et_gender.setText(results[8]);
+                            et_fullname.setText(results[4] + " " + results[6]);
+//                                    val result = string[2].dropLast(1)
+                            et_uniqcode.setText(
+                                    results[5]
+                                    /*result.replace("<", "")*/
+                            );
+                        } else {
+                            showToast("SCANNER ERROR !! INVALID DATA");
+                        }
+                    }else {
+                        showToast("SCANNER ERROR !! INVALID DATA");
+                    }
+                }));
+                mCodeScanner.setErrorCallback(thrown -> runOnUiThread(() -> {
+                    hideScannerLayout();
+                    showToast("Camera initialization error: ${it.message}");
+                }));
+            }
+            break;
         }
+    }
+
+    private void visibleScannerLayout() {
+        mCodeScannerView.setVisibility(View.VISIBLE);
+        grower_registration_submit_btn.setVisibility(View.GONE);
+        mScrollView.setVisibility(View.GONE);
+    }
+
+    private void hideScannerLayout() {
+        mCodeScannerView.setVisibility(View.GONE);
+        grower_registration_submit_btn.setVisibility(View.VISIBLE);
+        mScrollView.setVisibility(View.VISIBLE);
     }
 
     public void submit(View v) {
@@ -232,7 +323,8 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
 
             growerModel.setLoginId(Integer.parseInt(Preferences.get(mContext, Preferences.LOGINID).trim()));//,
             growerModel.setCountryId(Integer.parseInt(counrtyId.trim()));//,
-            growerModel.setCountryMasterId(26);//,
+           //village id
+            growerModel.setCountryMasterId(/*26*/mSpinner5List.get(mSearchableSpinner5.getSelectedItemPosition()).getCountryMasterId());//,
             growerModel.setUniqueId("");//,
             growerModel.setUserType(str_Lable);//,
             growerModel.setLandMark(str_et_landmark);//,
@@ -241,22 +333,83 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
             growerModel.setGender(str_et_gender);//,
             growerModel.setMobileNo(str_et_mobile);//,
             growerModel.setUniqueCode(str_et_uniqcode);//,
-            growerModel.setIdProofFrontCopy("one.jpg");//,
-            growerModel.setIdProofBackCopy("two.jpg");//,
-            growerModel.setUploadPhoto("three.jpg");//,
+            growerModel.setIdProofFrontCopy(front_path);//,
+            growerModel.setIdProofBackCopy(back_path);//,
+            growerModel.setUploadPhoto(dp_path);//,
             growerModel.setRegDt(str_et_regdate);//,
+            growerModel.setIsSync(0);
+            growerModel.setStaffNameAndId(str_et_satffname);
             growerModel.setCreatedBy(Preferences.get(mContext, Preferences.USER_NAME));//
 
-
-            stid = 1;
-            new UploadFile().execute(dp_path);
-
-
+            new AddRegistrationAsyncTask().execute();
+//            stid = 1;
+//            new UploadFile().execute(dp_path);
         } catch (Exception e) {
             Log.i("Error is ", e.getMessage());
         }
+    }
 
+    private class GetRegistrationAsyncTaskList extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected final Void doInBackground(Void... voids) {
+            SqlightDatabase database = null;
+            try {
+                database = new SqlightDatabase(mContext);
+                List<GrowerModel> list = database.getAllRegistration();
+                for (int i = 0; i < list.size(); i++) {
+                    Log.e("temporary","farmer photo "+list.get(i).getUploadPhoto() + "\n country id " + growerModel.getCountryId() +
+                            "\n CountryMasterId() " + list.get(i).getCountryMasterId() +
+                            "\nLandMark()" + list.get(i).getLandMark() +
+                            "\nLandFullName()" + list.get(i).getFullName() +
+                            "\nLandGender()" + list.get(i).getGender() +
+                            "\nLandDOB()()" + list.get(i).getDOB() +
+                            "\nLandMobileNo()" + list.get(i).getMobileNo() +
+                            "\nLandUniqueCode()" + list.get(i).getUniqueCode() +
+                            "\nLandRegDt()" + list.get(i).getRegDt() +
+                            "\nLandStaffNameAndI()" + list.get(i).getStaffNameAndId() +
+                            "\nLandFrontCopy()" + list.get(i).getIdProofFrontCopy() +
+                            "\nIsSync()" + list.get(i).getIsSync() +
+                            "\nreatedBy()" + list.get(i).getCreatedBy() +
+                            "\nUserType()" + list.get(i).getUserType()+
+                            "\nBackCopy()" + list.get(i).getIdProofBackCopy()+
+                            "\ntempid ()" + list.get(i).getTempId());
+                }
+            } finally {
+                if (database != null) {
+                    database.close();
+                }
+            }
+            return null;
+        }
 
+        @Override
+        protected void onPostExecute(Void unused) {
+            finish();
+            super.onPostExecute(unused);
+        }
+    }
+
+    private class AddRegistrationAsyncTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected final Void doInBackground(Void... voids) {
+            SqlightDatabase database = null;
+            try {
+                database = new SqlightDatabase(mContext);
+                database.addRegistration(growerModel);
+            } finally {
+                if (database != null) {
+                    database.close();
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void unused) {
+            new GetRegistrationAsyncTaskList().execute();
+//            finish();
+            super.onPostExecute(unused);
+        }
     }
 
     @Override
@@ -527,7 +680,6 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
                     database.close();
                 }
             }
-
             return actionModels;
         }
 
@@ -537,17 +689,16 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
             if (result != null && result.size() > 0) {
 
                 for (int i = 0; i < result.size(); i++) {
-                    SearchableSpinner searchableSpinner = findViewById(mSpinnerArray[i]);
-                    searchableSpinner.setVisibility(View.VISIBLE);
-                    searchableSpinner.setOnItemSelectedListener(new SpinnerItemSelected());
-
-                    searchableSpinner.setTitle("Select "+result.get(i).getDisplayTitle());
+//                    SearchableSpinner searchableSpinner = findViewById(mSpinnerArray[i]);
+                    mSpinnerArray[i].setVisibility(View.VISIBLE);
+                    mSpinnerArray[i].setTitle("Select " + result.get(i).getDisplayTitle());
 
                     TextView textView = findViewById(mSpinnerHeadingTextView[i]);
                     textView.setVisibility(View.VISIBLE);
                     textView.setText(Html.fromHtml(result.get(i).getDisplayTitle() + "<font color='#FF0000'>*</font>"));
                 }
-
+                mSpinnerPosition = 1;
+                mCountryMasterIdAsPerSelection = Integer.parseInt(Preferences.get(mContext, Preferences.COUNTRY_MASTER_ID));
                 new GetLocationMasterAsyncTask().execute();
             } else {
                 Log.e("temporary", "onPostExecute result null ");
@@ -556,89 +707,462 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
         }
     }
 
+
     private class GetLocationMasterAsyncTask extends AsyncTask<Void, Void, ArrayList<CategoryChildModel>> {
         @Override
         protected final ArrayList<CategoryChildModel> doInBackground(Void... voids) {
             SqlightDatabase database = null;
-            ArrayList<CategoryChildModel> actionModels = null;
+            ArrayList<CategoryChildModel> mCategoryChildModelsList = null;
             try {
                 database = new SqlightDatabase(mContext);
-                actionModels = database.getLocationCategories(Integer.parseInt(Preferences.get(mContext, Preferences.COUNTRY_MASTER_ID)));
-                Log.e("temporary", "GetLocationMasterAsyncTask try called " + actionModels.size());
+                mCategoryChildModelsList = database.getLocationCategories(/*Integer.parseInt(Preferences.get(mContext, Preferences.COUNTRY_MASTER_ID))*/mCountryMasterIdAsPerSelection);
             } finally {
-                Log.e("temporary", "GetLocationMasterAsyncTask finally called");
                 if (database != null) {
                     database.close();
                 }
             }
-            return actionModels;
+            return mCategoryChildModelsList;
         }
 
         @Override
         protected void onPostExecute(ArrayList<CategoryChildModel> result) {
             if (result != null && result.size() > 0) {
-                Log.e("temporary", "onPostExecute called " + result.size());
                 callLocationAdapter(result);
             } else {
-                Log.e("temporary", "GetLocationMasterAsyncTask onPostExecute result null ");
+                clearSpinnerData(mSpinnerPosition);
             }
             super.onPostExecute(result);
         }
     }
 
     private void callLocationAdapter(ArrayList<CategoryChildModel> result) {
-//        CategoryChildModel categoryChildModel = new CategoryChildModel(0, 0, 0, "",
-//                "", "", "", "", "",
-//                "", "", result.get(0).getDisplayTitle());
-//        result.add(0, categoryChildModel);
-        SearchableSpinner searchableSpinner = findViewById(mSpinnerArray[0]);
-        Spinner1Adapter adapter = new Spinner1Adapter(mContext, R.layout.spinner_rows, result);
-        searchableSpinner.setAdapter(adapter);
-    }
-
-    private static class SpinnerItemSelected implements AdapterView.OnItemSelectedListener {
-
-        @Override
-        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-            switch (view.getId()) {
-                case R.id.sp1: {
-
-                }
-                break;
-                case R.id.sp2: {
-                }
-                break;
-                case R.id.sp3: {
-                }
-                break;
-                case R.id.sp4: {
-                }
-                break;
-                case R.id.sp5: {
-                }
-                break;
-                case R.id.sp6: {
-                }
-                break;
-                case R.id.sp7: {
-                }
-                break;
-                case R.id.sp8: {
-                }
-                break;
-                case R.id.sp9: {
-                }
-                break;
-                case R.id.sp10: {
-                }
-                break;
+        switch (mSpinnerPosition) {
+            case 1: {
+                mSpinner1List = result;
+                Spinner1Adapter adapter = new Spinner1Adapter(mContext, R.layout.spinner_rows, result);
+                mSearchableSpinner1.setAdapter(adapter);
             }
-        }
+            break;
+            case 2: {
+                mSpinner2List = result;
+                Spinner2Adapter adapter = new Spinner2Adapter(mContext, R.layout.spinner_rows, result);
+                mSearchableSpinner2.setAdapter(adapter);
+                mSearchableSpinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        if (mSpinner2List != null && mSpinner2List.size() > 0) {
+                            mSpinnerPosition = 3;
+                            mCountryMasterIdAsPerSelection = mSpinner2List.get(i).getCountryMasterId();
+                            new GetLocationMasterAsyncTask().execute();
+                        }
+                    }
 
-        @Override
-        public void onNothingSelected(AdapterView<?> adapterView) {
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
 
+                    }
+                });
+            }
+            break;
+            case 3: {
+                mSpinner3List = result;
+                Spinner3Adapter adapter = new Spinner3Adapter(mContext, R.layout.spinner_rows, result);
+                mSearchableSpinner3.setAdapter(adapter);
+
+                mSearchableSpinner3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        if (mSpinner3List != null && mSpinner3List.size() > 0) {
+                            mSpinnerPosition = 4;
+                            mCountryMasterIdAsPerSelection = mSpinner3List.get(i).getCountryMasterId();
+                            new GetLocationMasterAsyncTask().execute();
+                        }
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                    }
+                });
+            }
+            break;
+            case 4: {
+                mSpinner4List = result;
+                Spinner4Adapter adapter = new Spinner4Adapter(mContext, R.layout.spinner_rows, result);
+                mSearchableSpinner4.setAdapter(adapter);
+
+                mSearchableSpinner4.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        if (mSpinner4List != null && mSpinner4List.size() > 0) {
+                            mSpinnerPosition = 5;
+                            mCountryMasterIdAsPerSelection = mSpinner4List.get(i).getCountryMasterId();
+                            new GetLocationMasterAsyncTask().execute();
+                        }
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                    }
+                });
+            }
+            break;
+            case 5: {
+                mSpinner5List = result;
+                Spinner5Adapter adapter = new Spinner5Adapter(mContext, R.layout.spinner_rows, result);
+                mSearchableSpinner5.setAdapter(adapter);
+
+                mSearchableSpinner5.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        if (mSpinner5List != null && mSpinner5List.size() > 0) {
+                            mSpinnerPosition = 6;
+                            mCountryMasterIdAsPerSelection = mSpinner5List.get(i).getCountryMasterId();
+                            new GetLocationMasterAsyncTask().execute();
+                        }
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                    }
+                });
+            }
+            break;
+            case 6: {
+                mSpinner6List = result;
+                Spinner6Adapter adapter = new Spinner6Adapter(mContext, R.layout.spinner_rows, result);
+                mSearchableSpinner6.setAdapter(adapter);
+
+                mSearchableSpinner6.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        if (mSpinner6List != null && mSpinner6List.size() > 0) {
+                            mSpinnerPosition = 7;
+                            mCountryMasterIdAsPerSelection = mSpinner6List.get(i).getCountryMasterId();
+                            new GetLocationMasterAsyncTask().execute();
+                        }
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                    }
+                });
+            }
+            break;
+            case 7: {
+                mSpinner7List = result;
+                Spinner7Adapter adapter = new Spinner7Adapter(mContext, R.layout.spinner_rows, result);
+                mSearchableSpinner7.setAdapter(adapter);
+
+                mSearchableSpinner7.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        if (mSpinner7List != null && mSpinner7List.size() > 0) {
+                            mSpinnerPosition = 8;
+                            mCountryMasterIdAsPerSelection = mSpinner7List.get(i).getCountryMasterId();
+                            new GetLocationMasterAsyncTask().execute();
+                        }
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                    }
+                });
+            }
+            break;
+            case 8: {
+                mSpinner8List = result;
+                Spinner8Adapter adapter = new Spinner8Adapter(mContext, R.layout.spinner_rows, result);
+                mSearchableSpinner8.setAdapter(adapter);
+
+                mSearchableSpinner8.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        if (mSpinner8List != null && mSpinner8List.size() > 0) {
+                            mSpinnerPosition = 9;
+                            mCountryMasterIdAsPerSelection = mSpinner8List.get(i).getCountryMasterId();
+                            new GetLocationMasterAsyncTask().execute();
+                        }
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                    }
+                });
+            }
+            break;
+            case 9: {
+                mSpinner9List = result;
+                Spinner9Adapter adapter = new Spinner9Adapter(mContext, R.layout.spinner_rows, result);
+                mSearchableSpinner9.setAdapter(adapter);
+
+                mSearchableSpinner9.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        if (mSpinner9List != null && mSpinner9List.size() > 0) {
+                            mSpinnerPosition = 10;
+                            mCountryMasterIdAsPerSelection = mSpinner9List.get(i).getCountryMasterId();
+                            new GetLocationMasterAsyncTask().execute();
+                        }
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                    }
+                });
+            }
+            break;
+            case 10: {
+                mSpinner10List = result;
+                Spinner10Adapter adapter = new Spinner10Adapter(mContext, R.layout.spinner_rows, result);
+                mSearchableSpinner10.setAdapter(adapter);
+                mSearchableSpinner10.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        if (mSpinner10List != null && mSpinner10List.size() > 0) {
+                            mSpinnerPosition = 10;
+                            mCountryMasterIdAsPerSelection = mSpinner10List.get(i).getCountryMasterId();
+                            new GetLocationMasterAsyncTask().execute();
+                        }
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                    }
+                });
+            }
+            break;
         }
     }
 
+    private void clearSpinnerData(int mSpinnerPosition) {
+        switch (mSpinnerPosition) {
+            case 2: {
+                if (mSpinner2List != null) {
+                    mSpinner2List.clear();
+                }
+                if (mSpinner3List != null) {
+                    mSpinner3List.clear();
+                }
+                if (mSpinner4List != null) {
+                    mSpinner4List.clear();
+                }
+                if (mSpinner5List != null) {
+                    mSpinner5List.clear();
+                }
+                if (mSpinner6List != null) {
+                    mSpinner6List.clear();
+                }
+                if (mSpinner7List != null) {
+                    mSpinner7List.clear();
+                }
+                if (mSpinner8List != null) {
+                    mSpinner8List.clear();
+                }
+                if (mSpinner9List != null) {
+                    mSpinner9List.clear();
+                }
+                if (mSpinner10List != null) {
+                    mSpinner10List.clear();
+                }
+
+                mSearchableSpinner2.setAdapter(null);
+                mSearchableSpinner3.setAdapter(null);
+                mSearchableSpinner4.setAdapter(null);
+                mSearchableSpinner5.setAdapter(null);
+                mSearchableSpinner6.setAdapter(null);
+                mSearchableSpinner7.setAdapter(null);
+                mSearchableSpinner8.setAdapter(null);
+                mSearchableSpinner9.setAdapter(null);
+                mSearchableSpinner10.setAdapter(null);
+            }
+            break;
+            case 3: {
+                if (mSpinner3List != null) {
+                    mSpinner3List.clear();
+                }
+                if (mSpinner4List != null) {
+                    mSpinner4List.clear();
+                }
+                if (mSpinner5List != null) {
+                    mSpinner5List.clear();
+                }
+                if (mSpinner6List != null) {
+                    mSpinner6List.clear();
+                }
+                if (mSpinner7List != null) {
+                    mSpinner7List.clear();
+                }
+                if (mSpinner8List != null) {
+                    mSpinner8List.clear();
+                }
+                if (mSpinner9List != null) {
+                    mSpinner9List.clear();
+                }
+                if (mSpinner10List != null) {
+                    mSpinner10List.clear();
+                }
+
+                mSearchableSpinner3.setAdapter(null);
+                mSearchableSpinner4.setAdapter(null);
+                mSearchableSpinner5.setAdapter(null);
+                mSearchableSpinner6.setAdapter(null);
+                mSearchableSpinner7.setAdapter(null);
+                mSearchableSpinner8.setAdapter(null);
+                mSearchableSpinner9.setAdapter(null);
+                mSearchableSpinner10.setAdapter(null);
+            }
+            break;
+            case 4: {
+                if (mSpinner4List != null) {
+                    mSpinner4List.clear();
+                }
+                if (mSpinner5List != null) {
+                    mSpinner5List.clear();
+                }
+                if (mSpinner6List != null) {
+                    mSpinner6List.clear();
+                }
+                if (mSpinner7List != null) {
+                    mSpinner7List.clear();
+                }
+                if (mSpinner8List != null) {
+                    mSpinner8List.clear();
+                }
+                if (mSpinner9List != null) {
+                    mSpinner9List.clear();
+                }
+                if (mSpinner10List != null) {
+                    mSpinner10List.clear();
+                }
+
+                mSearchableSpinner4.setAdapter(null);
+                mSearchableSpinner5.setAdapter(null);
+                mSearchableSpinner6.setAdapter(null);
+                mSearchableSpinner7.setAdapter(null);
+                mSearchableSpinner8.setAdapter(null);
+                mSearchableSpinner9.setAdapter(null);
+                mSearchableSpinner10.setAdapter(null);
+            }
+            break;
+            case 5: {
+                if (mSpinner5List != null) {
+                    mSpinner5List.clear();
+                }
+                if (mSpinner6List != null) {
+                    mSpinner6List.clear();
+                }
+                if (mSpinner7List != null) {
+                    mSpinner7List.clear();
+                }
+                if (mSpinner8List != null) {
+                    mSpinner8List.clear();
+                }
+                if (mSpinner9List != null) {
+                    mSpinner9List.clear();
+                }
+                if (mSpinner10List != null) {
+                    mSpinner10List.clear();
+                }
+
+                mSearchableSpinner5.setAdapter(null);
+                mSearchableSpinner6.setAdapter(null);
+                mSearchableSpinner7.setAdapter(null);
+                mSearchableSpinner8.setAdapter(null);
+                mSearchableSpinner9.setAdapter(null);
+                mSearchableSpinner10.setAdapter(null);
+            }
+            break;
+            case 6: {
+                if (mSpinner6List != null) {
+                    mSpinner6List.clear();
+                }
+                if (mSpinner7List != null) {
+                    mSpinner7List.clear();
+                }
+                if (mSpinner8List != null) {
+                    mSpinner8List.clear();
+                }
+                if (mSpinner9List != null) {
+                    mSpinner9List.clear();
+                }
+                if (mSpinner10List != null) {
+                    mSpinner10List.clear();
+                }
+
+                mSearchableSpinner6.setAdapter(null);
+                mSearchableSpinner7.setAdapter(null);
+                mSearchableSpinner8.setAdapter(null);
+                mSearchableSpinner9.setAdapter(null);
+                mSearchableSpinner10.setAdapter(null);
+            }
+            break;
+            case 7: {
+                if (mSpinner7List != null) {
+                    mSpinner7List.clear();
+                }
+                if (mSpinner8List != null) {
+                    mSpinner8List.clear();
+                }
+                if (mSpinner9List != null) {
+                    mSpinner9List.clear();
+                }
+                if (mSpinner10List != null) {
+                    mSpinner10List.clear();
+                }
+                mSearchableSpinner7.setAdapter(null);
+                mSearchableSpinner8.setAdapter(null);
+                mSearchableSpinner9.setAdapter(null);
+                mSearchableSpinner10.setAdapter(null);
+            }
+            break;
+            case 8: {
+
+                if (mSpinner8List != null) {
+                    mSpinner8List.clear();
+                }
+                if (mSpinner9List != null) {
+                    mSpinner9List.clear();
+                }
+                if (mSpinner10List != null) {
+                    mSpinner10List.clear();
+                }
+                mSearchableSpinner8.setAdapter(null);
+                mSearchableSpinner9.setAdapter(null);
+                mSearchableSpinner10.setAdapter(null);
+            }
+            break;
+            case 9: {
+                if (mSpinner9List != null) {
+                    mSpinner9List.clear();
+                }
+                if (mSpinner10List != null) {
+                    mSpinner10List.clear();
+                }
+                mSearchableSpinner9.setAdapter(null);
+                mSearchableSpinner10.setAdapter(null);
+            }
+            break;
+            case 10: {
+                if (mSpinner10List != null) {
+                    mSpinner10List.clear();
+                }
+                mSearchableSpinner10.setAdapter(null);
+            }
+            break;
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        mCodeScanner.releaseResources();
+        super.onPause();
+    }
 }

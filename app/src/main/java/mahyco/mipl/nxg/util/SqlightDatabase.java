@@ -12,6 +12,7 @@ import java.util.Vector;
 
 import mahyco.mipl.nxg.model.CategoryChildModel;
 import mahyco.mipl.nxg.model.CategoryModel;
+import mahyco.mipl.nxg.model.GrowerModel;
 
 public class SqlightDatabase extends SQLiteOpenHelper {
 
@@ -102,6 +103,28 @@ public class SqlightDatabase extends SQLiteOpenHelper {
 
         db.execSQL(creategrowermaster);
 
+        String createRegistration =  " Create table tbl_registrationmaster(\n" +
+                "    TempId  INTEGER PRIMARY KEY AUTOINCREMENT, \n" +
+                "    CountryId INTEGER,\n" +
+                "    CountryMasterId INTEGER,\n" +
+                "    FarmerPhoto Text,\n" +
+                "    Landmark text,\n" +
+                "    GrowerName text,\n" +
+                "    Gender text,\n" +
+                "    DateOfBirth text,\n" +
+                "    MobileNo text,\n" +
+                "    UniqueCode text,\n" +
+                "    DateOfRegistration text,\n" +
+                "    StaffNameId text,\n" +
+                "    FrontPhoto text,\n" +
+                "    IsSync INTEGER,\n" +
+                "    CreatedBy text,\n" +
+                "    UserType text,\n" +
+                "    BackPhoto text\n" +
+                ")";
+
+        db.execSQL(createRegistration);
+
     }
 
     @Override
@@ -111,6 +134,7 @@ public class SqlightDatabase extends SQLiteOpenHelper {
         droptable(db, "tbl_categorymaster");
         droptable(db, "tbl_seasonmaster");
         droptable(db, "tbl_growermaster");
+        droptable(db, "tbl_registrationmaster");
         onCreate(db);
     }
 
@@ -227,6 +251,73 @@ public class SqlightDatabase extends SQLiteOpenHelper {
 
     }
 
+    public boolean addRegistration(GrowerModel growerModel) {
+        /*Log.e("temporary","farmer photo "+growerModel.getUploadPhoto() + "\n country id " + growerModel.getCountryId() +
+                "\n CountryMasterId() " + growerModel.getCountryMasterId() +
+                "\nLandMark()" + growerModel.getLandMark() +
+                "\nLandFullName()" + growerModel.getFullName() +
+                "\nLandGender()" + growerModel.getGender() +
+                "\nLandDOB()()" + growerModel.getDOB() +
+                "\nLandMobileNo()" + growerModel.getMobileNo() +
+                "\nLandUniqueCode()" + growerModel.getUniqueCode() +
+                "\nLandRegDt()" + growerModel.getRegDt() +
+                "\nLandStaffNameAndI()" + growerModel.getStaffNameAndId() +
+                "\nLandFrontCopy()" + growerModel.getIdProofFrontCopy() +
+                "\nIsSync()" + growerModel.getIsSync() +
+                "\nreatedBy()" + growerModel.getCreatedBy() +
+                "\nUserType()" + growerModel.getUserType()+
+                "\nBackCopy()" + growerModel.getIdProofBackCopy());*/
+        SQLiteDatabase mydb = null;
+        try {
+            mydb = this.getReadableDatabase();
+            String q = "insert into tbl_registrationmaster" +
+                    "(" +
+                    "" +
+                    "CountryId," +
+                    "CountryMasterId," +
+                    "FarmerPhoto," +
+                    "Landmark," +
+                    "GrowerName," +
+                    "Gender," +
+                    "DateOfBirth," +
+                    "MobileNo," +
+                    "UniqueCode," +
+                    "DateOfRegistration," +
+                    "StaffNameId," +
+                    "FrontPhoto," +
+                    "IsSync," +
+                    "CreatedBy," +
+                    "UserType," +
+                    "BackPhoto" +
+                    ") values" +
+                    "('" + growerModel.getCountryId() + "'," +
+                    "'" + growerModel.getCountryMasterId() + "'," +
+                    "'" + growerModel.getUploadPhoto() + "'," +
+                    "'" + growerModel.getLandMark() + "'," +
+                    "'" + growerModel.getFullName() + "'," +
+                    "'" + growerModel.getGender() + "'," +
+                    "'" + growerModel.getDOB() + "'," +
+                    "'" + growerModel.getMobileNo() + "'," +
+                    "'" + growerModel.getUniqueCode() + "'," +
+                    "'" + growerModel.getRegDt() + "'," +
+                    "'" + growerModel.getStaffNameAndId() + "'," +
+                    "'" + growerModel.getIdProofFrontCopy() + "'," +
+                    "'" + growerModel.getIsSync() + "'," +
+                    "'" + growerModel.getCreatedBy() + "'," +
+                    "'" + growerModel.getUserType() + "'," +
+                    "'" + growerModel.getIdProofBackCopy() + "')";
+            Log.i("Query is -------> ", "" + q);
+            mydb.execSQL(q);
+            return true;
+        } catch (Exception e) {
+            Log.i("Error is Product Added ", "" + e.getMessage());
+            return false;
+        } finally {
+            mydb.close();
+        }
+
+    }
+
     public ArrayList<CategoryModel> getAllCategories() {
         SQLiteDatabase myDb = null;
         try {
@@ -255,8 +346,59 @@ public class SqlightDatabase extends SQLiteOpenHelper {
         }
     }
 
+    public ArrayList<GrowerModel> getAllRegistration() {
+        SQLiteDatabase myDb = null;
+        try {
+            myDb = this.getReadableDatabase();
+            String q = "SELECT * FROM tbl_registrationmaster";
+            Cursor cursorCourses = myDb.rawQuery(q, null);
+            ArrayList<GrowerModel> courseModalArrayList = new ArrayList<>();
+            if (cursorCourses.moveToFirst()) {
+                do {
+                    courseModalArrayList.add(new GrowerModel(cursorCourses.getInt(1),
+                            cursorCourses.getInt(2),
+                            cursorCourses.getString(3),
+                            cursorCourses.getString(4),
+                            cursorCourses.getString(5),
+                            cursorCourses.getString(6),
+                            cursorCourses.getString(7),
+                            cursorCourses.getString(8),
+                            cursorCourses.getString(9),
+                            cursorCourses.getString(10),
+                            cursorCourses.getString(11),
+                            cursorCourses.getString(12),
+                            cursorCourses.getInt(13),
+                            cursorCourses.getString(14),
+                            cursorCourses.getString(15),
+                            cursorCourses.getString(16),
+                            cursorCourses.getInt(0)));
+                } while (cursorCourses.moveToNext());
+            }
+            return courseModalArrayList;
+        } catch (Exception e) {
+            return null;
+        } finally {
+            myDb.close();
+        }
+    }
+
+    public boolean updateRegistrationStatus(int id, int status) {
+        SQLiteDatabase mydb = null;
+        try {
+            mydb = this.getReadableDatabase();
+            String q = "update  tbl_registrationmaster set IsSync=" + status + " where TempId=" + id;
+            Log.i("Query is -------> ", "" + q);
+            mydb.execSQL(q);
+            return true;
+        } catch (Exception e) {
+            Log.i("Error is  Added ", "Order Details : " + e.getMessage());
+            return false;
+        } finally {
+            mydb.close();
+        }
+    }
+
     public ArrayList<CategoryChildModel> getLocationCategories(int countryMasterId) {
-        Log.e("temporary","countryMasterId " + countryMasterId);
         SQLiteDatabase myDb = null;
         try {
             myDb = this.getReadableDatabase();

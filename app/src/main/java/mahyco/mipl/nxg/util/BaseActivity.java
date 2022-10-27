@@ -3,21 +3,25 @@ package mahyco.mipl.nxg.util;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.Settings;
+import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -36,6 +40,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected abstract int getLayout();
+
     protected abstract void init();
 
     protected boolean checkInternetConnection(Context context) {
@@ -112,5 +117,23 @@ public abstract class BaseActivity extends AppCompatActivity {
             view = new View(context);
         }
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    protected void showToast(String desc) {
+        Toast toast = Toast.makeText(this, desc, Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
+    }
+
+
+    protected File createImageFile(String type) throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        String imageFileName = Preferences.get(this,Preferences.USER_ID) + "_" + type + "_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        return File.createTempFile(
+                imageFileName, /* prefix */
+                ".jpg", /* suffix */
+                storageDir      /* directory */
+        );
     }
 }

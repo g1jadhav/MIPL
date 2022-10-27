@@ -7,6 +7,12 @@
     android:background="@color/login_background"
     tools:context=".view.growerregistration.NewGrowerRegistration">
 
+    <com.budiyev.android.codescanner.CodeScannerView
+        android:id="@+id/scanner_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
     <ScrollView
         android:id="@+id/main_scrollview"
         android:layout_width="match_parent"

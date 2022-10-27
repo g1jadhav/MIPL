@@ -1,10 +1,13 @@
 package mahyco.mipl.nxg;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
@@ -19,6 +22,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
@@ -58,6 +62,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     CardView card_downlaodMaster, card_upload_data_layout, card_grower, card_organizer;
     JsonObject jsonObject_Category;
+
+    private Dialog mDialog  = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -221,9 +227,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 } else if (!checkLocationMasterDataDownloaded()) {
                     Toast.makeText(context, "Please download location master data in download master data first", Toast.LENGTH_SHORT).show();
                 } else {
-                    Intent intent = new Intent(context, NewGrowerRegistration.class);
-                    intent.putExtra("title", "Grower");
-                    startActivity(intent);
+                    if (checkAutoTimeEnabledOrNot()) {
+                        Intent intent = new Intent(context, NewGrowerRegistration.class);
+                        intent.putExtra("title", "Grower");
+                        startActivity(intent);
+                    } else {
+                        showAutomaticTimeMessage("Please update time setting to automatic");                    }
                 }
                 break;
             }
@@ -233,9 +242,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 } else if (!checkLocationMasterDataDownloaded()) {
                     Toast.makeText(context, "Please download location master data in download master data first", Toast.LENGTH_SHORT).show();
                 } else {
-                    Intent intent = new Intent(context, NewGrowerRegistration.class);
-                    intent.putExtra("title", "Organizer");
-                    startActivity(intent);
+                    if (checkAutoTimeEnabledOrNot()) {
+                        Intent intent = new Intent(context, NewGrowerRegistration.class);
+                        intent.putExtra("title", "Organizer");
+                        startActivity(intent);
+                    } else {
+                        showAutomaticTimeMessage("Please update time setting to automatic");
+                    }
                 }
                 break;
         }
@@ -275,4 +288,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    private boolean checkAutoTimeEnabledOrNot() {
+        return Settings.Global.getInt(getContentResolver(), Settings.Global.AUTO_TIME, 0) == 1;
+    }
+
+    private void showAutomaticTimeMessage(String message) {
+        mDialog = null;
+
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
+        alertDialog.setCancelable(false);
+        alertDialog.setTitle("MIPL");
+        alertDialog.setMessage(message);
+        alertDialog.setPositiveButton("Setting", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                startActivity(new Intent(android.provider.Settings.ACTION_DATE_SETTINGS));
+            }
+        });
+        mDialog = alertDialog.create();
+        mDialog.show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (mDialog != null && mDialog.isShowing()) {
+            mDialog.dismiss();
+        }
+        super.onDestroy();
+    }
 }
