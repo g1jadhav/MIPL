@@ -2,8 +2,24 @@ package mahyco.mipl.nxg.model;
 
 public class CategoryChildModel {
 
+    public CategoryChildModel(int CountryMasterId, int CategoryId, int ParentId, String KeyValue,
+                              String KeyCode, String CreatedBy, String CreatedDt, String ModifiedBy, String ModifiedDt,
+                              String CountryName, String CategoryName, String DisplayTitle) {
+        this.CountryMasterId = CountryMasterId;
+        this.CategoryId = CategoryId;
+        this.ParentId = ParentId;
+        this.KeyValue = KeyValue;
+        this.KeyCode = KeyCode;
+        this.CreatedBy = CreatedBy;
+        this.CreatedDt = CreatedDt;
+        this.ModifiedBy = ModifiedBy;
+        this.ModifiedDt = ModifiedDt;
+        this.CountryName = CountryName;
+        this.CategoryName = CategoryName;
+        this.DisplayTitle = DisplayTitle;
+    }
 
-     int CountryMasterId;//": 21,
+    int CountryMasterId;//": 21,
 
     public int getCountryMasterId() {
         return CountryMasterId;
@@ -110,10 +126,10 @@ public class CategoryChildModel {
     }
 
     int CategoryId;//": 3,
-             int ParentId;//": 1,
-             String KeyValue;//": "Balaka",
+    int ParentId;//": 1,
+    String KeyValue;//": "Balaka",
     String KeyCode;//": "MB01",
-             boolean IsDelete;//": false,
+    boolean IsDelete;//": false,
     String CreatedBy;//": "Junaid Siddiqui",
     String CreatedDt;//": "2022-10-07T13:53:40.37",
     String ModifiedBy;//": "",
@@ -122,7 +138,7 @@ public class CategoryChildModel {
     String CategoryName;//": "EPA",
     String DisplayTitle;//": "EPA"
 
-   public String toString(){
+    public String toString() {
         return KeyValue;
     }
 

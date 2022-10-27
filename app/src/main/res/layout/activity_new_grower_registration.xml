@@ -6,6 +6,13 @@
     android:layout_height="match_parent"
     android:background="@color/login_background"
     tools:context=".view.growerregistration.NewGrowerRegistration">
+
+    <com.budiyev.android.codescanner.CodeScannerView
+        android:id="@+id/scanner_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
     <ScrollView
         android:id="@+id/main_scrollview"
         android:layout_width="match_parent"
@@ -19,8 +26,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
             android:orientation="vertical">
 
@@ -50,11 +57,10 @@
                         android:layout_height="150dp"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginBottom="10dp"
+                        android:onClick="dp"
                         android:src="@drawable/ic_baseline_person_grey"
                         app:civ_border_color="#E8E8E8"
-                        app:civ_border_width="2dp"
-                        android:onClick="dp"
-                        />
+                        app:civ_border_width="2dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -82,11 +88,189 @@
                 android:textColor="@color/black"
                 android:textSize="18sp" />
 
-            <androidx.recyclerview.widget.RecyclerView
+            <!--<androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rc_list"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content" />-->
 
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textview1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                android:id="@+id/sp1"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/login_spinner_style"
+                android:visibility="gone" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textview2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                android:id="@+id/sp2"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/login_spinner_style"
+                android:visibility="gone" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textview3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                android:id="@+id/sp3"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/login_spinner_style"
+                android:visibility="gone" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textview4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                android:id="@+id/sp4"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/login_spinner_style"
+                android:visibility="gone" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textview5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                android:id="@+id/sp5"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/login_spinner_style"
+                android:visibility="gone" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textview6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                android:id="@+id/sp6"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/login_spinner_style"
+                android:visibility="gone" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textview7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                android:id="@+id/sp7"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/login_spinner_style"
+                android:visibility="gone" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textview8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                android:id="@+id/sp8"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/login_spinner_style"
+                android:visibility="gone" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textview9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                android:id="@+id/sp9"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/login_spinner_style"
+                android:visibility="gone" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textview10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                android:id="@+id/sp10"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/login_spinner_style"
+                android:visibility="gone" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="match_parent"
@@ -116,8 +300,8 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    style="@style/Widget.AppCompat.Button.Borderless"
                     android:id="@+id/txt_name"
+                    style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/farmer_name"
@@ -187,7 +371,7 @@
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
-            <androidx.appcompat.widget.AppCompatEditText
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/date_of_birth_textview"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -197,7 +381,6 @@
                 android:gravity="center_vertical"
                 android:hint="@string/enter_dob"
                 android:maxLines="1"
-                android:text="11-10-2022"
                 android:paddingStart="10dp"
                 android:textColor="@color/black"
                 android:textSize="18sp" />
@@ -260,7 +443,7 @@
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
-            <androidx.appcompat.widget.AppCompatEditText
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/date_of_registration_textview"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -270,7 +453,6 @@
                 android:gravity="center_vertical"
                 android:hint="@string/enter_date_of_registration"
                 android:maxLines="1"
-                android:text="11-10-2022"
                 android:paddingStart="10dp"
                 android:textColor="@color/black"
                 android:textSize="18sp" />
@@ -308,11 +490,11 @@
                 android:drawableStart="@drawable/ic_baseline_photo_camera_24"
                 android:drawablePadding="5dp"
                 android:gravity="start"
+                android:onClick="front"
                 android:text="@string/national_id_photo_front"
                 android:textColor="@color/link_color_code"
                 android:textSize="15sp"
                 android:textStyle="bold"
-                android:onClick="front"
 
                 />
 
@@ -333,12 +515,11 @@
                 android:drawableStart="@drawable/ic_baseline_photo_camera_24"
                 android:drawablePadding="5dp"
                 android:gravity="start"
+                android:onClick="back"
                 android:text="@string/national_id_photo_back"
                 android:textColor="@color/link_color_code"
                 android:textSize="15sp"
-                android:textStyle="bold"
-                android:onClick="back"
-                />
+                android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/national_id_photo_back_side_image_view"
@@ -372,8 +553,8 @@
         android:layout_marginRight="25dp"
         android:layout_marginBottom="5dp"
         android:background="@drawable/login_btn"
-        android:text="@string/submit"
         android:onClick="submit"
+        android:text="@string/submit"
         android:textColor="@color/white_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintBottom_toTopOf="@id/registration_version_code" />

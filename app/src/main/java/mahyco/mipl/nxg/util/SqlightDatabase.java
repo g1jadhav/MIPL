@@ -7,17 +7,20 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.Vector;
 
+import mahyco.mipl.nxg.model.CategoryChildModel;
 import mahyco.mipl.nxg.model.CategoryModel;
+import mahyco.mipl.nxg.model.GrowerModel;
 
 public class SqlightDatabase extends SQLiteOpenHelper {
 
-    final static String DBName="mipl";
-    final static int version=7;
-    long count=0;
-    final String tbl_categorymaster= "tbl_categorymaster";
-    final String tbl_locationmaster= "tbl_locationmaster";
+    final static String DBName = "mipl";
+    final static int version = 7;
+    long count = 0;
+    final String tbl_categorymaster = "tbl_categorymaster";
+    final String tbl_locationmaster = "tbl_locationmaster";
 
     public SqlightDatabase(Context context) {
         super(context, DBName, null, version);
@@ -28,7 +31,7 @@ public class SqlightDatabase extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         // TODO Auto-generated method stub
 
-        String createCategoryMaster="Create table tbl_categorymaster(\n" +
+        String createCategoryMaster = "Create table tbl_categorymaster(\n" +
                 "    TempId  INTEGER PRIMARY KEY AUTOINCREMENT, \n" +
                 "    CategoryId integer,\n" +
                 "    CountryName text,\n" +
@@ -43,7 +46,7 @@ public class SqlightDatabase extends SQLiteOpenHelper {
                 ")";
         db.execSQL(createCategoryMaster);
 
-        String createlocationmaster=" Create table tbl_locationmaster(\n" +
+        String createlocationmaster = " Create table tbl_locationmaster(\n" +
                 "    TempId  INTEGER PRIMARY KEY AUTOINCREMENT, \n" +
                 "    CountryMasterId INTEGER,\n" +
                 "    CategoryId INTEGER,\n" +
@@ -62,44 +65,105 @@ public class SqlightDatabase extends SQLiteOpenHelper {
 
         db.execSQL(createlocationmaster);
 
+        String createseasonmaster = " Create table tbl_seasonmaster(\n" +
+                "    TempId  INTEGER PRIMARY KEY AUTOINCREMENT, \n" +
+                "    CountryMasterId INTEGER,\n" +
+                "    CategoryId INTEGER,\n" +
+                "    ParentId INTEGER,\n" +
+                "    KeyValue Text,\n" +
+                "    KeyCode text,\n" +
+                "    IsDelete text,\n" +
+                "    CreatedBy text,\n" +
+                "    CreatedDt text,\n" +
+                "    ModifiedBy text,\n" +
+                "    ModifiedDt text,\n" +
+                "    CountryName text,\n" +
+                "    CategoryName text,\n" +
+                "    DisplayTitle text\n" +
+                ")";
+
+        db.execSQL(createseasonmaster);
+
+        String creategrowermaster = " Create table tbl_growermaster(\n" +
+                "    TempId  INTEGER PRIMARY KEY AUTOINCREMENT, \n" +
+                "    CountryMasterId INTEGER,\n" +
+                "    CategoryId INTEGER,\n" +
+                "    ParentId INTEGER,\n" +
+                "    KeyValue Text,\n" +
+                "    KeyCode text,\n" +
+                "    IsDelete text,\n" +
+                "    CreatedBy text,\n" +
+                "    CreatedDt text,\n" +
+                "    ModifiedBy text,\n" +
+                "    ModifiedDt text,\n" +
+                "    CountryName text,\n" +
+                "    CategoryName text,\n" +
+                "    DisplayTitle text\n" +
+                ")";
+
+        db.execSQL(creategrowermaster);
+
+        String createRegistration =  " Create table tbl_registrationmaster(\n" +
+                "    TempId  INTEGER PRIMARY KEY AUTOINCREMENT, \n" +
+                "    CountryId INTEGER,\n" +
+                "    CountryMasterId INTEGER,\n" +
+                "    FarmerPhoto Text,\n" +
+                "    Landmark text,\n" +
+                "    GrowerName text,\n" +
+                "    Gender text,\n" +
+                "    DateOfBirth text,\n" +
+                "    MobileNo text,\n" +
+                "    UniqueCode text,\n" +
+                "    DateOfRegistration text,\n" +
+                "    StaffNameId text,\n" +
+                "    FrontPhoto text,\n" +
+                "    IsSync INTEGER,\n" +
+                "    CreatedBy text,\n" +
+                "    UserType text,\n" +
+                "    BackPhoto text\n" +
+                ")";
+
+        db.execSQL(createRegistration);
+
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int arg1, int arg2) {
         // TODO Auto-generated method stub
-        droptable(db,"createlocationmaster");
-        droptable(db,"tbl_categorymaster");
+        droptable(db, "tbl_locationmaster");
+        droptable(db, "tbl_categorymaster");
+        droptable(db, "tbl_seasonmaster");
+        droptable(db, "tbl_growermaster");
+        droptable(db, "tbl_registrationmaster");
         onCreate(db);
     }
 
     private void droptable(SQLiteDatabase db, String s) {
-        try{
+        try {
 
-            String tbl_order_terms="drop table "+s;
+            String tbl_order_terms = "drop table " + s;
             db.execSQL(tbl_order_terms);
-            Log.i("Table Drop :",s);
+            Log.i("Table Drop :", s);
 
-        }catch (Exception e)
-        {
-            Log.i("Error is :",e.getMessage());
+        } catch (Exception e) {
+            Log.i("Error is :", e.getMessage());
         }
     }
+
     public void trucateTable(String s) {
-        try{
+        try {
             SQLiteDatabase db = null;
             db = this.getReadableDatabase();
-            String trucateStr="delete from "+s;
+            String trucateStr = "delete from " + s;
             db.execSQL(trucateStr);
-            Log.i("Table Trucated :",s);
+            Log.i("Table Trucated :", s);
 
-        }catch (Exception e)
-        {
-            Log.i("Error is :",e.getMessage());
+        } catch (Exception e) {
+            Log.i("Error is :", e.getMessage());
         }
     }
 
-    public boolean addCategory(CategoryModel categoryModel)
-    {
+    public boolean addCategory(CategoryModel categoryModel) {
 
         SQLiteDatabase mydb = null;
         try {
@@ -118,21 +182,21 @@ public class SqlightDatabase extends SQLiteOpenHelper {
                     "ModifiedBy," +
                     "ModifiedDt" +
                     ") values" +
-                    "('"+categoryModel.getCategoryId()+"'," +
-                    "'"+categoryModel.getCountryName()+"'," +
-                    "'"+categoryModel.getPosition()+"'," +
-                    "'"+categoryModel.getCategoryName()+"'," +
-                    "'"+categoryModel.getDisplayTitle()+"'," +
-                    "'"+categoryModel.isDelete()+"'," +
-                    "'"+categoryModel.getCreatedBy()+"'," +
-                    "'"+categoryModel.getCreatedDt()+"'," +
-                    "'"+categoryModel.getModifiedBy()+"'," +
-                    "'"+categoryModel.getModifiedDt()+"')";
-            Log.i("Query is -------> ",""+q);
+                    "('" + categoryModel.getCategoryId() + "'," +
+                    "'" + categoryModel.getCountryName() + "'," +
+                    "'" + categoryModel.getPosition() + "'," +
+                    "'" + categoryModel.getCategoryName() + "'," +
+                    "'" + categoryModel.getDisplayTitle() + "'," +
+                    "'" + categoryModel.isDelete() + "'," +
+                    "'" + categoryModel.getCreatedBy() + "'," +
+                    "'" + categoryModel.getCreatedDt() + "'," +
+                    "'" + categoryModel.getModifiedBy() + "'," +
+                    "'" + categoryModel.getModifiedDt() + "')";
+            Log.i("Query is -------> ", "" + q);
             mydb.execSQL(q);
             return true;
         } catch (Exception e) {
-            Log.i("Error is Product Added ",""+e.getMessage());
+            Log.i("Error is Product Added ", "" + e.getMessage());
             return false;
         } finally {
             mydb.close();
@@ -140,38 +204,341 @@ public class SqlightDatabase extends SQLiteOpenHelper {
 
     }
 
+    public boolean addLocation(CategoryChildModel categoryModel) {
 
-    public boolean addOrderLocal(String id, String details,int status,String cname)
-    {
+        SQLiteDatabase mydb = null;
+        try {
+            mydb = this.getReadableDatabase();
+            String q = "insert into tbl_locationmaster" +
+                    "(" +
+                    "" +
+                    "CountryMasterId," +
+                    "CategoryId," +
+                    "ParentId," +
+                    "KeyValue," +
+                    "KeyCode," +
+                    "IsDelete," +
+                    "CreatedBy," +
+                    "CreatedDt," +
+                    "ModifiedBy," +
+                    "ModifiedDt," +
+                    "CountryName," +
+                    "CategoryName," +
+                    "DisplayTitle" +
+                    ") values" +
+                    "('" + categoryModel.getCountryMasterId() + "'," +
+                    "'" + categoryModel.getCategoryId() + "'," +
+                    "'" + categoryModel.getParentId() + "'," +
+                    "'" + categoryModel.getKeyValue() + "'," +
+                    "'" + categoryModel.getKeyCode() + "'," +
+                    "'" + categoryModel.isDelete() + "'," +
+                    "'" + categoryModel.getCreatedBy() + "'," +
+                    "'" + categoryModel.getCreatedDt() + "'," +
+                    "'" + categoryModel.getModifiedBy() + "'," +
+                    "'" + categoryModel.getModifiedDt() + "'," +
+                    "'" + categoryModel.getCountryName() + "'," +
+                    "'" + categoryModel.getCategoryName() + "'," +
+                    "'" + categoryModel.getDisplayTitle() + "')";
+            Log.i("Query is -------> ", "" + q);
+            mydb.execSQL(q);
+            return true;
+        } catch (Exception e) {
+            Log.i("Error is Product Added ", "" + e.getMessage());
+            return false;
+        } finally {
+            mydb.close();
+        }
+
+    }
+
+    public boolean addRegistration(GrowerModel growerModel) {
+        /*Log.e("temporary","farmer photo "+growerModel.getUploadPhoto() + "\n country id " + growerModel.getCountryId() +
+                "\n CountryMasterId() " + growerModel.getCountryMasterId() +
+                "\nLandMark()" + growerModel.getLandMark() +
+                "\nLandFullName()" + growerModel.getFullName() +
+                "\nLandGender()" + growerModel.getGender() +
+                "\nLandDOB()()" + growerModel.getDOB() +
+                "\nLandMobileNo()" + growerModel.getMobileNo() +
+                "\nLandUniqueCode()" + growerModel.getUniqueCode() +
+                "\nLandRegDt()" + growerModel.getRegDt() +
+                "\nLandStaffNameAndI()" + growerModel.getStaffNameAndId() +
+                "\nLandFrontCopy()" + growerModel.getIdProofFrontCopy() +
+                "\nIsSync()" + growerModel.getIsSync() +
+                "\nreatedBy()" + growerModel.getCreatedBy() +
+                "\nUserType()" + growerModel.getUserType()+
+                "\nBackCopy()" + growerModel.getIdProofBackCopy());*/
+        SQLiteDatabase mydb = null;
+        try {
+            mydb = this.getReadableDatabase();
+            String q = "insert into tbl_registrationmaster" +
+                    "(" +
+                    "" +
+                    "CountryId," +
+                    "CountryMasterId," +
+                    "FarmerPhoto," +
+                    "Landmark," +
+                    "GrowerName," +
+                    "Gender," +
+                    "DateOfBirth," +
+                    "MobileNo," +
+                    "UniqueCode," +
+                    "DateOfRegistration," +
+                    "StaffNameId," +
+                    "FrontPhoto," +
+                    "IsSync," +
+                    "CreatedBy," +
+                    "UserType," +
+                    "BackPhoto" +
+                    ") values" +
+                    "('" + growerModel.getCountryId() + "'," +
+                    "'" + growerModel.getCountryMasterId() + "'," +
+                    "'" + growerModel.getUploadPhoto() + "'," +
+                    "'" + growerModel.getLandMark() + "'," +
+                    "'" + growerModel.getFullName() + "'," +
+                    "'" + growerModel.getGender() + "'," +
+                    "'" + growerModel.getDOB() + "'," +
+                    "'" + growerModel.getMobileNo() + "'," +
+                    "'" + growerModel.getUniqueCode() + "'," +
+                    "'" + growerModel.getRegDt() + "'," +
+                    "'" + growerModel.getStaffNameAndId() + "'," +
+                    "'" + growerModel.getIdProofFrontCopy() + "'," +
+                    "'" + growerModel.getIsSync() + "'," +
+                    "'" + growerModel.getCreatedBy() + "'," +
+                    "'" + growerModel.getUserType() + "'," +
+                    "'" + growerModel.getIdProofBackCopy() + "')";
+            Log.i("Query is -------> ", "" + q);
+            mydb.execSQL(q);
+            return true;
+        } catch (Exception e) {
+            Log.i("Error is Product Added ", "" + e.getMessage());
+            return false;
+        } finally {
+            mydb.close();
+        }
+
+    }
+
+    public ArrayList<CategoryModel> getAllCategories() {
+        SQLiteDatabase myDb = null;
+        try {
+            myDb = this.getReadableDatabase();
+            String q = "SELECT  * FROM tbl_categorymaster";
+            Cursor cursorCourses = myDb.rawQuery(q, null);
+            ArrayList<CategoryModel> courseModalArrayList = new ArrayList<>();
+            if (cursorCourses.moveToFirst()) {
+                do {
+                    courseModalArrayList.add(new CategoryModel(cursorCourses.getInt(1),
+                            cursorCourses.getString(2),
+                            cursorCourses.getInt(3),
+                            cursorCourses.getString(4),
+                            cursorCourses.getString(5),
+                            cursorCourses.getString(7),
+                            cursorCourses.getString(8),
+                            cursorCourses.getString(9),
+                            cursorCourses.getString(10)));
+                } while (cursorCourses.moveToNext());
+            }
+            return courseModalArrayList;
+        } catch (Exception e) {
+            return null;
+        } finally {
+            myDb.close();
+        }
+    }
+
+    public ArrayList<GrowerModel> getAllRegistration() {
+        SQLiteDatabase myDb = null;
+        try {
+            myDb = this.getReadableDatabase();
+            String q = "SELECT * FROM tbl_registrationmaster";
+            Cursor cursorCourses = myDb.rawQuery(q, null);
+            ArrayList<GrowerModel> courseModalArrayList = new ArrayList<>();
+            if (cursorCourses.moveToFirst()) {
+                do {
+                    courseModalArrayList.add(new GrowerModel(cursorCourses.getInt(1),
+                            cursorCourses.getInt(2),
+                            cursorCourses.getString(3),
+                            cursorCourses.getString(4),
+                            cursorCourses.getString(5),
+                            cursorCourses.getString(6),
+                            cursorCourses.getString(7),
+                            cursorCourses.getString(8),
+                            cursorCourses.getString(9),
+                            cursorCourses.getString(10),
+                            cursorCourses.getString(11),
+                            cursorCourses.getString(12),
+                            cursorCourses.getInt(13),
+                            cursorCourses.getString(14),
+                            cursorCourses.getString(15),
+                            cursorCourses.getString(16),
+                            cursorCourses.getInt(0)));
+                } while (cursorCourses.moveToNext());
+            }
+            return courseModalArrayList;
+        } catch (Exception e) {
+            return null;
+        } finally {
+            myDb.close();
+        }
+    }
+
+    public boolean updateRegistrationStatus(int id, int status) {
+        SQLiteDatabase mydb = null;
+        try {
+            mydb = this.getReadableDatabase();
+            String q = "update  tbl_registrationmaster set IsSync=" + status + " where TempId=" + id;
+            Log.i("Query is -------> ", "" + q);
+            mydb.execSQL(q);
+            return true;
+        } catch (Exception e) {
+            Log.i("Error is  Added ", "Order Details : " + e.getMessage());
+            return false;
+        } finally {
+            mydb.close();
+        }
+    }
+
+    public ArrayList<CategoryChildModel> getLocationCategories(int countryMasterId) {
+        SQLiteDatabase myDb = null;
+        try {
+            myDb = this.getReadableDatabase();
+            String q = "SELECT  * FROM tbl_locationmaster where ParentId="+ countryMasterId;
+            Cursor cursorCourses = myDb.rawQuery(q, null);
+            ArrayList<CategoryChildModel> courseModalArrayList = new ArrayList<>();
+            if (cursorCourses.moveToFirst()) {
+                do {
+                    courseModalArrayList.add(new CategoryChildModel(cursorCourses.getInt(1),
+                            cursorCourses.getInt(2),
+                            cursorCourses.getInt(3),
+                            cursorCourses.getString(4),
+                            cursorCourses.getString(5),
+                            cursorCourses.getString(7),
+                            cursorCourses.getString(8),
+                            cursorCourses.getString(9),
+                            cursorCourses.getString(10),
+                            cursorCourses.getString(11),
+                            cursorCourses.getString(12),
+                            cursorCourses.getString(13)));
+                } while (cursorCourses.moveToNext());
+            }
+            return courseModalArrayList;
+        } catch (Exception e) {
+            return null;
+        } finally {
+            myDb.close();
+        }
+    }
+
+    public boolean addSeason(CategoryModel categoryModel) {
+        SQLiteDatabase mydb = null;
+        try {
+            mydb = this.getReadableDatabase();
+            String q = "insert into tbl_seasonmaster" +
+                    "(" +
+                    "" +
+                    "CategoryId," +
+                    "CountryName," +
+                    "Position," +
+                    "CategoryName," +
+                    "DisplayTitle," +
+                    "IsDelete," +
+                    "CreatedBy," +
+                    "CreatedDt," +
+                    "ModifiedBy," +
+                    "ModifiedDt" +
+                    ") values" +
+                    "('" + categoryModel.getCategoryId() + "'," +
+                    "'" + categoryModel.getCountryName() + "'," +
+                    "'" + categoryModel.getPosition() + "'," +
+                    "'" + categoryModel.getCategoryName() + "'," +
+                    "'" + categoryModel.getDisplayTitle() + "'," +
+                    "'" + categoryModel.isDelete() + "'," +
+                    "'" + categoryModel.getCreatedBy() + "'," +
+                    "'" + categoryModel.getCreatedDt() + "'," +
+                    "'" + categoryModel.getModifiedBy() + "'," +
+                    "'" + categoryModel.getModifiedDt() + "')";
+            Log.i("Query is -------> ", "" + q);
+            mydb.execSQL(q);
+            return true;
+        } catch (Exception e) {
+            Log.i("Error is Product Added ", "" + e.getMessage());
+            return false;
+        } finally {
+            mydb.close();
+        }
+    }
+
+    public boolean addGrower(CategoryModel categoryModel) {
+
+        SQLiteDatabase mydb = null;
+        try {
+            mydb = this.getReadableDatabase();
+            String q = "insert into tbl_growermaster" +
+                    "(" +
+                    "" +
+                    "CategoryId," +
+                    "CountryName," +
+                    "Position," +
+                    "CategoryName," +
+                    "DisplayTitle," +
+                    "IsDelete," +
+                    "CreatedBy," +
+                    "CreatedDt," +
+                    "ModifiedBy," +
+                    "ModifiedDt" +
+                    ") values" +
+                    "('" + categoryModel.getCategoryId() + "'," +
+                    "'" + categoryModel.getCountryName() + "'," +
+                    "'" + categoryModel.getPosition() + "'," +
+                    "'" + categoryModel.getCategoryName() + "'," +
+                    "'" + categoryModel.getDisplayTitle() + "'," +
+                    "'" + categoryModel.isDelete() + "'," +
+                    "'" + categoryModel.getCreatedBy() + "'," +
+                    "'" + categoryModel.getCreatedDt() + "'," +
+                    "'" + categoryModel.getModifiedBy() + "'," +
+                    "'" + categoryModel.getModifiedDt() + "')";
+            Log.i("Query is -------> ", "" + q);
+            mydb.execSQL(q);
+            return true;
+        } catch (Exception e) {
+            Log.i("Error is Product Added ", "" + e.getMessage());
+            return false;
+        } finally {
+            mydb.close();
+        }
+    }
+
+
+    public boolean addOrderLocal(String id, String details, int status, String cname) {
 
         SQLiteDatabase mydb = null;
         try {
             mydb = this.getReadableDatabase();
             String q = "insert into tbl_order_local(Details,Status,customername,createddate) values" +
-                    "('"+details+"',"+status+",'"+cname+"',datetime('now'))";
-            Log.i("Query is -------> ",""+q);
+                    "('" + details + "'," + status + ",'" + cname + "',datetime('now'))";
+            Log.i("Query is -------> ", "" + q);
             mydb.execSQL(q);
             return true;
         } catch (Exception e) {
-            Log.i("Error is  Added ","Order Details : "+e.getMessage());
+            Log.i("Error is  Added ", "Order Details : " + e.getMessage());
             return false;
         } finally {
             mydb.close();
         }
 
     }
-    public boolean updateLocalOrerStatus(String id,int status)
-    {
+
+    public boolean updateLocalOrerStatus(String id, int status) {
 
         SQLiteDatabase mydb = null;
         try {
             mydb = this.getReadableDatabase();
-            String q = "update  tbl_order_local set Status="+status+" where id="+id;
-            Log.i("Query is -------> ",""+q);
+            String q = "update  tbl_order_local set Status=" + status + " where id=" + id;
+            Log.i("Query is -------> ", "" + q);
             mydb.execSQL(q);
             return true;
         } catch (Exception e) {
-            Log.i("Error is  Added ","Order Details : "+e.getMessage());
+            Log.i("Error is  Added ", "Order Details : " + e.getMessage());
             return false;
         } finally {
             mydb.close();
@@ -180,10 +547,7 @@ public class SqlightDatabase extends SQLiteOpenHelper {
     }
 
 
-
-
-    public boolean clearProductList()
-    {
+    public boolean clearProductList() {
 
         SQLiteDatabase mydb = null;
         try {
@@ -191,11 +555,11 @@ public class SqlightDatabase extends SQLiteOpenHelper {
             String q = "delete from order_details";
             //String q = "delete from tbl_customersatyam";
 
-            Log.i("Query is -------> ",""+q);
+            Log.i("Query is -------> ", "" + q);
             mydb.execSQL(q);
             return true;
         } catch (Exception e) {
-            Log.i("Error is Clear List",""+e.getMessage());
+            Log.i("Error is Clear List", "" + e.getMessage());
             return false;
         } finally {
             mydb.close();
@@ -203,20 +567,19 @@ public class SqlightDatabase extends SQLiteOpenHelper {
 
     }
 
-    public boolean clearProductList(int id)
-    {
+    public boolean clearProductList(int id) {
 
         SQLiteDatabase mydb = null;
         try {
             mydb = this.getReadableDatabase();
-            String q = "delete from order_details where productid="+id+"";
+            String q = "delete from order_details where productid=" + id + "";
             //String q = "delete from tbl_customersatyam";
 
-            Log.i("Query is -------> ",""+q);
+            Log.i("Query is -------> ", "" + q);
             mydb.execSQL(q);
             return true;
         } catch (Exception e) {
-            Log.i("Error is Clear List",""+e.getMessage());
+            Log.i("Error is Clear List", "" + e.getMessage());
             return false;
         } finally {
             mydb.close();
@@ -225,38 +588,37 @@ public class SqlightDatabase extends SQLiteOpenHelper {
     }
 
 
-    public boolean clearTermsList()
-    {
+    public boolean clearTermsList() {
 
         SQLiteDatabase mydb = null;
         try {
             mydb = this.getReadableDatabase();
             String q = "delete from tbl_order_terms";
 
-            Log.i("Query is -------> ",""+q);
+            Log.i("Query is -------> ", "" + q);
             mydb.execSQL(q);
             return true;
         } catch (Exception e) {
-            Log.i("Error is Clear List",""+e.getMessage());
+            Log.i("Error is Clear List", "" + e.getMessage());
             return false;
         } finally {
             mydb.close();
         }
 
     }
-    public boolean clearTermsList(int id)
-    {
+
+    public boolean clearTermsList(int id) {
 
         SQLiteDatabase mydb = null;
         try {
             mydb = this.getReadableDatabase();
-            String q = "delete from tbl_order_terms where ParticularId='"+id+"'";
+            String q = "delete from tbl_order_terms where ParticularId='" + id + "'";
 
-            Log.i("Query is -------> ",""+q);
+            Log.i("Query is -------> ", "" + q);
             mydb.execSQL(q);
             return true;
         } catch (Exception e) {
-            Log.i("Error is Clear List",""+e.getMessage());
+            Log.i("Error is Clear List", "" + e.getMessage());
             return false;
         } finally {
             mydb.close();
@@ -272,10 +634,10 @@ public class SqlightDatabase extends SQLiteOpenHelper {
         int i = 0;
         try {
             mydb = this.getReadableDatabase();
-            String q = "SELECT  * FROM tbl_cstatus where id="+id;
+            String q = "SELECT  * FROM tbl_cstatus where id=" + id;
 
             Cursor c = mydb.rawQuery(q, null);
-            v=new Vector();
+            v = new Vector();
             if (c.moveToNext()) {
                 //v[i]=new Vector();
 
@@ -299,6 +661,7 @@ public class SqlightDatabase extends SQLiteOpenHelper {
             mydb.close();
         }
     }
+
     public Vector[] getAllProducts() {
         SQLiteDatabase mydb = null;
         String k = "";
@@ -309,9 +672,9 @@ public class SqlightDatabase extends SQLiteOpenHelper {
             String q = "SELECT  * FROM order_details";
 
             Cursor c = mydb.rawQuery(q, null);
-            v=new Vector[c.getCount()];
+            v = new Vector[c.getCount()];
             while (c.moveToNext()) {
-                v[i]=new Vector();
+                v[i] = new Vector();
 
                 v[i].addElement(c.getInt(0)); //id
                 v[i].addElement(c.getString(1));//productid
@@ -336,18 +699,18 @@ public class SqlightDatabase extends SQLiteOpenHelper {
         }
     }
 
-    public boolean addTerms(int termId, int srNo, int orderId, int particularId, String condition, boolean isRemoved,String name) {
+    public boolean addTerms(int termId, int srNo, int orderId, int particularId, String condition, boolean isRemoved, String name) {
 
         SQLiteDatabase mydb = null;
         try {
             mydb = this.getReadableDatabase();
             String q = "insert into tbl_order_terms(TermId,SrNo,OrderId,ParticularId,Condition,IsRemoved,name) values" +
-                    "("+termId+","+srNo+","+orderId+","+particularId+",'"+condition+"','"+isRemoved+"','"+name+"')";
-            Log.i("Query is -------> ",""+q);
+                    "(" + termId + "," + srNo + "," + orderId + "," + particularId + ",'" + condition + "','" + isRemoved + "','" + name + "')";
+            Log.i("Query is -------> ", "" + q);
             mydb.execSQL(q);
             return true;
         } catch (Exception e) {
-            Log.i("Error is Product Added ",""+e.getMessage());
+            Log.i("Error is Product Added ", "" + e.getMessage());
             return false;
         } finally {
             mydb.close();
@@ -355,6 +718,7 @@ public class SqlightDatabase extends SQLiteOpenHelper {
 
 
     }
+
     public Vector[] getAllTerms() {
         SQLiteDatabase mydb = null;
         String k = "";
@@ -365,9 +729,9 @@ public class SqlightDatabase extends SQLiteOpenHelper {
             String q = "SELECT  * FROM tbl_order_terms";
 
             Cursor c = mydb.rawQuery(q, null);
-            v=new Vector[c.getCount()];
+            v = new Vector[c.getCount()];
             while (c.moveToNext()) {
-                v[i]=new Vector();
+                v[i] = new Vector();
 
                 v[i].addElement(c.getInt(0)); //id
                 v[i].addElement(c.getInt(1));//productid
@@ -387,7 +751,9 @@ public class SqlightDatabase extends SQLiteOpenHelper {
         } finally {
             mydb.close();
         }
-    }public Vector[] getAllTermsForAdd() {
+    }
+
+    public Vector[] getAllTermsForAdd() {
         SQLiteDatabase mydb = null;
         String k = "";
         Vector v[];
@@ -397,9 +763,9 @@ public class SqlightDatabase extends SQLiteOpenHelper {
             String q = "SELECT  * FROM tbl_order_terms";
 
             Cursor c = mydb.rawQuery(q, null);
-            v=new Vector[c.getCount()];
+            v = new Vector[c.getCount()];
             while (c.moveToNext()) {
-                v[i]=new Vector();
+                v[i] = new Vector();
 
                 v[i].addElement(c.getInt(0)); //id
                 v[i].addElement(c.getInt(1));//productid
@@ -420,6 +786,7 @@ public class SqlightDatabase extends SQLiteOpenHelper {
             mydb.close();
         }
     }
+
     public Vector[] getAllOfflineOrders() {
         SQLiteDatabase mydb = null;
         String k = "";
@@ -430,9 +797,9 @@ public class SqlightDatabase extends SQLiteOpenHelper {
             String q = "SELECT  * FROM tbl_order_local where status=0";
 
             Cursor c = mydb.rawQuery(q, null);
-            v=new Vector[c.getCount()];
+            v = new Vector[c.getCount()];
             while (c.moveToNext()) {
-                v[i]=new Vector();
+                v[i] = new Vector();
 
                 v[i].addElement(c.getInt(0)); //id
                 v[i].addElement(c.getString(1));//productid
@@ -455,11 +822,12 @@ public class SqlightDatabase extends SQLiteOpenHelper {
     public Vector getAllOfflineOrdersById(int id) {
         SQLiteDatabase mydb = null;
         String k = "";
-        Vector v=new Vector();;
+        Vector v = new Vector();
+        ;
         int i = 0;
         try {
             mydb = this.getReadableDatabase();
-            String q = "SELECT  * FROM tbl_order_local where id="+id+" and status=0";
+            String q = "SELECT  * FROM tbl_order_local where id=" + id + " and status=0";
 
             Cursor c = mydb.rawQuery(q, null);
 
@@ -467,7 +835,7 @@ public class SqlightDatabase extends SQLiteOpenHelper {
 
 
                 v.addElement(c.getInt(0)); //id
-                v.addElement(c.getString(1).replace("\\\"",""));//productid
+                v.addElement(c.getString(1).replace("\\\"", ""));//productid
                 v.addElement(c.getInt(2));
                 v.addElement(c.getString(3));
                 v.addElement(c.getString(4));
@@ -486,7 +854,8 @@ public class SqlightDatabase extends SQLiteOpenHelper {
     public int getMaxOfflineOrderID() {
         SQLiteDatabase mydb = null;
         String k = "";
-        Vector v=new Vector();;
+        Vector v = new Vector();
+        ;
         int i = 0;
         try {
             mydb = this.getReadableDatabase();
@@ -495,7 +864,7 @@ public class SqlightDatabase extends SQLiteOpenHelper {
             Cursor c = mydb.rawQuery(q, null);
 
             if (c.moveToNext()) {
-                i=c.getInt(0); //id
+                i = c.getInt(0); //id
             }
 
             return i;

@@ -24,5 +24,8 @@ public class Constants {
     public static final String GETCATEGORY_BY_PARENT = "countryMaster/getall";
     public static final String SUBMIT_GROWER = "users/create";
     static final String CHECK_LOGIN="customToken/customToken";
+    public static final String GET_SEASON = "";
+    public static final String GET_GROWER = "";
+    public static final String GET_LOCATION = "countryMaster/getall";
 
 }
