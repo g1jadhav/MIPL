@@ -43,6 +43,7 @@ import mahyco.mipl.nxg.util.SqlightDatabase;
 import mahyco.mipl.nxg.view.downloadcategories.DownloadCategoryActivity;
 import mahyco.mipl.nxg.view.growerregistration.NewGrowerRegistration;
 import mahyco.mipl.nxg.view.login.Login;
+import mahyco.mipl.nxg.view.uploaddata.ActivityUpload;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, MainActivityListListener {
@@ -218,7 +219,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             break;
 
             case R.id.upload_data_layout:
-                downloadLocationData();
+                //downloadLocationData();
+                Intent upload = new Intent(context, ActivityUpload.class);
+                startActivity(upload);
                 break;
 
             case R.id.new_grower_registration_layout: {

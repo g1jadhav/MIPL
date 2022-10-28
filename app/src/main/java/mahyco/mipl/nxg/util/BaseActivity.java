@@ -89,7 +89,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected String getCurrentDate() {
         Date date = Calendar.getInstance().getTime();
-        String myFormat = "dd/MM/yyyy";
+        String myFormat = "yyyy-MM-dd";
 
         SimpleDateFormat df = new SimpleDateFormat(myFormat, Locale.getDefault());
         return df.format(date);
@@ -128,7 +128,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected File createImageFile(String type) throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-        String imageFileName = Preferences.get(this,Preferences.USER_ID) + "_" + type + "_" + timeStamp + "_";
+        String imageFileName = /*Preferences.get(this,Preferences.USER_ID) + "_" +*/ type + "_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         return File.createTempFile(
                 imageFileName, /* prefix */
