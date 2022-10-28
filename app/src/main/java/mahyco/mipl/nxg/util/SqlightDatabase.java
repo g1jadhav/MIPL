@@ -103,7 +103,7 @@ public class SqlightDatabase extends SQLiteOpenHelper {
 
         db.execSQL(creategrowermaster);
 
-        String createRegistration =  " Create table tbl_registrationmaster(\n" +
+        String createRegistration = " Create table tbl_registrationmaster(\n" +
                 "    TempId  INTEGER PRIMARY KEY AUTOINCREMENT, \n" +
                 "    CountryId INTEGER,\n" +
                 "    CountryMasterId INTEGER,\n" +
@@ -120,7 +120,9 @@ public class SqlightDatabase extends SQLiteOpenHelper {
                 "    IsSync INTEGER,\n" +
                 "    CreatedBy text,\n" +
                 "    UserType text,\n" +
-                "    BackPhoto text\n" +
+                "    BackPhoto text,\n" +
+                "    LoginId INTEGER,\n" +
+                "    UniqueId text\n" +
                 ")";
 
         db.execSQL(createRegistration);
@@ -288,7 +290,9 @@ public class SqlightDatabase extends SQLiteOpenHelper {
                     "IsSync," +
                     "CreatedBy," +
                     "UserType," +
-                    "BackPhoto" +
+                    "BackPhoto," +
+                    "LoginId," +
+                    "UniqueId" +
                     ") values" +
                     "('" + growerModel.getCountryId() + "'," +
                     "'" + growerModel.getCountryMasterId() + "'," +
@@ -305,7 +309,9 @@ public class SqlightDatabase extends SQLiteOpenHelper {
                     "'" + growerModel.getIsSync() + "'," +
                     "'" + growerModel.getCreatedBy() + "'," +
                     "'" + growerModel.getUserType() + "'," +
-                    "'" + growerModel.getIdProofBackCopy() + "')";
+                    "'" + growerModel.getIdProofBackCopy() + "'," +
+                    "'" + growerModel.getLoginId() + "'," +
+                    "'" + growerModel.getUniqueId() + "')";
             Log.i("Query is -------> ", "" + q);
             mydb.execSQL(q);
             return true;
@@ -371,6 +377,8 @@ public class SqlightDatabase extends SQLiteOpenHelper {
                             cursorCourses.getString(14),
                             cursorCourses.getString(15),
                             cursorCourses.getString(16),
+                            cursorCourses.getInt(17),
+                            cursorCourses.getString(18),
                             cursorCourses.getInt(0)));
                 } while (cursorCourses.moveToNext());
             }
@@ -382,11 +390,117 @@ public class SqlightDatabase extends SQLiteOpenHelper {
         }
     }
 
-    public boolean updateRegistrationStatus(int id, int status) {
+    public boolean updateRegistrationStatus(String mobileNumber, int status) {
         SQLiteDatabase mydb = null;
         try {
             mydb = this.getReadableDatabase();
-            String q = "update  tbl_registrationmaster set IsSync=" + status + " where TempId=" + id;
+            String q = "update  tbl_registrationmaster set IsSync=" + status + " where MobileNo=" + mobileNumber;
+            Log.i("Query is -------> ", "" + q);
+            mydb.execSQL(q);
+            return true;
+        } catch (Exception e) {
+            Log.i("Error is  Added ", "Order Details : " + e.getMessage());
+            return false;
+        } finally {
+            mydb.close();
+        }
+    }
+
+    public ArrayList<GrowerModel> deleteRegistration(String mobileNumber) {
+         SQLiteDatabase myDb = null;
+        try {
+            myDb = this.getReadableDatabase();
+            String q = "DELETE from tbl_registrationmaster where MobileNo=" + mobileNumber;
+            Cursor cursorCourses = myDb.rawQuery(q, null);
+            ArrayList<GrowerModel> courseModalArrayList = new ArrayList<>();
+            if (cursorCourses.moveToFirst()) {
+                do {
+                    courseModalArrayList.add(new GrowerModel(cursorCourses.getInt(1),
+                            cursorCourses.getInt(2),
+                            cursorCourses.getString(3),
+                            cursorCourses.getString(4),
+                            cursorCourses.getString(5),
+                            cursorCourses.getString(6),
+                            cursorCourses.getString(7),
+                            cursorCourses.getString(8),
+                            cursorCourses.getString(9),
+                            cursorCourses.getString(10),
+                            cursorCourses.getString(11),
+                            cursorCourses.getString(12),
+                            cursorCourses.getInt(13),
+                            cursorCourses.getString(14),
+                            cursorCourses.getString(15),
+                            cursorCourses.getString(16),
+                            cursorCourses.getInt(17),
+                            cursorCourses.getString(18),
+                            cursorCourses.getInt(0)));
+                } while (cursorCourses.moveToNext());
+            }
+            return courseModalArrayList;
+        } catch (Exception e) {
+            return null;
+        } finally {
+            myDb.close();
+        }
+    }
+
+//    public ArrayList<GrowerModel> updateRegistrationImagePath(String mobileNumber, String imageType, String path) {
+//        SQLiteDatabase myDb = null;
+//        try {
+//            myDb = this.getReadableDatabase();
+//            String q;
+//            if (imageType.equalsIgnoreCase("growerPhoto")) {
+//                q = "update  tbl_registrationmaster set FarmerPhoto='" + path + "' where MobileNo='" + mobileNumber+"'";
+//            } else if (imageType.equalsIgnoreCase("docBackPhoto")) {
+//                q = "update  tbl_registrationmaster set BackPhoto='" + path + "' where MobileNo='" + mobileNumber+"'";
+//            } else {
+//                q = "update  tbl_registrationmaster set FrontPhoto='" + path + "' where MobileNo='" + mobileNumber+"'";
+//            }
+//            Cursor cursorCourses = myDb.rawQuery(q, null);
+//            ArrayList<GrowerModel> courseModalArrayList = new ArrayList<>();
+//            if (cursorCourses.moveToFirst()) {
+//                do {
+//                    courseModalArrayList.add(new GrowerModel(cursorCourses.getInt(1),
+//                            cursorCourses.getInt(2),
+//                            cursorCourses.getString(3),
+//                            cursorCourses.getString(4),
+//                            cursorCourses.getString(5),
+//                            cursorCourses.getString(6),
+//                            cursorCourses.getString(7),
+//                            cursorCourses.getString(8),
+//                            cursorCourses.getString(9),
+//                            cursorCourses.getString(10),
+//                            cursorCourses.getString(11),
+//                            cursorCourses.getString(12),
+//                            cursorCourses.getInt(13),
+//                            cursorCourses.getString(14),
+//                            cursorCourses.getString(15),
+//                            cursorCourses.getString(16),
+//                            cursorCourses.getInt(17),
+//                            cursorCourses.getString(18),
+//                            cursorCourses.getInt(0)));
+//                } while (cursorCourses.moveToNext());
+//            }
+//            return courseModalArrayList;
+//        } catch (Exception e) {
+//            return null;
+//        } finally {
+//            myDb.close();
+//        }
+//    }
+
+    public boolean updateRegistrationImagePath(String mobileNumber, String imageType, String path) {
+        SQLiteDatabase mydb = null;
+        try {
+            mydb = this.getReadableDatabase();
+            String q;
+            if (imageType.equalsIgnoreCase("growerPhoto")) {
+                q = "update  tbl_registrationmaster set FarmerPhoto='" + path + "' where MobileNo='" + mobileNumber+"'";
+            } else if (imageType.equalsIgnoreCase("docBackPhoto")) {
+                q = "update  tbl_registrationmaster set BackPhoto='" + path + "' where MobileNo='" + mobileNumber+"'";
+            } else {
+                q = "update  tbl_registrationmaster set FrontPhoto='" + path + "' where MobileNo='" + mobileNumber+"'";
+            }
             Log.i("Query is -------> ", "" + q);
             mydb.execSQL(q);
             return true;
@@ -402,7 +516,7 @@ public class SqlightDatabase extends SQLiteOpenHelper {
         SQLiteDatabase myDb = null;
         try {
             myDb = this.getReadableDatabase();
-            String q = "SELECT  * FROM tbl_locationmaster where ParentId="+ countryMasterId;
+            String q = "SELECT  * FROM tbl_locationmaster where ParentId=" + countryMasterId;
             Cursor cursorCourses = myDb.rawQuery(q, null);
             ArrayList<CategoryChildModel> courseModalArrayList = new ArrayList<>();
             if (cursorCourses.moveToFirst()) {

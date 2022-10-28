@@ -16,7 +16,8 @@ public class GrowerModel {
     public GrowerModel(int countryId, int countryMasterId, String uploadPhoto, String landMark,
                        String growerName, String gender, String dob, String mobileNo, String uniqueCode, String regDate,
                        String staffNameAndId, String idProofFrontCopy,
-                       int isSync, String createdBy, String userType, String idProofBackCopy, int tempId) {
+                       int isSync, String createdBy, String userType, String idProofBackCopy,
+                       int loginId,String uniqueId, int tempId) {
         UploadPhoto = uploadPhoto;
         CountryId = countryId;
         CountryMasterId = countryMasterId;
@@ -33,7 +34,32 @@ public class GrowerModel {
         CreatedBy = createdBy;
         UserType = userType;
         IdProofBackCopy = idProofBackCopy;
+        LoginId = loginId;
+        UniqueId = uniqueId;
         TempId = tempId;
+    }
+
+    public GrowerModel(int countryId, int countryMasterId, String uploadPhoto, String landMark,
+                       String growerName, String gender, String dob, String mobileNo, String uniqueCode, String regDate,
+                       String staffNameAndId, String idProofFrontCopy, String createdBy, String userType, String idProofBackCopy,
+                       int loginId,String uniqueId ) {
+        UploadPhoto = uploadPhoto;
+        CountryId = countryId;
+        CountryMasterId = countryMasterId;
+        LandMark = landMark;
+        FullName = growerName;
+        Gender = gender;
+        DOB = dob;
+        MobileNo = mobileNo;
+        UniqueCode = uniqueCode;
+        RegDt = regDate;
+        StaffNameAndId = staffNameAndId;
+        IdProofFrontCopy = idProofFrontCopy;
+        CreatedBy = createdBy;
+        UserType = userType;
+        IdProofBackCopy = idProofBackCopy;
+        LoginId = loginId;
+        UniqueId = uniqueId;
     }
 
     public int getTempId() {

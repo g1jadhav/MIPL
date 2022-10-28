@@ -133,7 +133,7 @@
     <string name="login">Login</string>
     <string name="user_name">User Name</string>
     <string name="password">Password</string>
-    <string name="version_code"> Version: %d</string>
+    <string name="version_code"> V %d</string>
     <string name="welcome_back">Welcome back!</string>
     <string name="sign_in_to_your_account">Sign in to your account</string>
     <string name="new_user_registration">User\nRegistration</string>
@@ -242,7 +242,7 @@
     <string name="enter_organizer_name">Enter Organizer Name</string>
     <string name="Please_select_organizer_name">Please select organizer name</string>
     <string name="please_organizer_photo">Please capture organizer photo</string>
-    <string name="no_of_records_for_upload">No. of Records for upload =</string>
+    <string name="no_of_records_for_upload">No. of Records for upload = %d</string>
     <string name="upload">Upload</string>
     <string name="mandatory_field_visit_1st">Mandatory Field Visit-1st</string>
     <string name="mandatory_field_visit_2nd">Mandatory Field Visit-2nd</string>

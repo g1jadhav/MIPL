@@ -3,6 +3,7 @@ package mahyco.mipl.nxg.view.growerregistration;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.StrictMode;
 import android.text.Html;
@@ -17,20 +18,16 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.budiyev.android.codescanner.AutoFocusMode;
 import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
-import com.budiyev.android.codescanner.DecodeCallback;
-import com.budiyev.android.codescanner.ErrorCallback;
 import com.budiyev.android.codescanner.ScanMode;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.zxing.Result;
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 import com.vansuita.pickimage.bean.PickResult;
 import com.vansuita.pickimage.bundle.PickSetup;
@@ -41,6 +38,8 @@ import com.vansuita.pickimage.listeners.IPickResult;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -69,7 +68,6 @@ import mahyco.mipl.nxg.util.Constants;
 import mahyco.mipl.nxg.util.MultipartUtility;
 import mahyco.mipl.nxg.util.Preferences;
 import mahyco.mipl.nxg.util.SqlightDatabase;
-import mahyco.mipl.nxg.view.downloadcategories.DownloadCategoryActivity;
 
 public class NewGrowerRegistration extends BaseActivity implements Listener, View.OnClickListener {
 
@@ -127,6 +125,10 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
 
     private int mCountryMasterIdAsPerSelection = 0;
     private int mSpinnerPosition = 1;
+
+    private File mDocFrontPhotoFile = null;
+    private File mGrowerPhotoFile = null;
+    private File mDocBackPhotoFile = null;
 
     @Override
     protected int getLayout() {
@@ -202,7 +204,7 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
             mCodeScanner = new CodeScanner(this, mCodeScannerView);
             mScrollView = findViewById(R.id.main_scrollview);
 
-            if (countryName.equalsIgnoreCase("Malawi")){
+            if (countryName.equalsIgnoreCase("Malawi")) {
                 scan_qr_code_btn.setVisibility(View.VISIBLE);
                 scan_qr_code_btn.setOnClickListener(this);
             }
@@ -236,7 +238,7 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
                     mCalendar.set(Calendar.MONTH, i1);
                     mCalendar.set(Calendar.DAY_OF_MONTH, i2);
 
-                    String myFormat = "dd/MM/yyyy";
+                    String myFormat = "yyyy-MM-dd";
                     SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat, Locale.getDefault());
                     et_dob.setText(dateFormat.format(mCalendar.getTime()));
                 };
@@ -258,18 +260,18 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
                 visibleScannerLayout();
 
                 mCodeScanner.setCamera(CodeScanner.CAMERA_BACK);
-                         // or CAMERA_FRONT or specific camera id
-                mCodeScanner.setFormats( CodeScanner.ALL_FORMATS); // list of type BarcodeFormat,
+                // or CAMERA_FRONT or specific camera id
+                mCodeScanner.setFormats(CodeScanner.ALL_FORMATS); // list of type BarcodeFormat,
                 mCodeScanner.setAutoFocusMode(AutoFocusMode.SAFE); // or CONTINUOUS
-                mCodeScanner.setScanMode(ScanMode.SINGLE );// or CONTINUOUS or PREVIEW
-                mCodeScanner.setAutoFocusEnabled(true );// Whether to enable auto focus or not
-                mCodeScanner.setFlashEnabled( false );// Whether to enable flash or not
+                mCodeScanner.setScanMode(ScanMode.SINGLE);// or CONTINUOUS or PREVIEW
+                mCodeScanner.setAutoFocusEnabled(true);// Whether to enable auto focus or not
+                mCodeScanner.setFlashEnabled(false);// Whether to enable flash or not
                 mCodeScanner.setDecodeCallback(result -> runOnUiThread(() -> {
-                    if(!result.getText().isEmpty()){
+                    if (!result.getText().isEmpty()) {
                         hideScannerLayout();
                         String[] results = result.getText().split("~");
 
-                        if (results.length > 10 && results[1].contains( "MWI")
+                        if (results.length > 10 && results[1].contains("MWI")
                         ) {
                             showToast("Scanner successfully !!");
                             et_dob.setText(results[9]);
@@ -283,7 +285,7 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
                         } else {
                             showToast("SCANNER ERROR !! INVALID DATA");
                         }
-                    }else {
+                    } else {
                         showToast("SCANNER ERROR !! INVALID DATA");
                     }
                 }));
@@ -323,7 +325,7 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
 
             growerModel.setLoginId(Integer.parseInt(Preferences.get(mContext, Preferences.LOGINID).trim()));//,
             growerModel.setCountryId(Integer.parseInt(counrtyId.trim()));//,
-           //village id
+            //village id
             growerModel.setCountryMasterId(/*26*/mSpinner5List.get(mSearchableSpinner5.getSelectedItemPosition()).getCountryMasterId());//,
             growerModel.setUniqueId("");//,
             growerModel.setUserType(str_Lable);//,
@@ -349,7 +351,7 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
         }
     }
 
-    private class GetRegistrationAsyncTaskList extends AsyncTask<Void, Void, Void> {
+    /*private class GetRegistrationAsyncTaskList extends AsyncTask<Void, Void, Void> {
         @Override
         protected final Void doInBackground(Void... voids) {
             SqlightDatabase database = null;
@@ -357,7 +359,7 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
                 database = new SqlightDatabase(mContext);
                 List<GrowerModel> list = database.getAllRegistration();
                 for (int i = 0; i < list.size(); i++) {
-                    Log.e("temporary","farmer photo "+list.get(i).getUploadPhoto() + "\n country id " + growerModel.getCountryId() +
+                    Log.e("temporary", "farmer photo " + list.get(i).getUploadPhoto() + "\n country id " + growerModel.getCountryId() +
                             "\n CountryMasterId() " + list.get(i).getCountryMasterId() +
                             "\nLandMark()" + list.get(i).getLandMark() +
                             "\nLandFullName()" + list.get(i).getFullName() +
@@ -370,8 +372,8 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
                             "\nLandFrontCopy()" + list.get(i).getIdProofFrontCopy() +
                             "\nIsSync()" + list.get(i).getIsSync() +
                             "\nreatedBy()" + list.get(i).getCreatedBy() +
-                            "\nUserType()" + list.get(i).getUserType()+
-                            "\nBackCopy()" + list.get(i).getIdProofBackCopy()+
+                            "\nUserType()" + list.get(i).getUserType() +
+                            "\nBackCopy()" + list.get(i).getIdProofBackCopy() +
                             "\ntempid ()" + list.get(i).getTempId());
                 }
             } finally {
@@ -387,7 +389,7 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
             finish();
             super.onPostExecute(unused);
         }
-    }
+    }*/
 
     private class AddRegistrationAsyncTask extends AsyncTask<Void, Void, Void> {
         @Override
@@ -406,8 +408,8 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
 
         @Override
         protected void onPostExecute(Void unused) {
-            new GetRegistrationAsyncTaskList().execute();
-//            finish();
+            /*new GetRegistrationAsyncTaskList().execute();*/
+            finish();
             super.onPostExecute(unused);
         }
     }
@@ -489,7 +491,26 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
                             //TODO: do what you have to...
                             imageView_front.setVisibility(View.VISIBLE);
                             imageView_front.setImageBitmap(r.getBitmap());
-                            front_path = r.getPath();
+                            // front_path = r.getPath();
+                            try {
+                                mDocFrontPhotoFile = createImageFile("front_photo");
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            if (mDocFrontPhotoFile != null && r.getBitmap() != null) {
+                                try {
+                                    front_path = mDocFrontPhotoFile.getAbsolutePath();
+                                    Log.e("temporary"," front_path " + front_path);
+                                    FileOutputStream out = new FileOutputStream(front_path);
+                                    r.getBitmap().compress(Bitmap.CompressFormat.PNG, 100, out);
+                                    out.flush();
+                                    out.close();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                showToast(getString(R.string.went_wrong));
+                            }
                         }
                     })
                     .setOnPickCancel(new IPickCancel() {
@@ -512,9 +533,28 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
                             //TODO: do what you have to...
                             imageView_back.setVisibility(View.VISIBLE);
                             imageView_back.setImageBitmap(r.getBitmap());
-                            back_path = r.getPath();
+                           // back_path = r.getPath();
                            /* str_chk_img1 = r.getPath();
                             uploadstatus = 11;*/
+                            try {
+                                mDocBackPhotoFile = createImageFile("back_photo");
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            if (mDocBackPhotoFile != null && r.getBitmap() != null) {
+                                try {
+                                    back_path = mDocBackPhotoFile.getAbsolutePath();
+                                    Log.e("temporary"," back_path " + back_path);
+                                    FileOutputStream out = new FileOutputStream(back_path);
+                                    r.getBitmap().compress(Bitmap.CompressFormat.PNG, 100, out);
+                                    out.flush();
+                                    out.close();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                showToast(getString(R.string.went_wrong));
+                            }
                         }
                     })
                     .setOnPickCancel(new IPickCancel() {
@@ -536,9 +576,28 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
                         public void onPickResult(PickResult r) {
                             //TODO: do what you have to...
                             iv_dp.setImageBitmap(r.getBitmap());
-                            dp_path = r.getPath();
+                          //  dp_path = r.getPath();
                           /*  str_chk_img1 = r.getPath();
                             uploadstatus = 11;*/
+                            try {
+                                mGrowerPhotoFile = createImageFile("profile_photo");
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            if (mGrowerPhotoFile != null && r.getBitmap() != null) {
+                                try {
+                                    dp_path = mGrowerPhotoFile.getAbsolutePath();
+                                    Log.e("temporary"," dp " + dp_path);
+                                    FileOutputStream out = new FileOutputStream(dp_path);
+                                    r.getBitmap().compress(Bitmap.CompressFormat.PNG, 100, out);
+                                    out.flush();
+                                    out.close();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                showToast(getString(R.string.went_wrong));
+                            }
                         }
                     })
                     .setOnPickCancel(new IPickCancel() {
