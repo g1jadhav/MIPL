@@ -376,6 +376,9 @@ public class ActivityUpload extends BaseActivity implements View.OnClickListener
             return null;
         }
     }
+private String mGrowerPath;
+private String mDocBackPath;
+private String mDocFrontPath;
 
     private class UpdateAsyncTaskList extends AsyncTask<String, String, Void> {
 
@@ -389,6 +392,7 @@ public class ActivityUpload extends BaseActivity implements View.OnClickListener
                 database = new SqlightDatabase(mContext);
                 Log.e("temporary", "UpdateAsyncTaskList stid " + stid +" paths " + paths[0]);
                 if (stid == 1) {
+                    mGrowerPath = paths[0];
                     if (mGrowerClicked) {
                         database.updateRegistrationImagePath(mGrowerList.get(mIndex).getMobileNo(), "growerPhoto", path[0]);
                     } else {
@@ -398,19 +402,22 @@ public class ActivityUpload extends BaseActivity implements View.OnClickListener
                     stid = 2;
                 } else if (stid == 2) {
                     stid = 3;
+                    mDocFrontPath = paths[0];
                     if (mGrowerClicked) {
-                        database.updateRegistrationImagePath(mGrowerList.get(mIndex).getMobileNo(), "growerPhoto", path[0]);
+                        database.updateRegistrationImagePath(mGrowerList.get(mIndex).getMobileNo(), "frontPhoto", path[0]);
                     } else {
-                        database.updateRegistrationImagePath(mOrganizerList.get(mIndex).getMobileNo(), "growerPhoto", path[0]);
+                        database.updateRegistrationImagePath(mOrganizerList.get(mIndex).getMobileNo(), "frontPhoto", path[0]);
                     }
                     runOnUiThread(() -> Toast.makeText(mContext, "front Uploaded", Toast.LENGTH_SHORT).show());
                 } else if (stid == 3) {
+                    mDocBackPath = paths[0];
                     stid = 4;
                     if (mGrowerClicked) {
-                        database.updateRegistrationImagePath(mGrowerList.get(mIndex).getMobileNo(), "growerPhoto", path[0]);
+                        database.updateRegistrationImagePath(mGrowerList.get(mIndex).getMobileNo(), "docBackPhoto", path[0]);
                     } else {
-                        database.updateRegistrationImagePath(mOrganizerList.get(mIndex).getMobileNo(), "growerPhoto", path[0]);
+                        database.updateRegistrationImagePath(mOrganizerList.get(mIndex).getMobileNo(), "docBackPhoto", path[0]);
                     }
+                    runOnUiThread(() -> Toast.makeText(mContext, "back Uploaded", Toast.LENGTH_SHORT).show());
                 } /*else if (stid == 4) {
                     JsonObject jsonObject = new JsonObject();
                     if (mGrowerClicked) {
@@ -451,7 +458,6 @@ public class ActivityUpload extends BaseActivity implements View.OnClickListener
                         jsonObject.addProperty("UniqueId", mOrganizerList.get(mIndex).getUniqueId());
                     }
                     registrationAPI.createGrower(jsonObject);*/
-                runOnUiThread(() -> Toast.makeText(mContext, "back Uploaded", Toast.LENGTH_SHORT).show());
                 /*}*/
             } finally {
                 if (database != null) {
@@ -464,7 +470,7 @@ public class ActivityUpload extends BaseActivity implements View.OnClickListener
         @Override
         protected void onPostExecute(Void unused) {
             Log.e("temporary", "onPostExecute mGrowerClicked " + mGrowerClicked + " mGrowerList " + mGrowerList + " mGrowerList size " + mGrowerList.size()
-                    + " mOrganizerList " + mOrganizerList + " mOrganizerList size " + mOrganizerList.size());
+                    + " mGrowerPath " + mGrowerPath + " mDocBack " + mDocBackPath  + " mDocFrontPath " + mDocFrontPath);
             if (stid < 4) {
                 if (mGrowerClicked && mGrowerList != null && mGrowerList.size() > 0) {
                     new UploadFile().execute(mGrowerList.get(mIndex).getIdProofFrontCopy());
@@ -480,15 +486,15 @@ public class ActivityUpload extends BaseActivity implements View.OnClickListener
                     jsonObject.addProperty("DOB", mGrowerList.get(mIndex).getDOB());
                     jsonObject.addProperty("FullName", mGrowerList.get(mIndex).getFullName());
                     jsonObject.addProperty("Gender", mGrowerList.get(mIndex).getGender());
-                    jsonObject.addProperty("IdProofBackCopy", /*mGrowerList.get(mIndex).getIdProofBackCopy()*/paths[0]);
-                    jsonObject.addProperty("IdProofFrontCopy", /*mGrowerList.get(mIndex).getIdProofFrontCopy()*/paths[0]);
+                    jsonObject.addProperty("IdProofBackCopy", /*mGrowerList.get(mIndex).getIdProofBackCopy()*/mDocBackPath);
+                    jsonObject.addProperty("IdProofFrontCopy", /*mGrowerList.get(mIndex).getIdProofFrontCopy()*/mDocFrontPath);
                     jsonObject.addProperty("LandMark", mGrowerList.get(mIndex).getLandMark());
                     jsonObject.addProperty("LoginId", mGrowerList.get(mIndex).getLoginId());
                     jsonObject.addProperty("MobileNo", mGrowerList.get(mIndex).getMobileNo());
                     jsonObject.addProperty("RegDt", mGrowerList.get(mIndex).getRegDt());
                     jsonObject.addProperty("StaffNameAndId", mGrowerList.get(mIndex).getStaffNameAndId());
                     jsonObject.addProperty("UniqueCode", mGrowerList.get(mIndex).getUniqueCode());
-                    jsonObject.addProperty("UploadPhoto", /*mGrowerList.get(mIndex).getUploadPhoto()*/paths[0]);
+                    jsonObject.addProperty("UploadPhoto", /*mGrowerList.get(mIndex).getUploadPhoto()*/mGrowerPath);
                     jsonObject.addProperty("UserType", mGrowerList.get(mIndex).getUserType());
                     jsonObject.addProperty("UniqueId", mGrowerList.get(mIndex).getUniqueId());
                 } else {
@@ -498,15 +504,15 @@ public class ActivityUpload extends BaseActivity implements View.OnClickListener
                     jsonObject.addProperty("DOB", mOrganizerList.get(mIndex).getDOB());
                     jsonObject.addProperty("FullName", mOrganizerList.get(mIndex).getFullName());
                     jsonObject.addProperty("Gender", mOrganizerList.get(mIndex).getGender());
-                    jsonObject.addProperty("IdProofBackCopy",/* mOrganizerList.get(mIndex).getIdProofBackCopy()*/paths[0]);
-                    jsonObject.addProperty("IdProofFrontCopy", /*mOrganizerList.get(mIndex).getIdProofFrontCopy()*/paths[0]);
+                    jsonObject.addProperty("IdProofBackCopy",/* mOrganizerList.get(mIndex).getIdProofBackCopy()*/mDocBackPath);
+                    jsonObject.addProperty("IdProofFrontCopy", /*mOrganizerList.get(mIndex).getIdProofFrontCopy()*/mDocFrontPath);
                     jsonObject.addProperty("LandMark", mOrganizerList.get(mIndex).getLandMark());
                     jsonObject.addProperty("LoginId", mOrganizerList.get(mIndex).getLoginId());
                     jsonObject.addProperty("MobileNo", mOrganizerList.get(mIndex).getMobileNo());
                     jsonObject.addProperty("RegDt", mOrganizerList.get(mIndex).getRegDt());
                     jsonObject.addProperty("StaffNameAndId", mOrganizerList.get(mIndex).getStaffNameAndId());
                     jsonObject.addProperty("UniqueCode", mOrganizerList.get(mIndex).getUniqueCode());
-                    jsonObject.addProperty("UploadPhoto", /*mOrganizerList.get(mIndex).getUploadPhoto()*/paths[0]);
+                    jsonObject.addProperty("UploadPhoto", /*mOrganizerList.get(mIndex).getUploadPhoto()*/mGrowerPath);
                     jsonObject.addProperty("UserType", mOrganizerList.get(mIndex).getUserType());
                     jsonObject.addProperty("UniqueId", mOrganizerList.get(mIndex).getUniqueId());
                 }
