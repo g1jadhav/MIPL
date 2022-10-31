@@ -11,7 +11,6 @@ import java.util.List;
 
 import mahyco.mipl.nxg.model.CategoryModel;
 import mahyco.mipl.nxg.util.RetrofitClient;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -19,19 +18,20 @@ import retrofit2.Response;
 public class RegisrationAPI {
 
 
-        Context context;
-        String result = "";
-        ProgressDialog progressDialog;
-        RegistrationListener resultOutput;
+    Context context;
+    String result = "";
+    ProgressDialog progressDialog;
+    RegistrationListener resultOutput;
 
-        public RegisrationAPI(Context context, RegistrationListener resultOutput) {
-            this.context = context;
-            this.resultOutput = resultOutput;
-            progressDialog = new ProgressDialog(context);
-            progressDialog.setMessage("Please Wait..");
-        }
-    public void getCategory(JsonObject jsonObject)
-    {
+    public RegisrationAPI(Context context, RegistrationListener resultOutput) {
+        this.context = context;
+        this.resultOutput = resultOutput;
+        progressDialog = new ProgressDialog(context);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Please Wait..");
+    }
+
+    public void getCategory(JsonObject jsonObject) {
         try {
             if (!progressDialog.isShowing())
                 progressDialog.show();

@@ -267,6 +267,7 @@ public class NewActivityUpload extends BaseActivity implements View.OnClickListe
             progressDialog = new ProgressDialog(mContext);
             progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.setMessage("File Uploading ....");
+            progressDialog.setCancelable(false);
             progressDialog.show();
         }
 
