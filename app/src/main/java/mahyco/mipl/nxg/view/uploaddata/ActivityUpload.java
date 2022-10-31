@@ -49,7 +49,8 @@ public class ActivityUpload extends BaseActivity implements View.OnClickListener
 
     private int stid = 0;
     private GrowerRegistrationAPI registrationAPI;
-    private int mIndex = 0;
+    private int mIndexForGrowerList = 0;
+    private int mIndexForOrganizerList = 0;
     private boolean mGrowerClicked;
 
     @Override
@@ -95,22 +96,30 @@ public class ActivityUpload extends BaseActivity implements View.OnClickListener
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.grower_registration_upload: {
-                if (checkInternetConnection(mContext) && mGrowerList.size() > 0) {
-                    mGrowerClicked = true;
-                    mIndex = 0;
-                    stid = 1;
-                    new UploadFile().execute(mGrowerList.get(mIndex).getUploadPhoto());
+                if (checkInternetConnection(mContext)) {
+                    if (mGrowerList.size() > 0) {
+                        mGrowerClicked = true;
+                        mIndexForGrowerList = 0;
+                        stid = 1;
+                        new UploadFile().execute(mGrowerList.get(mIndexForGrowerList).getUploadPhoto());
+                    } else {
+                        showNoInternetDialog(mContext, "No data available to upload");
+                    }
                 } else {
                     showNoInternetDialog(mContext, "Please check your internet connection");
                 }
             }
             break;
             case R.id.organizer_registration_upload: {
-                if (checkInternetConnection(mContext) && mOrganizerList.size() > 0) {
-                    mGrowerClicked = false;
-                    mIndex = 0;
-                    stid = 1;
-                    new UploadFile().execute(mOrganizerList.get(mIndex).getUploadPhoto());
+                if (checkInternetConnection(mContext)) {
+                    if (mOrganizerList.size() > 0) {
+                        mGrowerClicked = false;
+                        mIndexForOrganizerList = 0;
+                        stid = 1;
+                        new UploadFile().execute(mOrganizerList.get(mIndexForOrganizerList).getUploadPhoto());
+                    } else {
+                        showNoInternetDialog(mContext, "No data available to upload");
+                    }
                 } else {
                     showNoInternetDialog(mContext, "Please check your internet connection");
                 }
@@ -149,19 +158,6 @@ public class ActivityUpload extends BaseActivity implements View.OnClickListener
             /*if (mGrowerClicked) {*/
             Log.e("temporary", "result.getStatus().equalsIgnoreCase(\"Success\")");
             new DeleteIfSyncSuccessfully().execute();
-            /*} else {
-                Log.e("temporary", "onGrowerRegister mGrowerUpload before " + mIndex);
-                mIndex++;
-                Log.e("temporary", "onGrowerRegister mGrowerUpload after " + mIndex + " mOrganizerList size " +
-                        mOrganizerList.size());
-                if (mIndex < mOrganizerList.size()) {
-                    Log.e("temporary", "UploadFile() called");
-                    stid = 1;
-                    new UploadFile().execute(mOrganizerList.get(mIndex).getUploadPhoto());
-                } else {
-                    Log.e("temporary", "onGrowerRegister mGrowerUpload all data upload");
-                }
-            }*/
         }
     }
 
@@ -227,110 +223,6 @@ public class ActivityUpload extends BaseActivity implements View.OnClickListener
                     try {
                         JSONObject job = new JSONObject(line.toString());
                         new UpdateAsyncTaskList().execute(job.getString("FileName"));
-                        /*if (stid == 1) {
-                            JSONObject job = new JSONObject(line.toString());
-                            new UpdateAsyncTaskList().execute();
-                            SqlightDatabase database = null;
-                            try {
-                                database = new SqlightDatabase(mContext);
-                                if (mGrowerClicked) {
-                                    database.updateRegistrationImagePath(mGrowerList.get(mIndex).getMobileNo(), "growerPhoto", job.getString("FileName"));
-                                } else {
-                                    database.updateRegistrationImagePath(mOrganizerList.get(mIndex).getMobileNo(), "growerPhoto", job.getString("FileName"));
-                                }
-                            } finally {
-                                if (database != null) {
-                                    database.close();
-                                }
-                            }
-                            Toast.makeText(mContext, "Dp Uploaded", Toast.LENGTH_SHORT).show();
-                            stid = 2;
-                            new UploadFile().execute(mGrowerList.get(mIndex).getIdProofFrontCopy());
-
-                        } else if (stid == 2) {
-                          //  stid = 3;
-                            JSONObject job = new JSONObject(line.toString());
-                            SqlightDatabase database = null;
-                            try {
-                                database = new SqlightDatabase(mContext);
-                                if (mGrowerClicked) {
-                                    database.updateRegistrationImagePath(mGrowerList.get(mIndex).getMobileNo(), "frontPhoto", job.getString("FileName"));
-                                } else {
-                                    database.updateRegistrationImagePath(mOrganizerList.get(mIndex).getMobileNo(), "frontPhoto", job.getString("FileName"));
-                                }
-                            } finally {
-                                if (database != null) {
-                                    database.close();
-                                }
-                            }
-                            new UploadFile().execute(mGrowerList.get(mIndex).getIdProofBackCopy());
-                            Toast.makeText(mContext, "front Uploaded", Toast.LENGTH_SHORT).show();
-                        } else if (stid == 3) {
-                            JSONObject job = new JSONObject(line.toString());
-                            SqlightDatabase database = null;
-                            try {
-                                database = new SqlightDatabase(mContext);
-                                if (mGrowerClicked) {
-                                    database.updateRegistrationImagePath(mGrowerList.get(mIndex).getMobileNo(), "docBackPhoto", job.getString("FileName"));
-                                } else {
-                                    database.updateRegistrationImagePath(mOrganizerList.get(mIndex).getMobileNo(), "docBackPhoto", job.getString("FileName"));
-                                }
-                            } finally {
-                                if (database != null) {
-                                    database.close();
-                                }
-                            }
-                            Log.e("temporary", " database farmer photo " +
-                                    mGrowerList.get(mIndex).getUploadPhoto());
-                            JsonObject jsonObject = new JsonObject();
-                            if (mGrowerClicked) {
-                                jsonObject.addProperty("CountryId", mGrowerList.get(mIndex).getCountryId());
-                                jsonObject.addProperty("CountryMasterId", mGrowerList.get(mIndex).getCountryMasterId());
-                                jsonObject.addProperty("CreatedBy", mGrowerList.get(mIndex).getCreatedBy());
-                                jsonObject.addProperty("DOB", mGrowerList.get(mIndex).getDOB());
-                                jsonObject.addProperty("FullName", mGrowerList.get(mIndex).getFullName());
-                                jsonObject.addProperty("Gender", mGrowerList.get(mIndex).getGender());
-                                jsonObject.addProperty("IdProofBackCopy", mGrowerList.get(mIndex).getIdProofBackCopy());
-                                jsonObject.addProperty("IdProofFrontCopy", mGrowerList.get(mIndex).getIdProofFrontCopy());
-                                jsonObject.addProperty("LandMark", mGrowerList.get(mIndex).getLandMark());
-                                jsonObject.addProperty("LoginId", mGrowerList.get(mIndex).getLoginId());
-                                jsonObject.addProperty("MobileNo", mGrowerList.get(mIndex).getMobileNo());
-                                jsonObject.addProperty("RegDt", mGrowerList.get(mIndex).getRegDt());
-                                jsonObject.addProperty("StaffNameAndId", mGrowerList.get(mIndex).getStaffNameAndId());
-                                jsonObject.addProperty("UniqueCode", mGrowerList.get(mIndex).getUniqueCode());
-                                jsonObject.addProperty("UploadPhoto", mGrowerList.get(mIndex).getUploadPhoto());
-                                jsonObject.addProperty("UserType", mGrowerList.get(mIndex).getUserType());
-                                jsonObject.addProperty("UniqueId", mGrowerList.get(mIndex).getUniqueId());
-
-                                // Log.e("temporary", "mGrowerList.get(mIndex).toString().trim() :" + growerModel.toString().trim());
-                                // Log.e("temporary", "Local Json Data :" + new Gson().toJson(growerModel));
-                                // JsonObject jsonObject = new JsonParser().parse(new Gson().toJson(growerModel)).getAsJsonObject();
-                                registrationAPI.createGrower(jsonObject);
-                            } else {
-                                jsonObject.addProperty("CountryId", mOrganizerList.get(mIndex).getCountryId());
-                                jsonObject.addProperty("CountryMasterId", mOrganizerList.get(mIndex).getCountryMasterId());
-                                jsonObject.addProperty("CreatedBy", mOrganizerList.get(mIndex).getCreatedBy());
-                                jsonObject.addProperty("DOB", mOrganizerList.get(mIndex).getDOB());
-                                jsonObject.addProperty("FullName", mOrganizerList.get(mIndex).getFullName());
-                                jsonObject.addProperty("Gender", mOrganizerList.get(mIndex).getGender());
-                                jsonObject.addProperty("IdProofBackCopy", mOrganizerList.get(mIndex).getIdProofBackCopy());
-                                jsonObject.addProperty("IdProofFrontCopy", mOrganizerList.get(mIndex).getIdProofFrontCopy());
-                                jsonObject.addProperty("LandMark", mOrganizerList.get(mIndex).getLandMark());
-                                jsonObject.addProperty("LoginId", mOrganizerList.get(mIndex).getLoginId());
-                                jsonObject.addProperty("MobileNo", mOrganizerList.get(mIndex).getMobileNo());
-                                jsonObject.addProperty("RegDt", mOrganizerList.get(mIndex).getRegDt());
-                                jsonObject.addProperty("StaffNameAndId", mOrganizerList.get(mIndex).getStaffNameAndId());
-                                jsonObject.addProperty("UniqueCode", mOrganizerList.get(mIndex).getUniqueCode());
-                                jsonObject.addProperty("UploadPhoto", mOrganizerList.get(mIndex).getUploadPhoto());
-                                jsonObject.addProperty("UserType", mOrganizerList.get(mIndex).getUserType());
-                                jsonObject.addProperty("UniqueId", mOrganizerList.get(mIndex).getUniqueId());
-                                // Log.e("temporary", "mGrowerList.get(mIndex).toString().trim() :" + growerModel.toString().trim());
-                                // Log.e("temporary", "Local Json Data :" + new Gson().toJson(growerModel));
-                                //JsonObject jsonObject = new JsonParser().parse(new Gson().toJson(growerModel)).getAsJsonObject();
-                                registrationAPI.createGrower(jsonObject);
-                            }
-                            Toast.makeText(mContext, "back Uploaded", Toast.LENGTH_SHORT).show();
-                        }*/
                     } catch (Exception e) {
 
                     }
@@ -360,11 +252,11 @@ public class ActivityUpload extends BaseActivity implements View.OnClickListener
                 MultipartUtility multipart = new MultipartUtility(requestURL, charset);
 
                 if (mGrowerClicked) {
-                    multipart.addFormField("UniqueCode", mGrowerList.get(mIndex).getUniqueCode());
-                    multipart.addFormField("FarmerName", mGrowerList.get(mIndex).getFullName());
+                    multipart.addFormField("UniqueCode", mGrowerList.get(mIndexForGrowerList).getUniqueCode());
+                    multipart.addFormField("FarmerName", mGrowerList.get(mIndexForGrowerList).getFullName());
                 } else {
-                    multipart.addFormField("UniqueCode", mOrganizerList.get(mIndex).getUniqueCode());
-                    multipart.addFormField("FarmerName", mOrganizerList.get(mIndex).getFullName());
+                    multipart.addFormField("UniqueCode", mOrganizerList.get(mIndexForOrganizerList).getUniqueCode());
+                    multipart.addFormField("FarmerName", mOrganizerList.get(mIndexForOrganizerList).getFullName());
                 }
                 multipart.addFilePart("UploadFile", uploadFile1);
 
@@ -376,9 +268,10 @@ public class ActivityUpload extends BaseActivity implements View.OnClickListener
             return null;
         }
     }
-private String mGrowerPath;
-private String mDocBackPath;
-private String mDocFrontPath;
+
+    private String mGrowerPath;
+    private String mDocBackPath;
+    private String mDocFrontPath;
 
     private class UpdateAsyncTaskList extends AsyncTask<String, String, Void> {
 
@@ -390,13 +283,13 @@ private String mDocFrontPath;
             try {
                 paths = path;
                 database = new SqlightDatabase(mContext);
-                Log.e("temporary", "UpdateAsyncTaskList stid " + stid +" paths " + paths[0]);
+                Log.e("temporary", "UpdateAsyncTaskList stid " + stid + " paths " + paths[0]);
                 if (stid == 1) {
                     mGrowerPath = paths[0];
                     if (mGrowerClicked) {
-                        database.updateRegistrationImagePath(mGrowerList.get(mIndex).getMobileNo(), "growerPhoto", path[0]);
+                        database.updateRegistrationImagePath(mGrowerList.get(mIndexForGrowerList).getMobileNo(), "growerPhoto", path[0],1);
                     } else {
-                        database.updateRegistrationImagePath(mOrganizerList.get(mIndex).getMobileNo(), "growerPhoto", path[0]);
+                        database.updateRegistrationImagePath(mOrganizerList.get(mIndexForOrganizerList).getMobileNo(), "growerPhoto", path[0],1);
                     }
                     runOnUiThread(() -> Toast.makeText(mContext, "Dp Uploaded", Toast.LENGTH_SHORT).show());
                     stid = 2;
@@ -404,61 +297,21 @@ private String mDocFrontPath;
                     stid = 3;
                     mDocFrontPath = paths[0];
                     if (mGrowerClicked) {
-                        database.updateRegistrationImagePath(mGrowerList.get(mIndex).getMobileNo(), "frontPhoto", path[0]);
+                        database.updateRegistrationImagePath(mGrowerList.get(mIndexForGrowerList).getMobileNo(), "frontPhoto", path[0],1);
                     } else {
-                        database.updateRegistrationImagePath(mOrganizerList.get(mIndex).getMobileNo(), "frontPhoto", path[0]);
+                        database.updateRegistrationImagePath(mOrganizerList.get(mIndexForOrganizerList).getMobileNo(), "frontPhoto", path[0],1);
                     }
                     runOnUiThread(() -> Toast.makeText(mContext, "front Uploaded", Toast.LENGTH_SHORT).show());
                 } else if (stid == 3) {
                     mDocBackPath = paths[0];
                     stid = 4;
                     if (mGrowerClicked) {
-                        database.updateRegistrationImagePath(mGrowerList.get(mIndex).getMobileNo(), "docBackPhoto", path[0]);
+                        database.updateRegistrationImagePath(mGrowerList.get(mIndexForGrowerList).getMobileNo(), "docBackPhoto", path[0],1);
                     } else {
-                        database.updateRegistrationImagePath(mOrganizerList.get(mIndex).getMobileNo(), "docBackPhoto", path[0]);
+                        database.updateRegistrationImagePath(mOrganizerList.get(mIndexForOrganizerList).getMobileNo(), "docBackPhoto", path[0],1);
                     }
                     runOnUiThread(() -> Toast.makeText(mContext, "back Uploaded", Toast.LENGTH_SHORT).show());
-                } /*else if (stid == 4) {
-                    JsonObject jsonObject = new JsonObject();
-                    if (mGrowerClicked) {
-                        jsonObject.addProperty("CountryId", mGrowerList.get(mIndex).getCountryId());
-                        jsonObject.addProperty("CountryMasterId", mGrowerList.get(mIndex).getCountryMasterId());
-                        jsonObject.addProperty("CreatedBy", mGrowerList.get(mIndex).getCreatedBy());
-                        jsonObject.addProperty("DOB", mGrowerList.get(mIndex).getDOB());
-                        jsonObject.addProperty("FullName", mGrowerList.get(mIndex).getFullName());
-                        jsonObject.addProperty("Gender", mGrowerList.get(mIndex).getGender());
-                        jsonObject.addProperty("IdProofBackCopy", mGrowerList.get(mIndex).getIdProofBackCopy());
-                        jsonObject.addProperty("IdProofFrontCopy", mGrowerList.get(mIndex).getIdProofFrontCopy());
-                        jsonObject.addProperty("LandMark", mGrowerList.get(mIndex).getLandMark());
-                        jsonObject.addProperty("LoginId", mGrowerList.get(mIndex).getLoginId());
-                        jsonObject.addProperty("MobileNo", mGrowerList.get(mIndex).getMobileNo());
-                        jsonObject.addProperty("RegDt", mGrowerList.get(mIndex).getRegDt());
-                        jsonObject.addProperty("StaffNameAndId", mGrowerList.get(mIndex).getStaffNameAndId());
-                        jsonObject.addProperty("UniqueCode", mGrowerList.get(mIndex).getUniqueCode());
-                        jsonObject.addProperty("UploadPhoto", mGrowerList.get(mIndex).getUploadPhoto());
-                        jsonObject.addProperty("UserType", mGrowerList.get(mIndex).getUserType());
-                        jsonObject.addProperty("UniqueId", mGrowerList.get(mIndex).getUniqueId());
-                    } else {
-                        jsonObject.addProperty("CountryId", mOrganizerList.get(mIndex).getCountryId());
-                        jsonObject.addProperty("CountryMasterId", mOrganizerList.get(mIndex).getCountryMasterId());
-                        jsonObject.addProperty("CreatedBy", mOrganizerList.get(mIndex).getCreatedBy());
-                        jsonObject.addProperty("DOB", mOrganizerList.get(mIndex).getDOB());
-                        jsonObject.addProperty("FullName", mOrganizerList.get(mIndex).getFullName());
-                        jsonObject.addProperty("Gender", mOrganizerList.get(mIndex).getGender());
-                        jsonObject.addProperty("IdProofBackCopy", mOrganizerList.get(mIndex).getIdProofBackCopy());
-                        jsonObject.addProperty("IdProofFrontCopy", mOrganizerList.get(mIndex).getIdProofFrontCopy());
-                        jsonObject.addProperty("LandMark", mOrganizerList.get(mIndex).getLandMark());
-                        jsonObject.addProperty("LoginId", mOrganizerList.get(mIndex).getLoginId());
-                        jsonObject.addProperty("MobileNo", mOrganizerList.get(mIndex).getMobileNo());
-                        jsonObject.addProperty("RegDt", mOrganizerList.get(mIndex).getRegDt());
-                        jsonObject.addProperty("StaffNameAndId", mOrganizerList.get(mIndex).getStaffNameAndId());
-                        jsonObject.addProperty("UniqueCode", mOrganizerList.get(mIndex).getUniqueCode());
-                        jsonObject.addProperty("UploadPhoto", mOrganizerList.get(mIndex).getUploadPhoto());
-                        jsonObject.addProperty("UserType", mOrganizerList.get(mIndex).getUserType());
-                        jsonObject.addProperty("UniqueId", mOrganizerList.get(mIndex).getUniqueId());
-                    }
-                    registrationAPI.createGrower(jsonObject);*/
-                /*}*/
+                }
             } finally {
                 if (database != null) {
                     database.close();
@@ -470,51 +323,51 @@ private String mDocFrontPath;
         @Override
         protected void onPostExecute(Void unused) {
             Log.e("temporary", "onPostExecute mGrowerClicked " + mGrowerClicked + " mGrowerList " + mGrowerList + " mGrowerList size " + mGrowerList.size()
-                    + " mGrowerPath " + mGrowerPath + " mDocBack " + mDocBackPath  + " mDocFrontPath " + mDocFrontPath);
+                    + " mGrowerPath " + mGrowerPath + " mDocBack " + mDocBackPath + " mDocFrontPath " + mDocFrontPath);
             if (stid < 4) {
                 if (mGrowerClicked && mGrowerList != null && mGrowerList.size() > 0) {
-                    new UploadFile().execute(mGrowerList.get(mIndex).getIdProofFrontCopy());
+                    new UploadFile().execute(mGrowerList.get(mIndexForGrowerList).getIdProofFrontCopy());
                 } else if (mOrganizerList != null && mOrganizerList.size() > 0) {
-                    new UploadFile().execute(mOrganizerList.get(mIndex).getIdProofFrontCopy());
+                    new UploadFile().execute(mOrganizerList.get(mIndexForOrganizerList).getIdProofFrontCopy());
                 }
             } else {
                 JsonObject jsonObject = new JsonObject();
                 if (mGrowerClicked) {
-                    jsonObject.addProperty("CountryId", mGrowerList.get(mIndex).getCountryId());
-                    jsonObject.addProperty("CountryMasterId", mGrowerList.get(mIndex).getCountryMasterId());
-                    jsonObject.addProperty("CreatedBy", mGrowerList.get(mIndex).getCreatedBy());
-                    jsonObject.addProperty("DOB", mGrowerList.get(mIndex).getDOB());
-                    jsonObject.addProperty("FullName", mGrowerList.get(mIndex).getFullName());
-                    jsonObject.addProperty("Gender", mGrowerList.get(mIndex).getGender());
+                    jsonObject.addProperty("CountryId", mGrowerList.get(mIndexForGrowerList).getCountryId());
+                    jsonObject.addProperty("CountryMasterId", mGrowerList.get(mIndexForGrowerList).getCountryMasterId());
+                    jsonObject.addProperty("CreatedBy", mGrowerList.get(mIndexForGrowerList).getCreatedBy());
+                    jsonObject.addProperty("DOB", mGrowerList.get(mIndexForGrowerList).getDOB());
+                    jsonObject.addProperty("FullName", mGrowerList.get(mIndexForGrowerList).getFullName());
+                    jsonObject.addProperty("Gender", mGrowerList.get(mIndexForGrowerList).getGender());
                     jsonObject.addProperty("IdProofBackCopy", /*mGrowerList.get(mIndex).getIdProofBackCopy()*/mDocBackPath);
                     jsonObject.addProperty("IdProofFrontCopy", /*mGrowerList.get(mIndex).getIdProofFrontCopy()*/mDocFrontPath);
-                    jsonObject.addProperty("LandMark", mGrowerList.get(mIndex).getLandMark());
-                    jsonObject.addProperty("LoginId", mGrowerList.get(mIndex).getLoginId());
-                    jsonObject.addProperty("MobileNo", mGrowerList.get(mIndex).getMobileNo());
-                    jsonObject.addProperty("RegDt", mGrowerList.get(mIndex).getRegDt());
-                    jsonObject.addProperty("StaffNameAndId", mGrowerList.get(mIndex).getStaffNameAndId());
-                    jsonObject.addProperty("UniqueCode", mGrowerList.get(mIndex).getUniqueCode());
+                    jsonObject.addProperty("LandMark", mGrowerList.get(mIndexForGrowerList).getLandMark());
+                    jsonObject.addProperty("LoginId", mGrowerList.get(mIndexForGrowerList).getLoginId());
+                    jsonObject.addProperty("MobileNo", mGrowerList.get(mIndexForGrowerList).getMobileNo());
+                    jsonObject.addProperty("RegDt", mGrowerList.get(mIndexForGrowerList).getRegDt());
+                    jsonObject.addProperty("StaffNameAndId", mGrowerList.get(mIndexForGrowerList).getStaffNameAndId());
+                    jsonObject.addProperty("UniqueCode", mGrowerList.get(mIndexForGrowerList).getUniqueCode());
                     jsonObject.addProperty("UploadPhoto", /*mGrowerList.get(mIndex).getUploadPhoto()*/mGrowerPath);
-                    jsonObject.addProperty("UserType", mGrowerList.get(mIndex).getUserType());
-                    jsonObject.addProperty("UniqueId", mGrowerList.get(mIndex).getUniqueId());
+                    jsonObject.addProperty("UserType", mGrowerList.get(mIndexForGrowerList).getUserType());
+                    jsonObject.addProperty("UniqueId", mGrowerList.get(mIndexForGrowerList).getUniqueId());
                 } else {
-                    jsonObject.addProperty("CountryId", mOrganizerList.get(mIndex).getCountryId());
-                    jsonObject.addProperty("CountryMasterId", mOrganizerList.get(mIndex).getCountryMasterId());
-                    jsonObject.addProperty("CreatedBy", mOrganizerList.get(mIndex).getCreatedBy());
-                    jsonObject.addProperty("DOB", mOrganizerList.get(mIndex).getDOB());
-                    jsonObject.addProperty("FullName", mOrganizerList.get(mIndex).getFullName());
-                    jsonObject.addProperty("Gender", mOrganizerList.get(mIndex).getGender());
+                    jsonObject.addProperty("CountryId", mOrganizerList.get(mIndexForOrganizerList).getCountryId());
+                    jsonObject.addProperty("CountryMasterId", mOrganizerList.get(mIndexForOrganizerList).getCountryMasterId());
+                    jsonObject.addProperty("CreatedBy", mOrganizerList.get(mIndexForOrganizerList).getCreatedBy());
+                    jsonObject.addProperty("DOB", mOrganizerList.get(mIndexForOrganizerList).getDOB());
+                    jsonObject.addProperty("FullName", mOrganizerList.get(mIndexForOrganizerList).getFullName());
+                    jsonObject.addProperty("Gender", mOrganizerList.get(mIndexForOrganizerList).getGender());
                     jsonObject.addProperty("IdProofBackCopy",/* mOrganizerList.get(mIndex).getIdProofBackCopy()*/mDocBackPath);
                     jsonObject.addProperty("IdProofFrontCopy", /*mOrganizerList.get(mIndex).getIdProofFrontCopy()*/mDocFrontPath);
-                    jsonObject.addProperty("LandMark", mOrganizerList.get(mIndex).getLandMark());
-                    jsonObject.addProperty("LoginId", mOrganizerList.get(mIndex).getLoginId());
-                    jsonObject.addProperty("MobileNo", mOrganizerList.get(mIndex).getMobileNo());
-                    jsonObject.addProperty("RegDt", mOrganizerList.get(mIndex).getRegDt());
-                    jsonObject.addProperty("StaffNameAndId", mOrganizerList.get(mIndex).getStaffNameAndId());
-                    jsonObject.addProperty("UniqueCode", mOrganizerList.get(mIndex).getUniqueCode());
+                    jsonObject.addProperty("LandMark", mOrganizerList.get(mIndexForOrganizerList).getLandMark());
+                    jsonObject.addProperty("LoginId", mOrganizerList.get(mIndexForOrganizerList).getLoginId());
+                    jsonObject.addProperty("MobileNo", mOrganizerList.get(mIndexForOrganizerList).getMobileNo());
+                    jsonObject.addProperty("RegDt", mOrganizerList.get(mIndexForOrganizerList).getRegDt());
+                    jsonObject.addProperty("StaffNameAndId", mOrganizerList.get(mIndexForOrganizerList).getStaffNameAndId());
+                    jsonObject.addProperty("UniqueCode", mOrganizerList.get(mIndexForOrganizerList).getUniqueCode());
                     jsonObject.addProperty("UploadPhoto", /*mOrganizerList.get(mIndex).getUploadPhoto()*/mGrowerPath);
-                    jsonObject.addProperty("UserType", mOrganizerList.get(mIndex).getUserType());
-                    jsonObject.addProperty("UniqueId", mOrganizerList.get(mIndex).getUniqueId());
+                    jsonObject.addProperty("UserType", mOrganizerList.get(mIndexForOrganizerList).getUserType());
+                    jsonObject.addProperty("UniqueId", mOrganizerList.get(mIndexForOrganizerList).getUniqueId());
                 }
                 registrationAPI.createGrower(jsonObject);
             }
@@ -529,9 +382,9 @@ private String mDocFrontPath;
             try {
                 database = new SqlightDatabase(mContext);
                 if (mGrowerClicked) {
-                    mGrowerList = database.deleteRegistration(mGrowerList.get(mIndex).getMobileNo());
+                    /*mGrowerList =*/ database.deleteRegistration(mGrowerList.get(mIndexForGrowerList).getMobileNo());
                 } else {
-                    mOrganizerList = database.deleteRegistration(mOrganizerList.get(mIndex).getMobileNo());
+                    /*mOrganizerList =*/ database.deleteRegistration(mOrganizerList.get(mIndexForOrganizerList).getMobileNo());
                 }
             } finally {
                 if (database != null) {
@@ -544,41 +397,43 @@ private String mDocFrontPath;
         @Override
         protected void onPostExecute(Void unused) {
             if (mGrowerClicked) {
-                Log.e("temporary", "mGrowerList list after delete " + mOrganizerList.size());
-                Log.e("temporary", "onGrowerRegister mGrowerUpload before " + mIndex);
+               /* Log.e("temporary", "mGrowerList list after delete " + mGrowerList.size());
+                Log.e("temporary", "onGrowerRegister mGrowerUpload before " + mIndexForGrowerList);
                 for (int i = 0; i < mGrowerList.size(); i++) {
                     Log.e("temporary", " i " + i + " mGrowerList.get(i).getIsSync() " + mGrowerList.get(i).getIsSync());
                     if (mGrowerList.get(i).getIsSync() == 0) {
-                        mIndex++;
+                        mIndexForGrowerList++;
                         break;
                     }
-                }
-                Log.e("temporary", "onGrowerRegister mGrowerUpload after " + mIndex + " growerlist size " +
+                }*/
+                mIndexForGrowerList++;
+                Log.e("temporary", "onGrowerRegister mGrowerUpload after " + mIndexForGrowerList + " growerlist size " +
                         mGrowerList.size());
-                if (mIndex < mGrowerList.size()) {
+                if (mIndexForGrowerList < mGrowerList.size()) {
                     Log.e("temporary", "UploadFile() called");
                     stid = 1;
-                    new UploadFile().execute(mGrowerList.get(mIndex).getUploadPhoto());
+                    new UploadFile().execute(mGrowerList.get(mIndexForGrowerList).getUploadPhoto());
                 } else {
                     Log.e("temporary", "onGrowerRegister mGrowerUpload all data upload");
                 }
                 mGrowerRecords.setText(getString(R.string.no_of_records_for_upload, mGrowerList.size()));
             } else {
-                Log.e("temporary", "mOrganizerList list after delete " + mOrganizerList.size());
-                Log.e("temporary", "onGrowerRegister mGrowerUpload before " + mIndex);
+                /*Log.e("temporary", "mOrganizerList list after delete " + mOrganizerList.size());
+                Log.e("temporary", "onOrganizerRegister mGrowerUpload before " + mIndexForOrganizerList);
                 for (int i = 0; i < mOrganizerList.size(); i++) {
                     Log.e("temporary", " i " + i + " mOrganizerList.get(i).getIsSync() " + mOrganizerList.get(i).getIsSync());
                     if (mOrganizerList.get(i).getIsSync() == 0) {
-                        mIndex++;
+                        mIndexForOrganizerList++;
                         break;
                     }
-                }
-                Log.e("temporary", "onGrowerRegister mGrowerUpload after " + mIndex + " mOrganizerList size " +
+                }*/
+                Log.e("temporary", "onOrganizerRegister mOrganizerUpload after " + mIndexForOrganizerList + " mOrganizerList size " +
                         mOrganizerList.size());
-                if (mIndex < mOrganizerList.size()) {
+                mIndexForOrganizerList++;
+                if (mIndexForOrganizerList < mOrganizerList.size()) {
                     Log.e("temporary", "UploadFile() called");
                     stid = 1;
-                    new UploadFile().execute(mOrganizerList.get(mIndex).getUploadPhoto());
+                    new UploadFile().execute(mOrganizerList.get(mIndexForOrganizerList).getUploadPhoto());
                 } else {
                     Log.e("temporary", "onGrowerRegister mGrowerUpload all data upload");
                 }

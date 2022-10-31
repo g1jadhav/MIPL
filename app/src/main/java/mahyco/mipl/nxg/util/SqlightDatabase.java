@@ -122,7 +122,10 @@ public class SqlightDatabase extends SQLiteOpenHelper {
                 "    UserType text,\n" +
                 "    BackPhoto text,\n" +
                 "    LoginId INTEGER,\n" +
-                "    UniqueId text\n" +
+                "    UniqueId text,\n" +
+                "    GrowerImageUpload INTEGER,\n" +
+                "    FrontImageUpload INTEGER,\n" +
+                "    BackImageUpload INTEGER\n" +
                 ")";
 
         db.execSQL(createRegistration);
@@ -292,7 +295,10 @@ public class SqlightDatabase extends SQLiteOpenHelper {
                     "UserType," +
                     "BackPhoto," +
                     "LoginId," +
-                    "UniqueId" +
+                    "UniqueId," +
+                    "GrowerImageUpload," +
+                    "FrontImageUpload," +
+                    "BackImageUpload" +
                     ") values" +
                     "('" + growerModel.getCountryId() + "'," +
                     "'" + growerModel.getCountryMasterId() + "'," +
@@ -311,7 +317,10 @@ public class SqlightDatabase extends SQLiteOpenHelper {
                     "'" + growerModel.getUserType() + "'," +
                     "'" + growerModel.getIdProofBackCopy() + "'," +
                     "'" + growerModel.getLoginId() + "'," +
-                    "'" + growerModel.getUniqueId() + "')";
+                    "'" + growerModel.getUniqueId() + "'," +
+                    "'" + growerModel.getGrowerImageUpload() + "'," +
+                    "'" + growerModel.getFrontImageUpload() + "'," +
+                    "'" + growerModel.getBackImageUpload() + "')";
             Log.i("Query is -------> ", "" + q);
             mydb.execSQL(q);
             return true;
@@ -379,7 +388,11 @@ public class SqlightDatabase extends SQLiteOpenHelper {
                             cursorCourses.getString(16),
                             cursorCourses.getInt(17),
                             cursorCourses.getString(18),
-                            cursorCourses.getInt(0)));
+                            cursorCourses.getInt(0),
+                            cursorCourses.getInt(19),
+                            cursorCourses.getInt(20),
+                            cursorCourses.getInt(21)
+                            ));
                 } while (cursorCourses.moveToNext());
             }
             return courseModalArrayList;
@@ -390,11 +403,12 @@ public class SqlightDatabase extends SQLiteOpenHelper {
         }
     }
 
-    public boolean updateRegistrationStatus(String mobileNumber, int status) {
+    public boolean updateRegistrationStatus(String uniqueCode, int status) {
         SQLiteDatabase mydb = null;
         try {
             mydb = this.getReadableDatabase();
-            String q = "update  tbl_registrationmaster set IsSync=" + status + " where MobileNo=" + mobileNumber;
+           // String q = "update  tbl_registrationmaster set IsSync=" + status + " where MobileNo=" + mobileNumber;
+            String q = "update  tbl_registrationmaster set IsSync='" + status + "' where UniqueCode='" + uniqueCode+"'";
             Log.i("Query is -------> ", "" + q);
             mydb.execSQL(q);
             return true;
@@ -405,12 +419,27 @@ public class SqlightDatabase extends SQLiteOpenHelper {
             mydb.close();
         }
     }
+    public boolean deleteRegistration(String uniqueCode) {
+        SQLiteDatabase mydb = null;
+        try {
+            mydb = this.getReadableDatabase();
+            String q = "DELETE from tbl_registrationmaster where UniqueCode='" + uniqueCode+"'";
+            Log.e("temporary"," deleted Query is -------> " + q);
+            mydb.execSQL(q);
+            return true;
+        } catch (Exception e) {
+            Log.e("temporary"," deleted Error is Clear List " + e.getMessage());
+            return false;
+        } finally {
+            mydb.close();
+        }
+    }
 
-    public ArrayList<GrowerModel> deleteRegistration(String mobileNumber) {
+    /*public ArrayList<GrowerModel> deleteRegistration(String uniqueCode) {
          SQLiteDatabase myDb = null;
         try {
             myDb = this.getReadableDatabase();
-            String q = "DELETE from tbl_registrationmaster where MobileNo=" + mobileNumber;
+            String q = "DELETE from tbl_registrationmaster where UniqueCode='" + uniqueCode+"'";
             Cursor cursorCourses = myDb.rawQuery(q, null);
             ArrayList<GrowerModel> courseModalArrayList = new ArrayList<>();
             if (cursorCourses.moveToFirst()) {
@@ -442,7 +471,7 @@ public class SqlightDatabase extends SQLiteOpenHelper {
         } finally {
             myDb.close();
         }
-    }
+    }*/
 
 //    public ArrayList<GrowerModel> updateRegistrationImagePath(String mobileNumber, String imageType, String path) {
 //        SQLiteDatabase myDb = null;
@@ -489,23 +518,25 @@ public class SqlightDatabase extends SQLiteOpenHelper {
 //        }
 //    }
 
-    public boolean updateRegistrationImagePath(String mobileNumber, String imageType, String path) {
+    public boolean updateRegistrationImagePath(String uniqueCode, String imageType, String path,int isInsertedValue) {
         SQLiteDatabase mydb = null;
         try {
             mydb = this.getReadableDatabase();
             String q;
             if (imageType.equalsIgnoreCase("growerPhoto")) {
-                q = "update  tbl_registrationmaster set FarmerPhoto='" + path + "' where MobileNo='" + mobileNumber+"'";
+                q = "update  tbl_registrationmaster set FarmerPhoto='" + path + "',  GrowerImageUpload='" + isInsertedValue +"'where UniqueCode='" + uniqueCode+"'";
             } else if (imageType.equalsIgnoreCase("docBackPhoto")) {
-                q = "update  tbl_registrationmaster set BackPhoto='" + path + "' where MobileNo='" + mobileNumber+"'";
+                q = "update  tbl_registrationmaster set BackPhoto='" + path + "',  BackImageUpload='" + isInsertedValue +"'where UniqueCode='" + uniqueCode+"'";
+                // q = "update  tbl_registrationmaster set BackPhoto='" + path + "' where UniqueCode='" + uniqueCode+"'";
             } else {
-                q = "update  tbl_registrationmaster set FrontPhoto='" + path + "' where MobileNo='" + mobileNumber+"'";
+                q = "update  tbl_registrationmaster set FrontPhoto='" + path + "',  FrontImageUpload='" + isInsertedValue +"'where UniqueCode='" + uniqueCode+"'";
+               // q = "update  tbl_registrationmaster set FrontPhoto='" + path + "' where UniqueCode='" + uniqueCode+"'";
             }
-            Log.i("Query is -------> ", "" + q);
+            Log.e("temporary","updateRegistrationImagePath Query is -------> " + q);
             mydb.execSQL(q);
             return true;
         } catch (Exception e) {
-            Log.i("Error is  Added ", "Order Details : " + e.getMessage());
+            Log.e("temporary","updateRegistrationImagePath Error is Added Order Details : " + e.getMessage());
             return false;
         } finally {
             mydb.close();

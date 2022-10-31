@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.StrictMode;
 import android.text.Html;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -311,43 +312,48 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
     }
 
     public void submit(View v) {
-        try {
+        if(validation()) {
+            try {
 
-            str_et_landmark = et_landmark.getText().toString();
-            str_et_fullname = et_fullname.getText().toString();
-            str_et_gender = et_gender.getText().toString();
-            str_et_dob = et_dob.getText().toString();
-            str_et_mobile = et_mobile.getText().toString();
-            str_et_uniqcode = et_uniqcode.getText().toString();
-            str_et_regdate = et_regdate.getText().toString();
-            str_et_satffname = et_satffname.getText().toString();
+                str_et_landmark = et_landmark.getText().toString();
+                str_et_fullname = et_fullname.getText().toString();
+                str_et_gender = et_gender.getText().toString();
+                str_et_dob = et_dob.getText().toString();
+                str_et_mobile = et_mobile.getText().toString();
+                str_et_uniqcode = et_uniqcode.getText().toString();
+                str_et_regdate = et_regdate.getText().toString();
+                str_et_satffname = et_satffname.getText().toString();
 
 
-            growerModel.setLoginId(Integer.parseInt(Preferences.get(mContext, Preferences.LOGINID).trim()));//,
-            growerModel.setCountryId(Integer.parseInt(counrtyId.trim()));//,
-            //village id
-            growerModel.setCountryMasterId(/*26*/mSpinner5List.get(mSearchableSpinner5.getSelectedItemPosition()).getCountryMasterId());//,
-            growerModel.setUniqueId("");//,
-            growerModel.setUserType(str_Lable);//,
-            growerModel.setLandMark(str_et_landmark);//,
-            growerModel.setFullName(str_et_fullname);//,
-            growerModel.setDOB(str_et_dob);//,
-            growerModel.setGender(str_et_gender);//,
-            growerModel.setMobileNo(str_et_mobile);//,
-            growerModel.setUniqueCode(str_et_uniqcode);//,
-            growerModel.setIdProofFrontCopy(front_path);//,
-            growerModel.setIdProofBackCopy(back_path);//,
-            growerModel.setUploadPhoto(dp_path);//,
-            growerModel.setRegDt(str_et_regdate);//,
-            growerModel.setIsSync(0);
-            growerModel.setStaffNameAndId(str_et_satffname);
-            growerModel.setCreatedBy(Preferences.get(mContext, Preferences.USER_NAME));//
+                growerModel.setLoginId(Integer.parseInt(Preferences.get(mContext, Preferences.LOGINID).trim()));//,
+                growerModel.setCountryId(Integer.parseInt(counrtyId.trim()));//,
+                //village id
+                growerModel.setCountryMasterId(/*26*/mSpinner5List.get(mSearchableSpinner5.getSelectedItemPosition()).getCountryMasterId());//,
+                growerModel.setUniqueId("");//,
+                growerModel.setUserType(str_Lable);//,
+                growerModel.setLandMark(str_et_landmark);//,
+                growerModel.setFullName(str_et_fullname);//,
+                growerModel.setDOB(str_et_dob);//,
+                growerModel.setGender(str_et_gender);//,
+                growerModel.setMobileNo(str_et_mobile);//,
+                growerModel.setUniqueCode(str_et_uniqcode);//,
+                growerModel.setIdProofFrontCopy(front_path);//,
+                growerModel.setIdProofBackCopy(back_path);//,
+                growerModel.setUploadPhoto(dp_path);//,
+                growerModel.setRegDt(str_et_regdate);//,
+                growerModel.setIsSync(0);
+                growerModel.setGrowerImageUpload(0);
+                growerModel.setFrontImageUpload(0);
+                growerModel.setBackImageUpload(0);
+                growerModel.setStaffNameAndId(str_et_satffname);
+                growerModel.setCreatedBy(Preferences.get(mContext, Preferences.USER_NAME));//
 
-            new AddRegistrationAsyncTask().execute();
+                new AddRegistrationAsyncTask().execute();
 //            stid = 1;
 //            new UploadFile().execute(dp_path);
-        } catch (Exception e) {
-            Log.i("Error is ", e.getMessage());
+            } catch (Exception e) {
+                Log.e("temporary ","Error is "+ e.getMessage());
+            }
         }
     }
 
@@ -500,7 +506,7 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
                             if (mDocFrontPhotoFile != null && r.getBitmap() != null) {
                                 try {
                                     front_path = mDocFrontPhotoFile.getAbsolutePath();
-                                    Log.e("temporary"," front_path " + front_path);
+                                   // Log.e("temporary", " front_path " + front_path);
                                     FileOutputStream out = new FileOutputStream(front_path);
                                     r.getBitmap().compress(Bitmap.CompressFormat.PNG, 100, out);
                                     out.flush();
@@ -533,7 +539,7 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
                             //TODO: do what you have to...
                             imageView_back.setVisibility(View.VISIBLE);
                             imageView_back.setImageBitmap(r.getBitmap());
-                           // back_path = r.getPath();
+                            // back_path = r.getPath();
                            /* str_chk_img1 = r.getPath();
                             uploadstatus = 11;*/
                             try {
@@ -544,7 +550,7 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
                             if (mDocBackPhotoFile != null && r.getBitmap() != null) {
                                 try {
                                     back_path = mDocBackPhotoFile.getAbsolutePath();
-                                    Log.e("temporary"," back_path " + back_path);
+                                 //   Log.e("temporary", " back_path " + back_path);
                                     FileOutputStream out = new FileOutputStream(back_path);
                                     r.getBitmap().compress(Bitmap.CompressFormat.PNG, 100, out);
                                     out.flush();
@@ -576,7 +582,7 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
                         public void onPickResult(PickResult r) {
                             //TODO: do what you have to...
                             iv_dp.setImageBitmap(r.getBitmap());
-                          //  dp_path = r.getPath();
+                            //  dp_path = r.getPath();
                           /*  str_chk_img1 = r.getPath();
                             uploadstatus = 11;*/
                             try {
@@ -587,7 +593,7 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
                             if (mGrowerPhotoFile != null && r.getBitmap() != null) {
                                 try {
                                     dp_path = mGrowerPhotoFile.getAbsolutePath();
-                                    Log.e("temporary"," dp " + dp_path);
+                                  //  Log.e("temporary", " dp " + dp_path);
                                     FileOutputStream out = new FileOutputStream(dp_path);
                                     r.getBitmap().compress(Bitmap.CompressFormat.PNG, 100, out);
                                     out.flush();
@@ -759,9 +765,9 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
                 mSpinnerPosition = 1;
                 mCountryMasterIdAsPerSelection = Integer.parseInt(Preferences.get(mContext, Preferences.COUNTRY_MASTER_ID));
                 new GetLocationMasterAsyncTask().execute();
-            } else {
+            } /*else {
                 Log.e("temporary", "onPostExecute result null ");
-            }
+            }*/
             super.onPostExecute(result);
         }
     }
@@ -1219,9 +1225,70 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
         }
     }
 
+    private boolean validation() {
+        if (mGrowerPhotoFile == null) {
+            showToast(getString(R.string.please_grower_photo));
+            return false;
+        } else if(mSearchableSpinner5.getSelectedItemPosition() == -1){
+            showToast("Data not found");
+            return false;
+        } else if (TextUtils.isEmpty(et_landmark.getText().toString())) {
+            showToast(getString(R.string.Please_enter_landmark));
+            return false;
+        } else if (TextUtils.isEmpty(et_fullname.getText().toString())) {
+            if (str_Lable.equalsIgnoreCase("Grower")) {
+                showToast(getString(R.string.Please_enter_farmer_name));
+            } else {
+                showToast(getString(R.string.Please_enter_organizer_name));
+            }
+            return false;
+        } else if (TextUtils.isEmpty(et_gender.getText().toString())) {
+            showToast(getString(R.string.Please_enter_gender));
+            return false;
+        } else if (TextUtils.isEmpty(et_dob.getText().toString().trim())) {
+            showToast(getString(R.string.Please_enter_date_of_birth));
+            return false;
+        } else if (TextUtils.isEmpty(et_mobile.getText().toString().trim())) {
+            showToast(getString(R.string.Please_enter_mobile_no));
+            return false;
+        } else if (TextUtils.isEmpty(et_uniqcode.getText().toString().trim())) {
+            showToast(getString(R.string.Please_enter_unique_code));
+            return false;
+        } else if (mDocFrontPhotoFile == null) {
+            showToast(getString(R.string.please_capture_national_id_photo_front));
+            return false;
+        } else if (mDocBackPhotoFile == null) {
+            showToast(getString(R.string.please_capture_national_id_photo_back));
+            return false;
+        } else {
+            /*return if (checkInternetConnection()) {*/
+            return true;
+            /*} else {
+                setEnableOrDisable(true)
+                showToast(getString(R.string.err_internet))
+                false
+            }*/
+        }
+    }
+
     @Override
     protected void onPause() {
         mCodeScanner.releaseResources();
         super.onPause();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mCodeScannerView.getVisibility() == View.VISIBLE) {
+            mCodeScanner.releaseResources();
+            hideScannerLayout();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        hideKeyboard(mContext);
+        dismissNoInternetDialog();
+        super.onDestroy();
     }
 }
