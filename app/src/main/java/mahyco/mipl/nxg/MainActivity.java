@@ -44,6 +44,7 @@ import mahyco.mipl.nxg.view.downloadcategories.DownloadCategoryActivity;
 import mahyco.mipl.nxg.view.growerregistration.NewGrowerRegistration;
 import mahyco.mipl.nxg.view.login.Login;
 import mahyco.mipl.nxg.view.uploaddata.ActivityUpload;
+import mahyco.mipl.nxg.view.uploaddata.NewActivityUpload;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, MainActivityListListener {
@@ -220,7 +221,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             case R.id.upload_data_layout:
                 //downloadLocationData();
-                Intent upload = new Intent(context, ActivityUpload.class);
+                Intent upload = new Intent(context, /*ActivityUpload*/NewActivityUpload.class);
                 startActivity(upload);
                 break;
 

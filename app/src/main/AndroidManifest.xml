@@ -79,7 +79,11 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
             android:screenOrientation="portrait"/>
 
-        <activity android:name=".view.uploaddata.ActivityUpload"
+       <!-- <activity android:name=".view.uploaddata.ActivityUpload"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
+            android:screenOrientation="portrait"/>-->
+
+        <activity android:name=".view.uploaddata.NewActivityUpload"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
             android:screenOrientation="portrait"/>
 
