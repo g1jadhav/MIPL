@@ -83,14 +83,14 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
     RecyclerView rc_list;
     CategoryLoadingAdapter adapter;
     EditText et_landmark, et_fullname, /*et_gender,*/ /*et_dob,*/
-            et_mobile, et_uniqcode, /*et_regdate,*/
-            et_satffname;
+            et_mobile, et_uniqcode /*et_regdate,*/
+            /*,et_satffname*/;
     String str_et_landmark, str_et_fullname, str_et_gender, str_et_dob, str_et_mobile, str_et_uniqcode, str_et_regdate, str_et_satffname;
     Button grower_registration_submit_btn, scan_qr_code_btn;
     CircleImageView iv_dp;
     ImageView imageView_front, imageView_back;
     String str_Lable = "";
-    TextView txt_name, et_dob, et_regdate;
+    TextView txt_name, et_dob, et_regdate, et_satffname;
     TextView txt_registration_country;
     String dp_path, front_path, back_path;
     static int stid = 0;
@@ -200,7 +200,7 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
             et_uniqcode = (EditText) findViewById(R.id.unique_code_edittext);
             et_regdate = findViewById(R.id.date_of_registration_textview);
             et_regdate.setText(getCurrentDate());
-            et_satffname = (EditText) findViewById(R.id.staff_name_and_id_textview);
+            et_satffname = findViewById(R.id.staff_name_and_id_textview);
             txt_name = (TextView) findViewById(R.id.txt_name);
             txt_registration_country = (TextView) findViewById(R.id.registration_country_textview);
             txt_name.setText(str_Lable + " Full Name :");
@@ -244,7 +244,7 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
                 Calendar mCalendar = Calendar.getInstance();
                 hideKeyboard(mContext);
 
-                mCalendar.add(Calendar.YEAR,-18);
+                mCalendar.add(Calendar.YEAR, -18);
 
                 DatePickerDialog.OnDateSetListener onDateSetListener = (datePicker, i, i1, i2) -> {
                     mCalendar.set(Calendar.YEAR, i);
@@ -1281,14 +1281,14 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
         } else if (TextUtils.isEmpty(et_mobile.getText().toString().trim())) {
             showToast(getString(R.string.Please_enter_mobile_no));
             return false;
-        } else if (TextUtils.isEmpty(et_uniqcode.getText().toString().trim())) {
-            showToast(getString(R.string.Please_enter_unique_code));
-            return false;
-        } else if (mDocFrontPhotoFile == null) {
+        }  else if (mDocFrontPhotoFile == null) {
             showToast(getString(R.string.please_capture_national_id_photo_front));
             return false;
         } else if (mDocBackPhotoFile == null) {
             showToast(getString(R.string.please_capture_national_id_photo_back));
+            return false;
+        } else if (TextUtils.isEmpty(et_uniqcode.getText().toString().trim())) {
+            showToast(getString(R.string.Please_enter_unique_code));
             return false;
         } else {
             /*return if (checkInternetConnection()) {*/
@@ -1303,13 +1303,16 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
 
     @Override
     protected void onPause() {
-        mCodeScanner.releaseResources();
+        if (mCodeScannerView != null) {
+            mCodeScanner.releaseResources();
+        }
         super.onPause();
     }
 
     @Override
     public void onBackPressed() {
-        if (mCodeScannerView.getVisibility() == View.VISIBLE) {
+        Log.e("temporary", "backpressed " +mCodeScannerView);
+        if (mCodeScannerView != null && mCodeScannerView.getVisibility() == View.VISIBLE) {
             mCodeScanner.releaseResources();
             hideScannerLayout();
         } else {

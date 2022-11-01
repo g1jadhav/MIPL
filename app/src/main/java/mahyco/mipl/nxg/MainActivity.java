@@ -9,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.Html;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,6 +37,7 @@ import com.google.gson.JsonObject;
 import java.util.List;
 
 import mahyco.mipl.nxg.model.CategoryModel;
+import mahyco.mipl.nxg.seeddistribution.OldGrowerSeedDistribution;
 import mahyco.mipl.nxg.util.Preferences;
 import mahyco.mipl.nxg.util.SqlightDatabase;
 import mahyco.mipl.nxg.view.downloadcategories.DownloadCategoryActivity;
@@ -61,7 +61,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     JsonObject jsonObject;
     String plantid, roleid;
 
-    CardView card_downlaodMaster, card_upload_data_layout, card_grower, card_organizer;
+    CardView card_downlaodMaster, card_upload_data_layout, card_grower, card_organizer,
+    card_parent_seed_distributin_layout;
     JsonObject jsonObject_Category;
 
     private Dialog mDialog  = null;
@@ -99,8 +100,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         card_grower = (CardView) findViewById(R.id.new_grower_registration_layout);
         card_organizer = (CardView) findViewById(R.id.new_organizer_registration_layout);
+        card_parent_seed_distributin_layout = (CardView) findViewById(R.id.parent_seed_distribution_layout);
 
-
+        card_parent_seed_distributin_layout.setOnClickListener(this);
         card_downlaodMaster.setOnClickListener(this);
         card_upload_data_layout.setOnClickListener(this);
         card_grower.setOnClickListener(this);
@@ -252,6 +254,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     } else {
                         showAutomaticTimeMessage("Please update time setting to automatic");
                     }
+                }
+                break;
+            case R.id.parent_seed_distribution_layout:
+                if (checkAutoTimeEnabledOrNot()) {
+                    Intent intent = new Intent(context, OldGrowerSeedDistribution.class);
+                    startActivity(intent);
+                } else {
+                    showAutomaticTimeMessage("Please update time setting to automatic");
                 }
                 break;
         }

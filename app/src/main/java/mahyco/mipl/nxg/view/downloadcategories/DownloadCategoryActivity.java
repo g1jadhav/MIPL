@@ -91,29 +91,31 @@ public class DownloadCategoryActivity extends BaseActivity implements View.OnCli
 
     @Override
     public void onListCategoryMasterResponse(List<CategoryModel> lst) {
-        Toast.makeText(mContext, "" + lst.size(), Toast.LENGTH_SHORT).show();
+       // Toast.makeText(mContext, "" + lst.size(), Toast.LENGTH_SHORT).show();
         if (mCategoryMasterList != null) {
             mCategoryMasterList.clear();
         }
         mCategoryMasterList = lst;
         mDatabaseName = "CategoryMaster";
+        showNoInternetDialog(mContext,"Category Master Downloaded Successfully");
         new MasterAsyncTask().execute();
     }
 
     @Override
     public void onListLocationResponse(List<CategoryChildModel> lst) {
-        Toast.makeText(mContext, "" + lst.size(), Toast.LENGTH_SHORT).show();
+       // Toast.makeText(mContext, "" + lst.size(), Toast.LENGTH_SHORT).show();
         if (mLocationMasterList != null) {
             mLocationMasterList.clear();
         }
         mLocationMasterList = lst;
         mDatabaseName = "LocationMaster";
+        showNoInternetDialog(mContext,"Location Master Downloaded Successfully");
         new MasterAsyncTask().execute();
     }
 
     @Override
     public void onListSeasonMasterResponse(List<CategoryModel> lst) {
-        Toast.makeText(mContext, "" + lst.size(), Toast.LENGTH_SHORT).show();
+       // Toast.makeText(mContext, "" + lst.size(), Toast.LENGTH_SHORT).show();
         if (mSeasonMasterList != null) {
             mSeasonMasterList.clear();
         }
@@ -124,7 +126,7 @@ public class DownloadCategoryActivity extends BaseActivity implements View.OnCli
 
     @Override
     public void onListGrowerResponse(List<CategoryModel> lst) {
-        Toast.makeText(mContext, "" + lst.size(), Toast.LENGTH_SHORT).show();
+       // Toast.makeText(mContext, "" + lst.size(), Toast.LENGTH_SHORT).show();
         if (mGrowerMasterList != null) {
             mGrowerMasterList.clear();
         }

@@ -22,15 +22,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MahycoMarketDemo"
         android:usesCleartextTraffic="true">
-        <activity android:name=".view.growerregistration.NewGrowerRegistration"
+        <activity
+            android:name=".view.growerregistration.NewGrowerRegistration"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"/>
+            android:windowSoftInputMode="stateHidden" />
 
-        <activity android:name=".view.registration.Registration"
+        <activity
+            android:name=".view.registration.Registration"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"/>
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".view.createcorrection.CreateCorrection"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
@@ -53,8 +55,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".Splash"
-            android:exported="true"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
+            android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MahycoMarketDemo.NoActionBar">
             <intent-filter>
@@ -75,17 +77,25 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MahycoMarketDemo.NoActionBar" />
 
-        <activity android:name=".view.downloadcategories.DownloadCategoryActivity"
+        <activity
+            android:name=".view.downloadcategories.DownloadCategoryActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
-       <!-- <activity android:name=".view.uploaddata.ActivityUpload"
+        <activity
+            android:name=".seeddistribution.OldGrowerSeedDistribution"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
-            android:screenOrientation="portrait"/>-->
+            android:exported="false"
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".view.uploaddata.NewActivityUpload"
+        <!-- <activity android:name=".view.uploaddata.ActivityUpload"
+             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
+             android:screenOrientation="portrait"/>-->
+
+        <activity
+            android:name=".view.uploaddata.NewActivityUpload"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".view.actionlist.PendingActionList"

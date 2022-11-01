@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.StrictMode;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,6 +49,7 @@ public class NewActivityUpload extends BaseActivity implements View.OnClickListe
     private int stid = 0;
     private GrowerRegistrationAPI registrationAPI;
     private boolean mGrowerClicked;
+    private String mResponseString = "";
 
     @Override
     protected int getLayout() {
@@ -183,6 +183,7 @@ public class NewActivityUpload extends BaseActivity implements View.OnClickListe
         if (result.getStatus().equalsIgnoreCase("Success")) {
             /*if (mGrowerClicked) {*/
 //            Log.e("temporary", "result.getStatus().equalsIgnoreCase(\"Success\")");
+            mResponseString = result.getComment();
             new DeleteIfSyncSuccessfully().execute();
         }
     }
@@ -316,7 +317,7 @@ public class NewActivityUpload extends BaseActivity implements View.OnClickListe
                 database = new SqlightDatabase(mContext);
 //                Log.e("temporary", "UpdateAsyncTaskList stid " + stid + " paths " + paths[0]);
                 if (stid == 1) {
-                   // mGrowerPath = paths[0];
+                    // mGrowerPath = paths[0];
                     if (mGrowerClicked) {
                         database.updateRegistrationImagePath(mGrowerList.get(0).getUniqueCode(), "growerPhoto", path[0], 1);
                     } else {
@@ -326,7 +327,7 @@ public class NewActivityUpload extends BaseActivity implements View.OnClickListe
                     stid = 2;
                 } else if (stid == 2) {
                     stid = 3;
-                  //  mDocFrontPath = paths[0];
+                    //  mDocFrontPath = paths[0];
                     if (mGrowerClicked) {
                         database.updateRegistrationImagePath(mGrowerList.get(0).getUniqueCode(), "frontPhoto", path[0], 1);
                     } else {
@@ -334,7 +335,7 @@ public class NewActivityUpload extends BaseActivity implements View.OnClickListe
                     }
                     runOnUiThread(() -> Toast.makeText(mContext, "front Uploaded", Toast.LENGTH_SHORT).show());
                 } else if (stid == 3) {
-                  //  mDocBackPath = paths[0];
+                    //  mDocBackPath = paths[0];
                     stid = 4;
                     if (mGrowerClicked) {
                         database.updateRegistrationImagePath(mGrowerList.get(0).getUniqueCode(), "docBackPhoto", path[0], 1);
@@ -494,6 +495,11 @@ public class NewActivityUpload extends BaseActivity implements View.OnClickListe
                     stid = 1;
                     new UploadFile().execute(mGrowerList.get(0).getUploadPhoto());
                 } else {
+                    if (mResponseString.contains("Error")) {
+                        showNoInternetDialog(mContext, mResponseString);
+                    } else {
+                        showNoInternetDialog(mContext, "New Grower Registration Record/s Uploaded Successfully");
+                    }
 //                    Log.e("temporary", "onGrowerRegister mGrowerUpload all data upload");
                 }
                 mGrowerRecords.setText(getString(R.string.no_of_records_for_upload, mGrowerList.size()));
@@ -505,7 +511,11 @@ public class NewActivityUpload extends BaseActivity implements View.OnClickListe
                     stid = 1;
                     new UploadFile().execute(mOrganizerList.get(0).getUploadPhoto());
                 } else {
-//                    Log.e("temporary", "onGrowerRegister mGrowerUpload all data upload");
+                    if (mResponseString.contains("Error")) {
+                        showNoInternetDialog(mContext, mResponseString);
+                    } else {
+                        showNoInternetDialog(mContext, "New Organizer Registration Record/s Uploaded Successfully");
+                    }//                    Log.e("temporary", "onGrowerRegister mGrowerUpload all data upload");
                 }
                 mOrganizerRecords.setText(getString(R.string.no_of_records_for_upload, mOrganizerList.size()));
             }
@@ -564,7 +574,7 @@ public class NewActivityUpload extends BaseActivity implements View.OnClickListe
 
         @Override
         protected void onPostExecute(Void unused) {
-          if (stid < 4) {
+            if (stid < 4) {
                 if (mGrowerClicked && mGrowerList != null && mGrowerList.size() > 0) {
                  /*   Log.e("temporary", "GetUpdatedListAfterUpdateAsyncTaskList onPostExecute mGrowerClicked " + mGrowerClicked + " mGrowerList " + mGrowerList + " mGrowerList size " + mGrowerList.size()
                             + "stid " + stid+" mGrowerPath " + mGrowerList.get(0).getUploadPhoto() + " mDocBack " + mGrowerList.get(0).getIdProofBackCopy() + " mDocFrontPath " + mGrowerList.get(0).getIdProofFrontCopy());*/

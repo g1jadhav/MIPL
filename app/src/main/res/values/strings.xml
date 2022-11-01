@@ -195,7 +195,7 @@
     <string name="enter_unique_code">Enter Unique Code</string>
     <string name="date_of_registration">Date of Registration<font color='#FF0000'>*</font></string>
     <string name="enter_date_of_registration">Enter Date of Registration</string>
-    <string name="staff_name_and_id">Staff Name and ID<font color='#FF0000'>*</font></string>
+    <string name="staff_name_and_id">Staff Name<font color='#FF0000'>*</font></string>
     <string name="scan">Open Scanner</string>
     <string name="grower_photo">Capture Photo<font color='#FF0000'>*</font></string>
     <string name="organizer_photo">Organizer Photo<font color='#FF0000'>*</font></string>
@@ -212,7 +212,7 @@
     <string name="crop">Crop<font color='#FF0000'>*</font></string>
     <string name="production_code">Production Code<font color='#FF0000'>*</font></string>
     <string name="seed_production_area_ha">Seed Production area (Ha)<font color='#FF0000'>*</font></string>
-    <string name="parent_seed_issue_location">Parent Seed Issue Location<font color='#FF0000'>*</font></string>
+    <string name="parent_seed_issue_location">Parent Seed Issue Cluster<font color='#FF0000'>*</font></string>
     <string name="parent_seed_batch_no_female_variety">Parent Seed Batch No. Female/Variety<font color='#FF0000'>*</font></string>
     <string name="parent_seed_batch_no_male">Parent Seed Batch No. Male<font color='#FF0000'>*</font></string>
     <string name="parent_seed_issue_date">Parent seed Issue Date<font color='#FF0000'>*</font></string>
@@ -270,6 +270,7 @@
     <string name="download_location_master">Download Location Master</string>
     <string name="download_season_master">Download Season Master</string>
     <string name="download_grower_master">Download Grower Master</string>
+    <string name="enter_production_area">Enter seed production area</string>
 
     <string-array name="country_array">
         <item>Select Country</item>

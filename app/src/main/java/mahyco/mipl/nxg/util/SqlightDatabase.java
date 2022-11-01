@@ -13,6 +13,7 @@ import java.util.Vector;
 import mahyco.mipl.nxg.model.CategoryChildModel;
 import mahyco.mipl.nxg.model.CategoryModel;
 import mahyco.mipl.nxg.model.GrowerModel;
+import mahyco.mipl.nxg.model.OldGrowerSeedDistributionModel;
 
 public class SqlightDatabase extends SQLiteOpenHelper {
 
@@ -21,6 +22,8 @@ public class SqlightDatabase extends SQLiteOpenHelper {
     long count = 0;
     final String tbl_categorymaster = "tbl_categorymaster";
     final String tbl_locationmaster = "tbl_locationmaster";
+
+    final String tbl_parentSeedDistribution = "tbl_parentseeddistribution";
 
     public SqlightDatabase(Context context) {
         super(context, DBName, null, version);
@@ -130,6 +133,28 @@ public class SqlightDatabase extends SQLiteOpenHelper {
 
         db.execSQL(createRegistration);
 
+
+        String parentSeedDistribution = " Create table "+ tbl_parentSeedDistribution+"(\n" +
+                "    TempId  INTEGER PRIMARY KEY AUTOINCREMENT, \n" +
+                "    CountryId INTEGER,\n" +
+                "    CountryMasterId INTEGER,\n" +
+                "    plantingYear Text,\n" +
+                "    season text,\n" +
+                "    uniqueCode text,\n" +
+                "    staffName text,\n" +
+                "    crop text,\n" +
+                "    distributedBy text,\n" +
+                "    productionCode text,\n" +
+                "    seedProductionArea text,\n" +
+                "    seedIssueLocation text,\n" +
+                "    seedBatchNoFemale text,\n" +
+                "    seedBatchNoMale text,\n" +
+                "    growerName text,\n" +
+                "    growerAddress text\n" +
+                ")";
+
+        db.execSQL(parentSeedDistribution);
+
     }
 
     @Override
@@ -140,6 +165,7 @@ public class SqlightDatabase extends SQLiteOpenHelper {
         droptable(db, "tbl_seasonmaster");
         droptable(db, "tbl_growermaster");
         droptable(db, "tbl_registrationmaster");
+        droptable(db, tbl_parentSeedDistribution);
         onCreate(db);
     }
 
@@ -333,6 +359,57 @@ public class SqlightDatabase extends SQLiteOpenHelper {
 
     }
 
+    public boolean parentSeedDistribution(OldGrowerSeedDistributionModel seedDistributionModel) {
+
+        SQLiteDatabase mydb = null;
+        try {
+            mydb = this.getReadableDatabase();
+            String q = "insert into " + tbl_parentSeedDistribution +
+                    "(" +
+                    "" +
+                    "CountryId," +
+                    "CountryMasterId," +
+                    "plantingYear," +
+                    "season," +
+                    "uniqueCode," +
+                    "staffName," +
+                    "crop," +
+                    "distributedBy," +
+                    "productionCode," +
+                    "seedProductionArea," +
+                    "seedIssueLocation," +
+                    "seedBatchNoFemale," +
+                    "seedBatchNoMale," +
+                    "growerName," +
+                    "growerAddress" +
+                    ") values" +
+                    "('" + seedDistributionModel.getCountryId() + "'," +
+                    "'" + seedDistributionModel.getCountryMasterId() + "'," +
+                    "'" + seedDistributionModel.getPlantingYear() + "'," +
+                    "'" + seedDistributionModel.getSeason() + "'," +
+                    "'" + seedDistributionModel.getUniqueCode() + "'," +
+                    "'" + seedDistributionModel.getStaffName() + "'," +
+                    "'" + seedDistributionModel.getCrop() + "'," +
+                    "'" + seedDistributionModel.getDistributedBy() + "'," +
+                    "'" + seedDistributionModel.getProductionCode() + "'," +
+                    "'" + seedDistributionModel.getSeedProductionArea()+ "'," +
+                    "'" + seedDistributionModel.getSeedIssueLocation() + "'," +
+                    "'" + seedDistributionModel.getSeedBatchNoFemale()+ "'," +
+                    "'" + seedDistributionModel.getSeedBatchNoMale()+ "'," +
+                    "'" + seedDistributionModel.getGrowerName()+ "'," +
+                    "'" + seedDistributionModel.getGrowerAddress() + "')";
+            Log.i("Query is -------> ", "" + q);
+            mydb.execSQL(q);
+            return true;
+        } catch (Exception e) {
+            Log.i("Error is Product Added ", "" + e.getMessage());
+            return false;
+        } finally {
+            mydb.close();
+        }
+
+    }
+
     public ArrayList<CategoryModel> getAllCategories() {
         SQLiteDatabase myDb = null;
         try {
@@ -400,6 +477,58 @@ public class SqlightDatabase extends SQLiteOpenHelper {
             return null;
         } finally {
             myDb.close();
+        }
+    }
+
+    public ArrayList<OldGrowerSeedDistributionModel> getParentSeedDistributionList() {
+        SQLiteDatabase myDb = null;
+        try {
+            myDb = this.getReadableDatabase();
+            String q = "SELECT * FROM "+tbl_parentSeedDistribution;
+            Cursor cursorCourses = myDb.rawQuery(q, null);
+            ArrayList<OldGrowerSeedDistributionModel> courseModalArrayList = new ArrayList<>();
+            if (cursorCourses.moveToFirst()) {
+                do {
+                    courseModalArrayList.add(new OldGrowerSeedDistributionModel(cursorCourses.getInt(1),
+                            cursorCourses.getInt(2),
+                            cursorCourses.getString(3),
+                            cursorCourses.getString(4),
+                            cursorCourses.getString(5),
+                            cursorCourses.getString(6),
+                            cursorCourses.getString(7),
+                            cursorCourses.getString(8),
+                            cursorCourses.getString(9),
+                            cursorCourses.getString(10),
+                            cursorCourses.getString(11),
+                            cursorCourses.getString(12),
+                            cursorCourses.getString(13),
+                            cursorCourses.getString(14),
+                            cursorCourses.getString(15),
+                            cursorCourses.getInt(0)
+                    ));
+                } while (cursorCourses.moveToNext());
+            }
+            return courseModalArrayList;
+        } catch (Exception e) {
+            return null;
+        } finally {
+            myDb.close();
+        }
+    }
+
+    public boolean deleteParentSeedDistribution(String uniqueCode) {
+        SQLiteDatabase mydb = null;
+        try {
+            mydb = this.getReadableDatabase();
+            String q = "DELETE from "+ tbl_parentSeedDistribution+ " where UniqueCode='" + uniqueCode+"'";
+            Log.e("temporary"," deleted Query is -------> " + q);
+            mydb.execSQL(q);
+            return true;
+        } catch (Exception e) {
+            Log.e("temporary"," deleted Error is Clear List " + e.getMessage());
+            return false;
+        } finally {
+            mydb.close();
         }
     }
 
