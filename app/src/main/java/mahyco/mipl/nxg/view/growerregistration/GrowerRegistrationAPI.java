@@ -1,4 +1,4 @@
-  package mahyco.mipl.nxg.view.growerregistration;
+package mahyco.mipl.nxg.view.growerregistration;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -20,21 +20,20 @@ import retrofit2.Response;
 
 public class GrowerRegistrationAPI {
 
+    Context context;
+    String result = "";
+    ProgressDialog progressDialog;
+    Listener resultOutput;
 
-        Context context;
-        String result = "";
-        ProgressDialog progressDialog;
-        Listener resultOutput;
+    public GrowerRegistrationAPI(Context context, Listener resultOutput) {
+        this.context = context;
+        this.resultOutput = resultOutput;
+        progressDialog = new ProgressDialog(context);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Please Wait..");
+    }
 
-        public GrowerRegistrationAPI(Context context, Listener resultOutput) {
-            this.context = context;
-            this.resultOutput = resultOutput;
-            progressDialog = new ProgressDialog(context);
-            progressDialog.setMessage("Please Wait..");
-        }
-
-    public void getCategory(JsonObject jsonObject)
-    {
+    public void getCategory(JsonObject jsonObject) {
         try {
             if (!progressDialog.isShowing())
                 progressDialog.show();
@@ -73,8 +72,7 @@ public class GrowerRegistrationAPI {
         }
     }
 
-    public void getCategoryByParent(JsonObject jsonObject, SearchableSpinner spinner)
-    {
+    public void getCategoryByParent(JsonObject jsonObject, SearchableSpinner spinner) {
         try {
           /*  if (!progressDialog.isShowing())
                 progressDialog.show();*/
@@ -92,11 +90,11 @@ public class GrowerRegistrationAPI {
                     if (response.body() != null) {
                         List<CategoryChildModel> result = response.body();
                         try {
-                            resultOutput.loadChildSpinner(result,spinner);
+                            resultOutput.loadChildSpinner(result, spinner);
                         } catch (NullPointerException e) {
-                           // Toast.makeText(context, "Error is " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            // Toast.makeText(context, "Error is " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         } catch (Exception e) {
-                           // Toast.makeText(context, "Error is " + e.getMessage(), Toast.LENGTH_LONG).show();
+                            // Toast.makeText(context, "Error is " + e.getMessage(), Toast.LENGTH_LONG).show();
                         }
                     }
                 }
@@ -114,8 +112,7 @@ public class GrowerRegistrationAPI {
     }
 
 
-    public void createGrower(JsonObject jsonObject)
-    {
+    public void createGrower(JsonObject jsonObject) {
         try {
             if (!progressDialog.isShowing())
                 progressDialog.show();

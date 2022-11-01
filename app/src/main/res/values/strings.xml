@@ -160,7 +160,7 @@
     <string name="Please_select_planting_year">Please select planting year</string>
     <string name="Please_enter_landmark">Please enter landmark</string>
     <string name="Please_enter_farmer_name">Please enter farmer name</string>
-    <string name="Please_enter_gender">Please enter gender</string>
+    <string name="Please_select_gender">Please select gender</string>
     <string name="Please_enter_date_of_birth">Please enter date of birth</string>
     <string name="please_wait">Please wait.....</string>
     <string name="empty_device_id">Empty device id</string>

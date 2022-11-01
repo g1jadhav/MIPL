@@ -28,6 +28,7 @@ public class DownloadCategoryApi {
         this.context = context;
         this.resultOutput = resultOutput;
         progressDialog = new ProgressDialog(context);
+        progressDialog.setCancelable(false);
         progressDialog.setMessage("Please Wait..");
     }
 

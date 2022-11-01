@@ -43,7 +43,6 @@ import mahyco.mipl.nxg.util.SqlightDatabase;
 import mahyco.mipl.nxg.view.downloadcategories.DownloadCategoryActivity;
 import mahyco.mipl.nxg.view.growerregistration.NewGrowerRegistration;
 import mahyco.mipl.nxg.view.login.Login;
-import mahyco.mipl.nxg.view.uploaddata.ActivityUpload;
 import mahyco.mipl.nxg.view.uploaddata.NewActivityUpload;
 
 

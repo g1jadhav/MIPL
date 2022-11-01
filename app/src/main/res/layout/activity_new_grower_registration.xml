@@ -100,7 +100,8 @@
                 android:layout_marginTop="10dp"
                 android:textColor="@color/black"
                 android:textSize="15sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:visibility="gone" />
 
             <com.toptoche.searchablespinnerlibrary.SearchableSpinner
                 android:id="@+id/sp1"
@@ -348,7 +349,32 @@
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
-            <androidx.appcompat.widget.AppCompatEditText
+            <RadioGroup
+                android:id="@+id/gender_radio_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <RadioButton
+                    android:id="@+id/male_radio_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:checked="false"
+                    android:text="Male" />
+
+                <RadioButton
+                    android:id="@+id/female_radio_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:checked="false"
+                    android:text="Female" />
+
+            </RadioGroup>
+
+            <!--<androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/gender_edittext"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -360,7 +386,7 @@
                 android:maxLines="1"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
-                android:textColor="@color/black" />
+                android:textColor="@color/black" />-->
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="match_parent"
@@ -403,7 +429,7 @@
                 android:background="@drawable/login_screen_edittext"
                 android:ellipsize="end"
                 android:hint="@string/enter_mobile_no"
-                android:inputType="phone"
+                android:inputType="number"
                 android:maxLines="1"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
@@ -563,8 +589,8 @@
         android:id="@+id/registration_version_code"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="end"
         android:fontFamily="@font/comforta"
+        android:gravity="end"
         android:padding="5dp"
         android:textColor="@color/btn_color"
         android:textSize="15sp"

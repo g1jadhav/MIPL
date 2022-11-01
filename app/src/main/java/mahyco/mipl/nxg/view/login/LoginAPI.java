@@ -27,8 +27,10 @@ public class LoginAPI {
         this.context = context;
         this.resultOutput = resultOutput;
         progressDialog = new ProgressDialog(context);
+        progressDialog.setCancelable(false);
         progressDialog.setMessage("Please Wait..");
     }
+
     public void validateLogin(JsonObject jsonObject) {
         try {
 
@@ -66,8 +68,8 @@ public class LoginAPI {
 
         }
     }
-    public void getCategory(JsonObject jsonObject)
-    {
+
+    public void getCategory(JsonObject jsonObject) {
         try {
             if (!progressDialog.isShowing())
                 progressDialog.show();

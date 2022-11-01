@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -78,7 +79,7 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
     LinearLayoutManager mManager;
     RecyclerView rc_list;
     CategoryLoadingAdapter adapter;
-    EditText et_landmark, et_fullname, et_gender, /*et_dob,*/
+    EditText et_landmark, et_fullname, /*et_gender,*/ /*et_dob,*/
             et_mobile, et_uniqcode, /*et_regdate,*/
             et_satffname;
     String str_et_landmark, str_et_fullname, str_et_gender, str_et_dob, str_et_mobile, str_et_uniqcode, str_et_regdate, str_et_satffname;
@@ -131,6 +132,9 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
     private File mGrowerPhotoFile = null;
     private File mDocBackPhotoFile = null;
 
+    private RadioButton mMaleRadioButton;
+    private RadioButton mFemaleRadioButton;
+
     @Override
     protected int getLayout() {
         return R.layout.activity_new_grower_registration;
@@ -150,6 +154,9 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
             dp_path = front_path = back_path = "";
 
             new GetCategoriesAsyncTask().execute();
+
+            mMaleRadioButton = findViewById(R.id.male_radio_btn);
+            mFemaleRadioButton = findViewById(R.id.female_radio_btn);
 
             mSearchableSpinner1 = findViewById(R.id.sp1);
             mSearchableSpinner2 = findViewById(R.id.sp2);
@@ -183,7 +190,7 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
 
             et_landmark = (EditText) findViewById(R.id.landmark_edittext);
             et_fullname = (EditText) findViewById(R.id.farmer_name_edittext);
-            et_gender = (EditText) findViewById(R.id.gender_edittext);
+            // et_gender = (EditText) findViewById(R.id.gender_edittext);
             et_dob = findViewById(R.id.date_of_birth_textview);
             et_dob.setOnClickListener(this);
             et_mobile = (EditText) findViewById(R.id.mobile_no_edittext);
@@ -234,6 +241,8 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
                 Calendar mCalendar = Calendar.getInstance();
                 hideKeyboard(mContext);
 
+                mCalendar.add(Calendar.YEAR,-18);
+
                 DatePickerDialog.OnDateSetListener onDateSetListener = (datePicker, i, i1, i2) -> {
                     mCalendar.set(Calendar.YEAR, i);
                     mCalendar.set(Calendar.MONTH, i1);
@@ -276,7 +285,14 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
                         ) {
                             showToast("Scanner successfully !!");
                             et_dob.setText(results[9]);
-                            et_gender.setText(results[8]);
+                            // et_gender.setText(results[8]);
+                            if (results[8].equalsIgnoreCase("male")) {
+                                mFemaleRadioButton.setChecked(false);
+                                mMaleRadioButton.setChecked(true);
+                            } else {
+                                mFemaleRadioButton.setChecked(true);
+                                mMaleRadioButton.setChecked(false);
+                            }
                             et_fullname.setText(results[4] + " " + results[6]);
 //                                    val result = string[2].dropLast(1)
                             et_uniqcode.setText(
@@ -312,12 +328,17 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
     }
 
     public void submit(View v) {
-        if(validation()) {
+        if (validation()) {
             try {
 
                 str_et_landmark = et_landmark.getText().toString();
                 str_et_fullname = et_fullname.getText().toString();
-                str_et_gender = et_gender.getText().toString();
+
+                if (mMaleRadioButton.isChecked()) {
+                    str_et_gender = mMaleRadioButton.getText().toString();
+                } else {
+                    str_et_gender = mFemaleRadioButton.getText().toString();
+                }
                 str_et_dob = et_dob.getText().toString();
                 str_et_mobile = et_mobile.getText().toString();
                 str_et_uniqcode = et_uniqcode.getText().toString();
@@ -352,7 +373,7 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
 //            stid = 1;
 //            new UploadFile().execute(dp_path);
             } catch (Exception e) {
-                Log.e("temporary ","Error is "+ e.getMessage());
+                Log.e("temporary ", "Error is " + e.getMessage());
             }
         }
     }
@@ -506,7 +527,7 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
                             if (mDocFrontPhotoFile != null && r.getBitmap() != null) {
                                 try {
                                     front_path = mDocFrontPhotoFile.getAbsolutePath();
-                                   // Log.e("temporary", " front_path " + front_path);
+                                    //Z Log.e("temporary", " front_path " + front_path);
                                     FileOutputStream out = new FileOutputStream(front_path);
                                     r.getBitmap().compress(Bitmap.CompressFormat.PNG, 100, out);
                                     out.flush();
@@ -550,7 +571,7 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
                             if (mDocBackPhotoFile != null && r.getBitmap() != null) {
                                 try {
                                     back_path = mDocBackPhotoFile.getAbsolutePath();
-                                 //   Log.e("temporary", " back_path " + back_path);
+                                    //   Log.e("temporary", " back_path " + back_path);
                                     FileOutputStream out = new FileOutputStream(back_path);
                                     r.getBitmap().compress(Bitmap.CompressFormat.PNG, 100, out);
                                     out.flush();
@@ -593,7 +614,7 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
                             if (mGrowerPhotoFile != null && r.getBitmap() != null) {
                                 try {
                                     dp_path = mGrowerPhotoFile.getAbsolutePath();
-                                  //  Log.e("temporary", " dp " + dp_path);
+                                    //  Log.e("temporary", " dp " + dp_path);
                                     FileOutputStream out = new FileOutputStream(dp_path);
                                     r.getBitmap().compress(Bitmap.CompressFormat.PNG, 100, out);
                                     out.flush();
@@ -1229,7 +1250,7 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
         if (mGrowerPhotoFile == null) {
             showToast(getString(R.string.please_grower_photo));
             return false;
-        } else if(mSearchableSpinner5.getSelectedItemPosition() == -1){
+        } else if (mSearchableSpinner5.getSelectedItemPosition() == -1) {
             showToast("Data not found");
             return false;
         } else if (TextUtils.isEmpty(et_landmark.getText().toString())) {
@@ -1242,8 +1263,9 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
                 showToast(getString(R.string.Please_enter_organizer_name));
             }
             return false;
-        } else if (TextUtils.isEmpty(et_gender.getText().toString())) {
-            showToast(getString(R.string.Please_enter_gender));
+        } else if (/*TextUtils.isEmpty(et_gender.getText().toString())*/
+                !mMaleRadioButton.isChecked() && !mFemaleRadioButton.isChecked()) {
+            showToast(getString(R.string.Please_select_gender));
             return false;
         } else if (TextUtils.isEmpty(et_dob.getText().toString().trim())) {
             showToast(getString(R.string.Please_enter_date_of_birth));
@@ -1282,6 +1304,8 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
         if (mCodeScannerView.getVisibility() == View.VISIBLE) {
             mCodeScanner.releaseResources();
             hideScannerLayout();
+        } else {
+            super.onBackPressed();
         }
     }
 
