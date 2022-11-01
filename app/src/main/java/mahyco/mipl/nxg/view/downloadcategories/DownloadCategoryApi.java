@@ -12,6 +12,7 @@ import java.util.List;
 import mahyco.mipl.nxg.MainActivityListListener;
 import mahyco.mipl.nxg.model.CategoryChildModel;
 import mahyco.mipl.nxg.model.CategoryModel;
+import mahyco.mipl.nxg.model.SeasonModel;
 import mahyco.mipl.nxg.util.RetrofitClient;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -149,17 +150,17 @@ public class DownloadCategoryApi {
             if (!progressDialog.isShowing())
                 progressDialog.show();
 
-            Call<List<CategoryModel>> call = null;
+            Call<List<SeasonModel>> call = null;
             call = RetrofitClient.getInstance().getMyApi().getSeason(jsonObject);
-            call.enqueue(new Callback<List<CategoryModel>>() {
+            call.enqueue(new Callback<List<SeasonModel>>() {
                 @Override
-                public void onResponse(Call<List<CategoryModel>> call, Response<List<CategoryModel>> response) {
+                public void onResponse(Call<List<SeasonModel>> call, Response<List<SeasonModel>> response) {
 
                     if (progressDialog.isShowing())
                         progressDialog.dismiss();
 
                     if (response.body() != null) {
-                        List<CategoryModel> result = response.body();
+                        List<SeasonModel> result = response.body();
                         try {
                             resultOutput.onListSeasonMasterResponse(result);
                         } catch (NullPointerException e) {
@@ -171,7 +172,7 @@ public class DownloadCategoryApi {
                 }
 
                 @Override
-                public void onFailure(Call<List<CategoryModel>> call, Throwable t) {
+                public void onFailure(Call<List<SeasonModel>> call, Throwable t) {
                     if (progressDialog.isShowing())
                         progressDialog.dismiss();
                     Log.e("Error is", t.getMessage());

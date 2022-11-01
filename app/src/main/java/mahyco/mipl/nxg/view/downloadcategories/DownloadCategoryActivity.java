@@ -11,6 +11,7 @@ import com.google.gson.JsonObject;
 
 import java.util.List;
 
+import mahyco.mipl.nxg.model.SeasonModel;
 import mahyco.mipl.nxg.util.BaseActivity;
 import mahyco.mipl.nxg.R;
 import mahyco.mipl.nxg.model.CategoryChildModel;
@@ -32,7 +33,7 @@ public class DownloadCategoryActivity extends BaseActivity implements View.OnCli
 
     private List<CategoryModel> mCategoryMasterList;
     private List<CategoryChildModel> mLocationMasterList;
-    private List<CategoryModel> mSeasonMasterList;
+    private List<SeasonModel> mSeasonMasterList;
     private List<CategoryModel> mGrowerMasterList;
 
     private String mDatabaseName = "";
@@ -112,7 +113,7 @@ public class DownloadCategoryActivity extends BaseActivity implements View.OnCli
     }
 
     @Override
-    public void onListSeasonMasterResponse(List<CategoryModel> lst) {
+    public void onListSeasonMasterResponse(List<SeasonModel> lst) {
         Toast.makeText(mContext, "" + lst.size(), Toast.LENGTH_SHORT).show();
         if (mSeasonMasterList != null) {
             mSeasonMasterList.clear();
@@ -183,8 +184,8 @@ public class DownloadCategoryActivity extends BaseActivity implements View.OnCli
             try {
                 mJsonObjectCategory = null;
                 mJsonObjectCategory = new JsonObject();
-                mJsonObjectCategory.addProperty("filterValue", "");
-                mJsonObjectCategory.addProperty("FilterOption", "GetCountry");
+                mJsonObjectCategory.addProperty("filterValue", "1");
+                mJsonObjectCategory.addProperty("FilterOption", "CountryId");
                 mDownloadCategoryApi.getSeason(mJsonObjectCategory);
             } catch (Exception e) {
             }
@@ -201,12 +202,12 @@ public class DownloadCategoryActivity extends BaseActivity implements View.OnCli
                 database = new SqlightDatabase(mContext);
                 switch (mDatabaseName) {
                     case LOCATION_MASTER_DATABASE:
-                        database.trucateTable("tbl_locationmaster");
-                        for (CategoryChildModel param : mLocationMasterList) {
-                            if (param.getParentId() == 0) {
+                        database.trucateTable("tbl_SeasonMaster");
+                        for (SeasonModel param : mSeasonMasterList) {
+                          /*  if (param.getParentId() == 0) {
                                 Preferences.save(mContext, Preferences.COUNTRY_MASTER_ID, "" + param.getCountryMasterId());
-                            }
-                            database.addLocation(param);
+                            }*/
+                            database.addSeason(param);
                         }
                         break;
                     case CATEGORY_MASTER_DATABASE:
@@ -219,16 +220,16 @@ public class DownloadCategoryActivity extends BaseActivity implements View.OnCli
                         break;
                     case GROWER_MASTER_DATABASE:
                         database = new SqlightDatabase(mContext);
-                        database.trucateTable("tbl_seasonmaster");
+                        database.trucateTable("tbl_growermastermaster");
                         for (CategoryModel param : mCategoryMasterList) {
-                            database.addSeason(param);
+                            database.addGrower(param);
                         }
                         break;
                     case SEASON_MASTER_DATABASE:
                         database = new SqlightDatabase(mContext);
-                        database.trucateTable("tbl_growermastermaster");
-                        for (CategoryModel param : mCategoryMasterList) {
-                            database.addGrower(param);
+                        database.trucateTable("tbl_seasonmaster");
+                        for (SeasonModel param : mSeasonMasterList) {
+                            database.addSeason(param);
                         }
                         break;
                 }
