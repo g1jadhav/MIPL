@@ -1,8 +1,10 @@
 package mahyco.mipl.nxg.view.growerregistration;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.StrictMode;
@@ -20,6 +22,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -264,6 +267,11 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
                 mDatePickerDialog.show();
                 break;
             case R.id.scan_qr_code: {
+                if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.CAMERA)
+                        == PackageManager.PERMISSION_DENIED) {
+                    showToast("Please capture the photo first");
+                    return;
+                }
                 // open scanner
                 hideKeyboard(mContext);
                 mCodeScanner.startPreview();
