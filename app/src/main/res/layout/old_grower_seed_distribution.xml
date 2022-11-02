@@ -176,8 +176,7 @@
                 android:layout_height="40dp"
                 android:layout_marginTop="15dp"
                 android:background="@drawable/login_spinner_style"
-                android:visibility="gone"
-                app:hintText="Select Organizer Name" />
+                android:visibility="gone" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="match_parent"

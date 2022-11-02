@@ -2,7 +2,7 @@ package mahyco.mipl.nxg.util;
 
 public class Constants {
 
-    public static final String BASE_URL = "http://10.80.50.153/MIPL/api/";
+    public static final String BASE_URL = "http://10.80.50.26/MIPL/api/";
     public static final String GET_PENDINGACTION = "GetUserCode";
     public static final String RESETDATA = "ClearUserIMEI";
     public static final String GET_PENDINGACTION_USERCODE ="GetUserName" ;

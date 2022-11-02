@@ -2,7 +2,11 @@ package mahyco.mipl.nxg.seeddistribution;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.provider.Settings;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -28,29 +32,45 @@ import java.util.regex.Pattern;
 
 import mahyco.mipl.nxg.R;
 import mahyco.mipl.nxg.adapter.SeedDistrPlantingYearAdapter;
+import mahyco.mipl.nxg.model.OldGrowerSeedDistributionModel;
 import mahyco.mipl.nxg.util.BaseActivity;
 import mahyco.mipl.nxg.util.Preferences;
+import mahyco.mipl.nxg.util.SqlightDatabase;
 
 public class OldGrowerSeedDistribution extends BaseActivity implements View.OnClickListener {
 
     private Context mContext;
+
     private AppCompatSpinner mPlantingYearSpinner;
+    private AppCompatSpinner mSeasonSpinner;
+    private AppCompatSpinner mCropSpinner;
+    private AppCompatSpinner mProductionCodeSpinner;
+    private AppCompatSpinner mClusterSpinner;
+    private AppCompatSpinner mMaleBatchNoSpinner;
+    private AppCompatSpinner mFemaleBatchNoSpinner;
+    private AppCompatSpinner mOrganizerNameSpinner;
 
     private ArrayList<String> mYearList;
 
     private AppCompatEditText mAreaEditText;
+
+    private AppCompatTextView mGrowerName;
+    private AppCompatTextView mUniqueCode;
+    private AppCompatTextView mAddressTextView;
     private AppCompatTextView mParentSeedIssueDate;
     private AppCompatTextView mStaffTextView;
+    private AppCompatTextView mOrganizerNameTextView;
 
     private CodeScanner mCodeScanner;
     private CodeScannerView mCodeScannerView;
     private ScrollView mScrollView;
 
-    private  Button mSubmitButton;
-    private  Button mScanQRCodeButton;
-    private  String mCountryId = "0";
+    private Button mSubmitButton;
+    private Button mScanQRCodeButton;
+    private String mCountryId = "0";
     private String mCountryName = "";
     private RadioGroup mRadioGroup;
+    private OldGrowerSeedDistributionModel mOldGrowerSeedDistributionModel = new OldGrowerSeedDistributionModel();
 
     @Override
     protected int getLayout() {
@@ -65,6 +85,35 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
         mYearList = new ArrayList<>();
 
         mContext = this;
+
+        mRadioGroup = findViewById(R.id.direct_or_organizer_radio_group);
+        mRadioGroup.setOnCheckedChangeListener((radioGroup, i) -> {
+            switch (i) {
+                case R.id.direct_to_grower_radio_btn: {
+                    mOrganizerNameSpinner.setVisibility(View.GONE);
+                    mOrganizerNameTextView.setVisibility(View.GONE);
+                }
+                break;
+                case R.id.direct_to_orgnizer_radio_btn: {
+                    mOrganizerNameSpinner.setVisibility(View.VISIBLE);
+                    mOrganizerNameTextView.setVisibility(View.VISIBLE);
+                }
+                break;
+            }
+        });
+
+        mPlantingYearSpinner = findViewById(R.id.planting_year_drop_down);
+        mOrganizerNameSpinner = findViewById(R.id.organizer_name_drop_down);
+        mSeasonSpinner = findViewById(R.id.season_drop_down);
+        mCropSpinner = findViewById(R.id.crop_drop_down);
+        mProductionCodeSpinner = findViewById(R.id.production_code_drop_down);
+        mClusterSpinner = findViewById(R.id.parent_seed_issue_location_drop_down);
+        mMaleBatchNoSpinner = findViewById(R.id.parent_seed_batch_no_male_drop_down);
+        mFemaleBatchNoSpinner = findViewById(R.id.parent_seed_batch_no_female_drop_down);
+        mGrowerName = findViewById(R.id.grower_name_textview);
+        mUniqueCode = findViewById(R.id.unique_id_textview);
+        mAddressTextView = findViewById(R.id.address_textview);
+        mOrganizerNameTextView = findViewById(R.id.organizer_name_textview);
 
         mScanQRCodeButton = findViewById(R.id.seed_scan_qr_code);
         mCodeScannerView = findViewById(R.id.seed_distribution_scanner_view);
@@ -94,8 +143,6 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
         calendar.add(Calendar.YEAR, -1);
         mYearList.add(String.valueOf(calendar.get(Calendar.YEAR)));
 
-        mPlantingYearSpinner = findViewById(R.id.planting_year_drop_down);
-
         SeedDistrPlantingYearAdapter adapter = new SeedDistrPlantingYearAdapter(mContext, R.layout.spinner_rows, mYearList);
         mPlantingYearSpinner.setAdapter(adapter);
         mPlantingYearSpinner.setSelection(1);
@@ -114,7 +161,11 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
             case R.id.seed_scan_qr_code: {
                 if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.CAMERA)
                         == PackageManager.PERMISSION_DENIED) {
-                    showToast("Please give camera permission first");
+                    showToast("Camera Permission is Required.");
+                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                    Uri uri = Uri.fromParts("package", getPackageName(), null);
+                    intent.setData(uri);
+                    startActivity(intent);
                     return;
                 }
                 // open scanner
@@ -154,7 +205,46 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
             break;
 
             case R.id.seed_distribution_submit_btn:
+                mOldGrowerSeedDistributionModel.setLoginId(Integer.parseInt(Preferences.get(mContext, Preferences.LOGINID).trim()));
+                mOldGrowerSeedDistributionModel.setCountryId(Integer.parseInt(Preferences.get(mContext, Preferences.COUNTRYCODE)));
+                mOldGrowerSeedDistributionModel.setGrowerName(mGrowerName.getText().toString());
+                mOldGrowerSeedDistributionModel.setUniqueCode(mUniqueCode.getText().toString());
+                mOldGrowerSeedDistributionModel.setGrowerAddress(mAddressTextView.getText().toString());
+                mOldGrowerSeedDistributionModel.setPlantingYear(mPlantingYearSpinner.getSelectedItem().toString());
+                mOldGrowerSeedDistributionModel.setSeason(mSeasonSpinner.getSelectedItem().toString());
+                mOldGrowerSeedDistributionModel.setCrop(mCropSpinner.getSelectedItem().toString());
+                mOldGrowerSeedDistributionModel.setProductionCode(mProductionCodeSpinner.getSelectedItem().toString());
+                mOldGrowerSeedDistributionModel.setSeedProductionArea(mAreaEditText.getText().toString());
+                mOldGrowerSeedDistributionModel.setSeedIssueLocation(mClusterSpinner.getSelectedItem().toString());
+                mOldGrowerSeedDistributionModel.setSeedBatchNoFemale(mFemaleBatchNoSpinner.getSelectedItem().toString());
+                mOldGrowerSeedDistributionModel.setSeedBatchNoMale(mMaleBatchNoSpinner.getSelectedItem().toString());
+                mOldGrowerSeedDistributionModel.setIssueDate(mParentSeedIssueDate.getText().toString());
+                mOldGrowerSeedDistributionModel.setStaffName(mStaffTextView.getText().toString());
+
+                new AddDataAsyncTask().execute();
                 break;
+        }
+    }
+
+    private class AddDataAsyncTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected final Void doInBackground(Void... voids) {
+            SqlightDatabase database = null;
+            try {
+                database = new SqlightDatabase(mContext);
+                database.parentSeedDistribution(mOldGrowerSeedDistributionModel);
+            } finally {
+                if (database != null) {
+                    database.close();
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void unused) {
+            finish();
+            super.onPostExecute(unused);
         }
     }
 

@@ -51,6 +51,9 @@ public class NewActivityUpload extends BaseActivity implements View.OnClickListe
     private boolean mGrowerClicked;
     private String mResponseString = "";
 
+    private int mGrowerListSize;
+    private int mOrganizerSize;
+
     @Override
     protected int getLayout() {
         return R.layout.activity_upload_layout;
@@ -223,6 +226,8 @@ public class NewActivityUpload extends BaseActivity implements View.OnClickListe
 //                            "\ngetFrontImageUpload ()" + list.get(i).getFrontImageUpload() +
 //                            "\ngetBackImageUpload ()" + list.get(i).getBackImageUpload());
                 }
+                mOrganizerSize = mOrganizerList.size();
+                mGrowerListSize = mGrowerList.size();
             } finally {
                 if (database != null) {
                     database.close();
@@ -498,7 +503,7 @@ public class NewActivityUpload extends BaseActivity implements View.OnClickListe
                     if (mResponseString.contains("Error")) {
                         showNoInternetDialog(mContext, mResponseString);
                     } else {
-                        showNoInternetDialog(mContext, "New Grower Registration Record/s Uploaded Successfully");
+                        showNoInternetDialog(mContext, "New Grower Registration "+ mGrowerListSize +" Record/s Uploaded Successfully");
                     }
 //                    Log.e("temporary", "onGrowerRegister mGrowerUpload all data upload");
                 }
@@ -514,7 +519,7 @@ public class NewActivityUpload extends BaseActivity implements View.OnClickListe
                     if (mResponseString.contains("Error")) {
                         showNoInternetDialog(mContext, mResponseString);
                     } else {
-                        showNoInternetDialog(mContext, "New Organizer Registration Record/s Uploaded Successfully");
+                        showNoInternetDialog(mContext, "New Organizer Registration "+ mOrganizerSize +"  Record/s Uploaded Successfully");
                     }//                    Log.e("temporary", "onGrowerRegister mGrowerUpload all data upload");
                 }
                 mOrganizerRecords.setText(getString(R.string.no_of_records_for_upload, mOrganizerList.size()));

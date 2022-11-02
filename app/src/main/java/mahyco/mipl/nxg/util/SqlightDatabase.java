@@ -150,7 +150,9 @@ public class SqlightDatabase extends SQLiteOpenHelper {
                 "    seedBatchNoFemale text,\n" +
                 "    seedBatchNoMale text,\n" +
                 "    growerName text,\n" +
-                "    growerAddress text\n" +
+                "    growerAddress text,\n" +
+                "    loginId INTEGER,\n" +
+                "    issueDate text\n" +
                 ")";
 
         db.execSQL(parentSeedDistribution);
@@ -381,7 +383,9 @@ public class SqlightDatabase extends SQLiteOpenHelper {
                     "seedBatchNoFemale," +
                     "seedBatchNoMale," +
                     "growerName," +
-                    "growerAddress" +
+                    "growerAddress," +
+                    "loginId," +
+                    "issueDate" +
                     ") values" +
                     "('" + seedDistributionModel.getCountryId() + "'," +
                     "'" + seedDistributionModel.getCountryMasterId() + "'," +
@@ -397,7 +401,9 @@ public class SqlightDatabase extends SQLiteOpenHelper {
                     "'" + seedDistributionModel.getSeedBatchNoFemale()+ "'," +
                     "'" + seedDistributionModel.getSeedBatchNoMale()+ "'," +
                     "'" + seedDistributionModel.getGrowerName()+ "'," +
-                    "'" + seedDistributionModel.getGrowerAddress() + "')";
+                    "'" + seedDistributionModel.getGrowerAddress()+ "'," +
+                    "'" + seedDistributionModel.getLoginId()+ "'," +
+                    "'" + seedDistributionModel.getIssueDate() + "')";
             Log.i("Query is -------> ", "" + q);
             mydb.execSQL(q);
             return true;
@@ -504,7 +510,9 @@ public class SqlightDatabase extends SQLiteOpenHelper {
                             cursorCourses.getString(13),
                             cursorCourses.getString(14),
                             cursorCourses.getString(15),
-                            cursorCourses.getInt(0)
+                            cursorCourses.getInt(16),
+                            cursorCourses.getInt(0),
+                            cursorCourses.getString(17)
                     ));
                 } while (cursorCourses.moveToNext());
             }

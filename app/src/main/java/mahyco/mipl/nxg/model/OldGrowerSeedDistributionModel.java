@@ -18,7 +18,8 @@ public class OldGrowerSeedDistributionModel {
     String GrowerName;
     String GrowerAddress;
     int TempId;
-
+    int LoginId;
+    String IssueDate;
     public OldGrowerSeedDistributionModel() {
     }
 
@@ -26,7 +27,7 @@ public class OldGrowerSeedDistributionModel {
                                           String uniqueCode, String staffName, String crop,
                                           String distributedBy, String productionCode, String seedProductionArea,
                                           String seedIssueLocation, String seedBatchNoFemale, String seedBatchNoMale,
-                                          String growerName, String growerAddress, int tempId) {
+                                          String growerName, String growerAddress, int loginId, int tempId, String issueDate) {
 
         GrowerName = growerName;
         GrowerAddress = growerAddress;
@@ -44,6 +45,24 @@ public class OldGrowerSeedDistributionModel {
         DistributedBy = distributedBy;
         ProductionCode = productionCode;
         TempId = tempId;
+        LoginId = loginId;
+        IssueDate = issueDate;
+    }
+
+    public String getIssueDate() {
+        return IssueDate;
+    }
+
+    public void setIssueDate(String issueDate) {
+        IssueDate = issueDate;
+    }
+
+    public int getLoginId() {
+        return LoginId;
+    }
+
+    public void setLoginId(int loginId) {
+        LoginId = loginId;
     }
 
     public String getGrowerName() {
