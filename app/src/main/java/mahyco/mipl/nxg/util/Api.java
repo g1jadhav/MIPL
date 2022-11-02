@@ -6,6 +6,7 @@ import java.util.List;
 
 import mahyco.mipl.nxg.model.CategoryChildModel;
 import mahyco.mipl.nxg.model.CategoryModel;
+import mahyco.mipl.nxg.model.SeasonModel;
 import mahyco.mipl.nxg.model.SuccessModel;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -27,6 +28,15 @@ public interface Api {
 
     @POST(Constants.GETCATEGORY)
     Call<List<CategoryModel>> getCategory(@Body JsonObject jsonObject);
+
+    @POST(Constants.GET_LOCATION)
+    Call<List<CategoryChildModel>> getLocation(@Body JsonObject jsonObject);
+
+    @POST(Constants.GET_GROWER)
+    Call<List<CategoryModel>> getGrower(@Body JsonObject jsonObject);
+
+    @POST(Constants.GET_SEASON)
+    Call<List<SeasonModel>> getSeason(@Body JsonObject jsonObject);
 
     @Multipart
     @POST("processInspection/uploadFile?FileType=Image")

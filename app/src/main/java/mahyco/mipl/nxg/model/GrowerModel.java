@@ -1,11 +1,100 @@
 package mahyco.mipl.nxg.model;
 
 public class GrowerModel {
-      int LoginId;//": 0,
-              int CountryId;//": 0,
-              int CountryMasterId;//": 0,
-              String UniqueId;//": "string",
+    int LoginId;//": 0,
+    int CountryId;//": 0,
+    int CountryMasterId;//": 0,
+    String UniqueId;//": "string",
     String UserType;//": "string",
+    int IsSync = 0;
+    String StaffNameAndId;
+    int TempId;
+
+    int GrowerImageUpload;//": 0,
+    int FrontImageUpload;//": 0,
+    int BackImageUpload;//": 0,
+
+    public GrowerModel() {
+    }
+
+    public GrowerModel(int countryId, int countryMasterId, String uploadPhoto, String landMark,
+                       String growerName, String gender, String dob, String mobileNo, String uniqueCode, String regDate,
+                       String staffNameAndId, String idProofFrontCopy,
+                       int isSync, String createdBy, String userType, String idProofBackCopy,
+                       int loginId,String uniqueId, int tempId,int growerImageUpload,
+                               int frontImageUpload,
+                               int backImageUpload) {
+        GrowerImageUpload = growerImageUpload;
+        FrontImageUpload = frontImageUpload;
+        BackImageUpload = backImageUpload;
+        UploadPhoto = uploadPhoto;
+        CountryId = countryId;
+        CountryMasterId = countryMasterId;
+        LandMark = landMark;
+        FullName = growerName;
+        Gender = gender;
+        DOB = dob;
+        MobileNo = mobileNo;
+        UniqueCode = uniqueCode;
+        RegDt = regDate;
+        StaffNameAndId = staffNameAndId;
+        IdProofFrontCopy = idProofFrontCopy;
+        IsSync = isSync;
+        CreatedBy = createdBy;
+        UserType = userType;
+        IdProofBackCopy = idProofBackCopy;
+        LoginId = loginId;
+        UniqueId = uniqueId;
+        TempId = tempId;
+    }
+
+    public int getGrowerImageUpload() {
+        return GrowerImageUpload;
+    }
+
+    public void setGrowerImageUpload(int growerImageUpload) {
+        GrowerImageUpload = growerImageUpload;
+    }
+
+    public int getFrontImageUpload() {
+        return FrontImageUpload;
+    }
+
+    public void setFrontImageUpload(int frontImageUpload) {
+        FrontImageUpload = frontImageUpload;
+    }
+
+    public int getBackImageUpload() {
+        return BackImageUpload;
+    }
+
+    public void setBackImageUpload(int backImageUpload) {
+        BackImageUpload = backImageUpload;
+    }
+
+    public int getTempId() {
+        return TempId;
+    }
+
+    public void setTempId(int tempId) {
+        TempId = TempId;
+    }
+
+    public String getStaffNameAndId() {
+        return StaffNameAndId;
+    }
+
+    public void setStaffNameAndId(String staffNameAndId) {
+        StaffNameAndId = staffNameAndId;
+    }
+
+    public int getIsSync() {
+        return IsSync;
+    }
+
+    public void setIsSync(int isSync) {
+        IsSync = isSync;
+    }
 
     public int getLoginId() {
         return LoginId;

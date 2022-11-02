@@ -1,15 +1,17 @@
 package mahyco.mipl.nxg;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.Html;
-import android.view.MenuItem;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioGroup;
@@ -17,52 +19,54 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.navigation.NavigationView;
-import com.google.gson.JsonObject;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.google.android.material.navigation.NavigationView;
+import com.google.gson.JsonObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import mahyco.mipl.nxg.model.CategoryModel;
+import mahyco.mipl.nxg.seeddistribution.OldGrowerSeedDistribution;
 import mahyco.mipl.nxg.util.Preferences;
-
 import mahyco.mipl.nxg.util.SqlightDatabase;
+import mahyco.mipl.nxg.view.downloadcategories.DownloadCategoryActivity;
 import mahyco.mipl.nxg.view.growerregistration.NewGrowerRegistration;
-
 import mahyco.mipl.nxg.view.login.Login;
+import mahyco.mipl.nxg.view.uploaddata.NewActivityUpload;
 
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener,MainActivityListListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, MainActivityListListener {
     RelativeLayout rl_fragment_container;
     MainActivityAPI mainActivityAPI;
     Context context;
     RecyclerView rc_pendingaction;
     LinearLayoutManager mManager;
     EditText editText_search;
-    int type=1;
+    int type = 1;
     TextView txtlbl;
     RadioGroup radioGroup;
     ImageButton btn_createInvastigation;
     RecyclerView rc_viewiqcplant;
     JsonObject jsonObject;
-    String plantid,roleid;
+    String plantid, roleid;
 
-  CardView card_downlaodMaster,card_upload_data_layout,card_grower,card_organizer;
-  JsonObject jsonObject_Category;
+    CardView card_downlaodMaster, card_upload_data_layout, card_grower, card_organizer,
+    card_parent_seed_distributin_layout;
+    JsonObject jsonObject_Category;
+
+    private Dialog mDialog  = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,28 +81,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        context=MainActivity.this;
-        mainActivityAPI=new MainActivityAPI(context,this);
+        context = MainActivity.this;
+        mainActivityAPI = new MainActivityAPI(context, this);
         init();
     }
 
     public void init() {
-        rc_viewiqcplant=findViewById(R.id.rc_viewiqcplant);
+        rc_viewiqcplant = findViewById(R.id.rc_viewiqcplant);
         mManager = new LinearLayoutManager(context);
         rc_viewiqcplant.setLayoutManager(mManager);
-        txtlbl=findViewById(R.id.txt_lbl);
+        txtlbl = findViewById(R.id.txt_lbl);
 
-        if(Preferences.get(context,Preferences.USER_NAME)!=null)
-        txtlbl.setText(Html.fromHtml("<b>Welcome - </b> <b style='color:#fc5a03;'>"+Preferences.get(context,Preferences.USER_NAME)+"</b>"));
-          card_downlaodMaster=(CardView)findViewById(R.id.downloadmaster);
+        if (Preferences.get(context, Preferences.USER_NAME) != null)
+            txtlbl.setText(Html.fromHtml("<b>Welcome - </b> <b style='color:#fc5a03;'>" + Preferences.get(context, Preferences.USER_NAME) + "</b>"));
+        card_downlaodMaster = (CardView) findViewById(R.id.downloadmaster);
 
-          card_upload_data_layout=(CardView)findViewById(R.id.upload_data_layout);
+        card_upload_data_layout = (CardView) findViewById(R.id.upload_data_layout);
 
-                card_grower=(CardView)findViewById(R.id.new_grower_registration_layout);
-        card_organizer=(CardView)findViewById(R.id.new_organizer_registration_layout);
+        card_grower = (CardView) findViewById(R.id.new_grower_registration_layout);
+        card_organizer = (CardView) findViewById(R.id.new_organizer_registration_layout);
+        card_parent_seed_distributin_layout = (CardView) findViewById(R.id.parent_seed_distribution_layout);
 
-
-
+        card_parent_seed_distributin_layout.setOnClickListener(this);
         card_downlaodMaster.setOnClickListener(this);
         card_upload_data_layout.setOnClickListener(this);
         card_grower.setOnClickListener(this);
@@ -112,7 +116,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
-
 
 
     @Override
@@ -193,76 +196,137 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onListResponce(List<CategoryModel> lst) {
-        Toast.makeText(context, ""+lst.size(), Toast.LENGTH_SHORT).show();
-        try{
-            SqlightDatabase database=new SqlightDatabase(context);
+        Toast.makeText(context, "" + lst.size(), Toast.LENGTH_SHORT).show();
+        try {
+            SqlightDatabase database = new SqlightDatabase(context);
             database.trucateTable("tbl_categorymaster");
-            for(CategoryModel categoryModel:lst)
-              database.addCategory(categoryModel);
+            for (CategoryModel categoryModel : lst)
+                database.addCategory(categoryModel);
 
-        }catch(Exception e)
-        {
+        } catch (Exception e) {
 
         }
     }
-
-
 
 
     @Override
     public void onClick(View v) {
-        Intent intent=new Intent(context, NewGrowerRegistration.class);
-        switch(v.getId())
-        {
-            case R.id.downloadmaster:
-                downloadMasterData();
-                break;
 
-                case R.id.upload_data_layout:
-                downloadLocationData();
-                break;
-
-            case R.id.new_grower_registration_layout:
-
-                intent.putExtra("title","Grower");
+        switch (v.getId()) {
+            case R.id.downloadmaster: {
+                // downloadMasterData();
+                Intent intent = new Intent(context, DownloadCategoryActivity.class);
                 startActivity(intent);
+            }
+            break;
+
+            case R.id.upload_data_layout:
+                //downloadLocationData();
+                Intent upload = new Intent(context, /*ActivityUpload*/NewActivityUpload.class);
+                startActivity(upload);
                 break;
 
+            case R.id.new_grower_registration_layout: {
+                if (!checkCategoryDataDownloaded()) {
+                    Toast.makeText(context, "Please download category master data in download master data first", Toast.LENGTH_SHORT).show();
+                } else if (!checkLocationMasterDataDownloaded()) {
+                    Toast.makeText(context, "Please download location master data in download master data first", Toast.LENGTH_SHORT).show();
+                } else {
+                    if (checkAutoTimeEnabledOrNot()) {
+                        Intent intent = new Intent(context, NewGrowerRegistration.class);
+                        intent.putExtra("title", "Grower");
+                        startActivity(intent);
+                    } else {
+                        showAutomaticTimeMessage("Please update time setting to automatic");                    }
+                }
+                break;
+            }
             case R.id.new_organizer_registration_layout:
-                intent.putExtra("title","Organizer");
-                startActivity(intent);
+                if (!checkCategoryDataDownloaded()) {
+                    Toast.makeText(context, "Please download category master data in download master data first", Toast.LENGTH_SHORT).show();
+                } else if (!checkLocationMasterDataDownloaded()) {
+                    Toast.makeText(context, "Please download location master data in download master data first", Toast.LENGTH_SHORT).show();
+                } else {
+                    if (checkAutoTimeEnabledOrNot()) {
+                        Intent intent = new Intent(context, NewGrowerRegistration.class);
+                        intent.putExtra("title", "Organizer");
+                        startActivity(intent);
+                    } else {
+                        showAutomaticTimeMessage("Please update time setting to automatic");
+                    }
+                }
+                break;
+            case R.id.parent_seed_distribution_layout:
+                if (checkAutoTimeEnabledOrNot()) {
+                    Intent intent = new Intent(context, OldGrowerSeedDistribution.class);
+                    startActivity(intent);
+                } else {
+                    showAutomaticTimeMessage("Please update time setting to automatic");
+                }
                 break;
         }
     }
 
+    private boolean checkLocationMasterDataDownloaded() {
+        return !Preferences.get(context, Preferences.COUNTRY_MASTER_ID).equalsIgnoreCase("");
+    }
+
+    private boolean checkCategoryDataDownloaded() {
+        return !Preferences.get(context, Preferences.STORED_CATEGORY_SIZE).equalsIgnoreCase("");
+    }
+
     private void downloadLocationData() {
-        try{
-            jsonObject_Category=new JsonObject();
-            jsonObject_Category.addProperty("filterValue","1");
-            jsonObject_Category.addProperty("FilterOption","CategoryId");
+        try {
+            jsonObject_Category = new JsonObject();
+            jsonObject_Category.addProperty("filterValue", "1");
+            jsonObject_Category.addProperty("FilterOption", "CategoryId");
             mainActivityAPI.getCategory(jsonObject_Category);
 
 
-
-        }catch(Exception e)
-        {
+        } catch (Exception e) {
 
         }
     }
 
     private void downloadMasterData() {
-        try{
-            jsonObject_Category=new JsonObject();
-            jsonObject_Category.addProperty("filterValue","Malawi");
-            jsonObject_Category.addProperty("FilterOption","GetCountry");
+        try {
+            jsonObject_Category = new JsonObject();
+            jsonObject_Category.addProperty("filterValue", "Malawi");
+            jsonObject_Category.addProperty("FilterOption", "GetCountry");
             mainActivityAPI.getCategory(jsonObject_Category);
 
 
-
-        }catch(Exception e)
-        {
+        } catch (Exception e) {
 
         }
     }
 
+    private boolean checkAutoTimeEnabledOrNot() {
+        return Settings.Global.getInt(getContentResolver(), Settings.Global.AUTO_TIME, 0) == 1;
+    }
+
+    private void showAutomaticTimeMessage(String message) {
+        mDialog = null;
+
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
+        alertDialog.setCancelable(false);
+        alertDialog.setTitle("MIPL");
+        alertDialog.setMessage(message);
+        alertDialog.setPositiveButton("Setting", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                startActivity(new Intent(android.provider.Settings.ACTION_DATE_SETTINGS));
+            }
+        });
+        mDialog = alertDialog.create();
+        mDialog.show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (mDialog != null && mDialog.isShowing()) {
+            mDialog.dismiss();
+        }
+        super.onDestroy();
+    }
 }

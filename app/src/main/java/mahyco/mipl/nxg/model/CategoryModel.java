@@ -2,6 +2,20 @@ package mahyco.mipl.nxg.model;
 
 public class CategoryModel {
 
+    public CategoryModel(int CategoryId, String CountryName, int Position, String CategoryName,
+                         String DisplayTitle,String CreatedBy,
+                         String CreatedDt, String ModifiedBy, String ModifiedDt) {
+        this.CategoryId = CategoryId;
+        this.CountryName = CountryName;
+        this.Position = Position;
+        this.CategoryName = CategoryName;
+        this.DisplayTitle = DisplayTitle;
+        this.CreatedBy = CreatedBy;
+        this.CreatedDt = CreatedDt;
+        this.ModifiedBy = ModifiedBy;
+        this.ModifiedDt = ModifiedDt;
+    }
+
     public int getCategoryId() {
         return CategoryId;
     }
@@ -93,8 +107,7 @@ public class CategoryModel {
     String ModifiedBy;//": "",
     String ModifiedDt;//": null
 
-    public String toString()
-    {
+    public String toString() {
         return CountryName;
     }
 

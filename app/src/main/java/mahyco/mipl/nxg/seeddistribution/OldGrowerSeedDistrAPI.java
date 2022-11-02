@@ -1,4 +1,4 @@
-package mahyco.mipl.nxg.view.registration;
+package mahyco.mipl.nxg.seeddistribution;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -6,24 +6,26 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.JsonObject;
+import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
 import java.util.List;
 
+import mahyco.mipl.nxg.model.CategoryChildModel;
 import mahyco.mipl.nxg.model.CategoryModel;
+import mahyco.mipl.nxg.model.SuccessModel;
 import mahyco.mipl.nxg.util.RetrofitClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class RegisrationAPI {
-
+public class OldGrowerSeedDistrAPI {
 
     Context context;
     String result = "";
     ProgressDialog progressDialog;
-    RegistrationListener resultOutput;
+    Listener resultOutput;
 
-    public RegisrationAPI(Context context, RegistrationListener resultOutput) {
+    public OldGrowerSeedDistrAPI(Context context, Listener resultOutput) {
         this.context = context;
         this.resultOutput = resultOutput;
         progressDialog = new ProgressDialog(context);
@@ -70,38 +72,35 @@ public class RegisrationAPI {
         }
     }
 
-    public void createObservation(JsonObject jsonObject) {
+    public void getCategoryByParent(JsonObject jsonObject, SearchableSpinner spinner) {
         try {
+          /*  if (!progressDialog.isShowing())
+                progressDialog.show();*/
 
-
-            if (!progressDialog.isShowing())
-                progressDialog.show();
-
-            Call<String> call = null;
-
-            call = RetrofitClient.getInstance().getMyApi().createUser(jsonObject);
-            call.enqueue(new Callback<String>() {
+            Call<List<CategoryChildModel>> call = null;
+            call = RetrofitClient.getInstance().getMyApi().getCategoryByParent(jsonObject);
+            call.enqueue(new Callback<List<CategoryChildModel>>() {
                 @Override
-                public void onResponse(Call<String> call, Response<String> response) {
+                public void onResponse(Call<List<CategoryChildModel>> call, Response<List<CategoryChildModel>> response) {
 
                     if (progressDialog.isShowing())
                         progressDialog.dismiss();
                     //  Toast.makeText(CourseList.this, "Calling..", Toast.LENGTH_SHORT).show();
 
                     if (response.body() != null) {
-                        String result = response.body();
+                        List<CategoryChildModel> result = response.body();
                         try {
-                            resultOutput.onResult(result);
+                            resultOutput.loadChildSpinner(result, spinner);
                         } catch (NullPointerException e) {
-                            Toast.makeText(context, "Error is " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            // Toast.makeText(context, "Error is " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         } catch (Exception e) {
-                            Toast.makeText(context, "Error is " + e.getMessage(), Toast.LENGTH_LONG).show();
+                            // Toast.makeText(context, "Error is " + e.getMessage(), Toast.LENGTH_LONG).show();
                         }
                     }
                 }
 
                 @Override
-                public void onFailure(Call<String> call, Throwable t) {
+                public void onFailure(Call<List<CategoryChildModel>> call, Throwable t) {
                     if (progressDialog.isShowing())
                         progressDialog.dismiss();
                     Log.e("Error is", t.getMessage());
@@ -112,28 +111,26 @@ public class RegisrationAPI {
         }
     }
 
-   /* public void getContractPlantList(JsonObject jsonObject_crop) {
+
+    public void createGrower(JsonObject jsonObject) {
         try {
-
-
             if (!progressDialog.isShowing())
                 progressDialog.show();
 
-            Call<List<ContractPlantModel>> call = null;
-
-            call = RetrofitClient.getInstance().getMyApi().getGetContractPlantList(jsonObject_crop);
-            call.enqueue(new Callback<List<ContractPlantModel>>() {
+            Call<SuccessModel> call = null;
+            call = RetrofitClient.getInstance().getMyApi().submitGrowerDetails(jsonObject);
+            call.enqueue(new Callback<SuccessModel>() {
                 @Override
-                public void onResponse(Call<List<ContractPlantModel>> call, Response<List<ContractPlantModel>> response) {
+                public void onResponse(Call<SuccessModel> call, Response<SuccessModel> response) {
 
                     if (progressDialog.isShowing())
                         progressDialog.dismiss();
                     //  Toast.makeText(CourseList.this, "Calling..", Toast.LENGTH_SHORT).show();
 
                     if (response.body() != null) {
-                        List<ContractPlantModel> result = response.body();
+                        SuccessModel result = response.body();
                         try {
-                            resultOutput.onListResponce_ContactPlant(result);
+                            resultOutput.onGrowerRegister(result);
                         } catch (NullPointerException e) {
                             Toast.makeText(context, "Error is " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         } catch (Exception e) {
@@ -143,7 +140,7 @@ public class RegisrationAPI {
                 }
 
                 @Override
-                public void onFailure(Call<List<ContractPlantModel>> call, Throwable t) {
+                public void onFailure(Call<SuccessModel> call, Throwable t) {
                     if (progressDialog.isShowing())
                         progressDialog.dismiss();
                     Log.e("Error is", t.getMessage());
@@ -152,5 +149,5 @@ public class RegisrationAPI {
         } catch (Exception e) {
 
         }
-    }*/
+    }
 }

@@ -133,7 +133,7 @@
     <string name="login">Login</string>
     <string name="user_name">User Name</string>
     <string name="password">Password</string>
-    <string name="version_code"> Version: %d</string>
+    <string name="version_code"> V %d</string>
     <string name="welcome_back">Welcome back!</string>
     <string name="sign_in_to_your_account">Sign in to your account</string>
     <string name="new_user_registration">User\nRegistration</string>
@@ -160,7 +160,7 @@
     <string name="Please_select_planting_year">Please select planting year</string>
     <string name="Please_enter_landmark">Please enter landmark</string>
     <string name="Please_enter_farmer_name">Please enter farmer name</string>
-    <string name="Please_enter_gender">Please enter gender</string>
+    <string name="Please_select_gender">Please select gender</string>
     <string name="Please_enter_date_of_birth">Please enter date of birth</string>
     <string name="please_wait">Please wait.....</string>
     <string name="empty_device_id">Empty device id</string>
@@ -195,7 +195,7 @@
     <string name="enter_unique_code">Enter Unique Code</string>
     <string name="date_of_registration">Date of Registration<font color='#FF0000'>*</font></string>
     <string name="enter_date_of_registration">Enter Date of Registration</string>
-    <string name="staff_name_and_id">Staff Name and ID<font color='#FF0000'>*</font></string>
+    <string name="staff_name_and_id">Staff Name<font color='#FF0000'>*</font></string>
     <string name="scan">Open Scanner</string>
     <string name="grower_photo">Capture Photo<font color='#FF0000'>*</font></string>
     <string name="organizer_photo">Organizer Photo<font color='#FF0000'>*</font></string>
@@ -212,7 +212,7 @@
     <string name="crop">Crop<font color='#FF0000'>*</font></string>
     <string name="production_code">Production Code<font color='#FF0000'>*</font></string>
     <string name="seed_production_area_ha">Seed Production area (Ha)<font color='#FF0000'>*</font></string>
-    <string name="parent_seed_issue_location">Parent Seed Issue Location<font color='#FF0000'>*</font></string>
+    <string name="parent_seed_issue_location">Parent Seed Issue Cluster<font color='#FF0000'>*</font></string>
     <string name="parent_seed_batch_no_female_variety">Parent Seed Batch No. Female/Variety<font color='#FF0000'>*</font></string>
     <string name="parent_seed_batch_no_male">Parent Seed Batch No. Male<font color='#FF0000'>*</font></string>
     <string name="parent_seed_issue_date">Parent seed Issue Date<font color='#FF0000'>*</font></string>
@@ -242,7 +242,7 @@
     <string name="enter_organizer_name">Enter Organizer Name</string>
     <string name="Please_select_organizer_name">Please select organizer name</string>
     <string name="please_organizer_photo">Please capture organizer photo</string>
-    <string name="no_of_records_for_upload">No. of Records for upload =</string>
+    <string name="no_of_records_for_upload">No. of Records for upload = %d</string>
     <string name="upload">Upload</string>
     <string name="mandatory_field_visit_1st">Mandatory Field Visit-1st</string>
     <string name="mandatory_field_visit_2nd">Mandatory Field Visit-2nd</string>
@@ -266,6 +266,11 @@
     <string name="geotag_of_location">Geotag of location<font color='#FF0000'>*</font></string>
     <string name="enter_grower_mobile_no">Enter Mobile No.</string>
     <string name="enter_recommendations_and_observations">Enter Recommendations And Observations</string>
+    <string name="download_category_master">Download Category Master</string>
+    <string name="download_location_master">Download Location Master</string>
+    <string name="download_season_master">Download Season Master</string>
+    <string name="download_grower_master">Download Grower Master</string>
+    <string name="enter_production_area">Enter seed production area</string>
 
     <string-array name="country_array">
         <item>Select Country</item>
