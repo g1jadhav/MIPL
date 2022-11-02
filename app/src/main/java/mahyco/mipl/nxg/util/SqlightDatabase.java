@@ -13,12 +13,16 @@ import java.util.Vector;
 import mahyco.mipl.nxg.model.CategoryChildModel;
 import mahyco.mipl.nxg.model.CategoryModel;
 import mahyco.mipl.nxg.model.GrowerModel;
+
 import mahyco.mipl.nxg.model.OldGrowerSeedDistributionModel;
+
+import mahyco.mipl.nxg.model.SeasonModel;
+
 
 public class SqlightDatabase extends SQLiteOpenHelper {
 
     final static String DBName = "mipl";
-    final static int version = 7;
+    final static int version = 8;
     long count = 0;
     final String tbl_categorymaster = "tbl_categorymaster";
     final String tbl_locationmaster = "tbl_locationmaster";
@@ -68,22 +72,17 @@ public class SqlightDatabase extends SQLiteOpenHelper {
 
         db.execSQL(createlocationmaster);
 
-        String createseasonmaster = " Create table tbl_seasonmaster(\n" +
-                "    TempId  INTEGER PRIMARY KEY AUTOINCREMENT, \n" +
-                "    CountryMasterId INTEGER,\n" +
-                "    CategoryId INTEGER,\n" +
-                "    ParentId INTEGER,\n" +
-                "    KeyValue Text,\n" +
-                "    KeyCode text,\n" +
-                "    IsDelete text,\n" +
-                "    CreatedBy text,\n" +
-                "    CreatedDt text,\n" +
-                "    ModifiedBy text,\n" +
-                "    ModifiedDt text,\n" +
-                "    CountryName text,\n" +
-                "    CategoryName text,\n" +
-                "    DisplayTitle text\n" +
-                ")";
+        String createseasonmaster = "Create table tbl_seasonmaster(" +
+                "TempID Integer PRIMARY KEY AUTOINCREMENT,\n" +
+                "SeasonId INTEGER,\n" +
+                "    CountryId INTEGER,\n" +
+                "    Season TEXT,\n" +
+                "    IsDelete TEXT,\n" +
+                "    CreatedBy TEXT,\n" +
+                "    CreatedDt  TEXT,\n" +
+                "    ModifiedBy  TEXT,\n" +
+                "    ModifiedDt  TEXT,\n" +
+                "    CountryName  TEXT)";
 
         db.execSQL(createseasonmaster);
 
@@ -711,34 +710,33 @@ public class SqlightDatabase extends SQLiteOpenHelper {
         }
     }
 
-    public boolean addSeason(CategoryModel categoryModel) {
+    public boolean addSeason(SeasonModel seasonModel) {
         SQLiteDatabase mydb = null;
         try {
             mydb = this.getReadableDatabase();
             String q = "insert into tbl_seasonmaster" +
                     "(" +
                     "" +
-                    "CategoryId," +
-                    "CountryName," +
-                    "Position," +
-                    "CategoryName," +
-                    "DisplayTitle," +
+                    "SeasonId," +
+                    "CountryId," +
+                    "Season," +
                     "IsDelete," +
                     "CreatedBy," +
                     "CreatedDt," +
                     "ModifiedBy," +
-                    "ModifiedDt" +
+                    "ModifiedDt," +
+                    "CountryName" +
+
                     ") values" +
-                    "('" + categoryModel.getCategoryId() + "'," +
-                    "'" + categoryModel.getCountryName() + "'," +
-                    "'" + categoryModel.getPosition() + "'," +
-                    "'" + categoryModel.getCategoryName() + "'," +
-                    "'" + categoryModel.getDisplayTitle() + "'," +
-                    "'" + categoryModel.isDelete() + "'," +
-                    "'" + categoryModel.getCreatedBy() + "'," +
-                    "'" + categoryModel.getCreatedDt() + "'," +
-                    "'" + categoryModel.getModifiedBy() + "'," +
-                    "'" + categoryModel.getModifiedDt() + "')";
+                    "('" + seasonModel.getSeasonId() + "'," +
+                    "'" + seasonModel.getCountryId() + "'," +
+                    "'" + seasonModel.getSeason() + "'," +
+                    "'" + seasonModel.isDelete() + "'," +
+                    "'" + seasonModel.getCreatedBy() + "'," +
+                    "'" + seasonModel.getCreatedDt() + "'," +
+                    "'" + seasonModel.getModifiedBy() + "'," +
+                    "'" + seasonModel.getModifiedDt() + "'," +
+                    "'" + seasonModel.getCountryName() + "')" ;
             Log.i("Query is -------> ", "" + q);
             mydb.execSQL(q);
             return true;
