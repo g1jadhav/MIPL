@@ -83,7 +83,7 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".seeddistribution.OldGrowerSeedDistribution"
+            android:name=".view.seeddistribution.OldGrowerSeedDistribution"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
             android:exported="false"
             android:screenOrientation="portrait" />

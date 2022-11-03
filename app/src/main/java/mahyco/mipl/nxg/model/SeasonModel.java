@@ -2,6 +2,17 @@ package mahyco.mipl.nxg.model;
 
 public class SeasonModel {
 
+    public SeasonModel(int seasonId, int countryId, String season, String createdBy, String createdDt, String modifiedBy, String modifiedDt, String countryName) {
+        SeasonId = seasonId;
+        CountryId = countryId;
+        Season = season;
+        CreatedBy = createdBy;
+        CreatedDt = createdDt;
+        ModifiedBy = modifiedBy;
+        ModifiedDt = modifiedDt;
+        CountryName = countryName;
+    }
+
     public int getSeasonId() {
         return SeasonId;
     }
@@ -72,6 +83,10 @@ public class SeasonModel {
 
     public void setCountryName(String countryName) {
         CountryName = countryName;
+    }
+
+    public String toString() {
+        return Season;
     }
 
     int SeasonId;//": 1,

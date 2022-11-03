@@ -6,7 +6,13 @@ import java.util.List;
 
 import mahyco.mipl.nxg.model.CategoryChildModel;
 import mahyco.mipl.nxg.model.CategoryModel;
+import mahyco.mipl.nxg.model.CropModel;
+import mahyco.mipl.nxg.model.DownloadGrowerModel;
+import mahyco.mipl.nxg.model.ProductCodeModel;
+import mahyco.mipl.nxg.model.ProductionClusterModel;
 import mahyco.mipl.nxg.model.SeasonModel;
+import mahyco.mipl.nxg.model.SeedBatchNoModel;
+import mahyco.mipl.nxg.model.SeedReceiptModel;
 import mahyco.mipl.nxg.model.SuccessModel;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -33,10 +39,25 @@ public interface Api {
     Call<List<CategoryChildModel>> getLocation(@Body JsonObject jsonObject);
 
     @POST(Constants.GET_GROWER)
-    Call<List<CategoryModel>> getGrower(@Body JsonObject jsonObject);
+    Call<List<DownloadGrowerModel>> getGrower(@Body JsonObject jsonObject);
 
     @POST(Constants.GET_SEASON)
     Call<List<SeasonModel>> getSeason(@Body JsonObject jsonObject);
+
+    @POST(Constants.GET_CROP)
+    Call<List<CropModel>> getCrop(@Body JsonObject jsonObject);
+
+    @POST(Constants.PRODUCTION_CLUSTER)
+    Call<List<ProductionClusterModel>> getProductionCluster(@Body JsonObject jsonObject);
+
+    @POST(Constants.PRODUCTION_CODE)
+    Call<List<ProductCodeModel>> getProductCode(@Body JsonObject jsonObject);
+
+    @POST(Constants.SEED_RECEIPT_BATCH)
+    Call<List<SeedReceiptModel>> getSeedReceiptNo(@Body JsonObject jsonObject);
+
+    @POST(Constants.MALE_FEMALE_BATCH)
+    Call<List<SeedBatchNoModel>> getSeedBatchNo(@Body JsonObject jsonObject);
 
     @Multipart
     @POST("processInspection/uploadFile?FileType=Image")

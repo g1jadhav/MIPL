@@ -1,4 +1,4 @@
-package mahyco.mipl.nxg.seeddistribution;
+package mahyco.mipl.nxg.view.seeddistribution;
 
 import android.app.ProgressDialog;
 import android.content.Context;

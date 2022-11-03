@@ -2,6 +2,7 @@ package mahyco.mipl.nxg.util;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -30,6 +31,7 @@ import java.util.Locale;
 public abstract class BaseActivity extends AppCompatActivity {
 
     private Dialog mDialog = null;
+    private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -123,6 +125,19 @@ public abstract class BaseActivity extends AppCompatActivity {
         Toast toast = Toast.makeText(this, desc, Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
+    }
+
+    protected void showProgressDialog(Context context) {
+        mProgressDialog = null;
+        mProgressDialog = new ProgressDialog(context);
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.setMessage("Please Wait..");
+    }
+
+    protected void hideProgressDialog() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
     }
 
 

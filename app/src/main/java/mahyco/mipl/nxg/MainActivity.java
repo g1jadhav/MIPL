@@ -37,7 +37,7 @@ import com.google.gson.JsonObject;
 import java.util.List;
 
 import mahyco.mipl.nxg.model.CategoryModel;
-import mahyco.mipl.nxg.seeddistribution.OldGrowerSeedDistribution;
+import mahyco.mipl.nxg.view.seeddistribution.OldGrowerSeedDistribution;
 import mahyco.mipl.nxg.util.Preferences;
 import mahyco.mipl.nxg.util.SqlightDatabase;
 import mahyco.mipl.nxg.view.downloadcategories.DownloadCategoryActivity;

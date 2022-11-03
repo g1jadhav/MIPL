@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.StrictMode;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -101,6 +102,8 @@ public class NewActivityUpload extends BaseActivity implements View.OnClickListe
                     if (mGrowerList.size() > 0) {
                         mGrowerClicked = true;
 //                        Log.e("temporary", "on cllick  mGrowerList.get(0).getGrowerImageUpload() " +  mGrowerList.get(0).getGrowerImageUpload() +
+//                                " mGrowerList.get(0).FrontImageUpload() " + mGrowerList.get(0).getFrontImageUpload() +
+//                                " mGrowerList.get(0).BackImageUpload() " + mGrowerList.get(0).getBackImageUpload() +
 //                                " mGrowerList.get(0).getUploadPhoto() " + mGrowerList.get(0).getUploadPhoto() +
 //                                " mGrowerList.get(0).getIdProofFrontCopy() " + mGrowerList.get(0).getIdProofFrontCopy()+
 //                                " mGrowerList.get(0).getIdProofBackCopy() " + mGrowerList.get(0).getIdProofBackCopy());

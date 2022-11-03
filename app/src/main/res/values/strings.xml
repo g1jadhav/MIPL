@@ -271,6 +271,10 @@
     <string name="download_season_master">Download Season Master</string>
     <string name="download_grower_master">Download Grower Master</string>
     <string name="enter_production_area">Enter seed production area</string>
+    <string name="download_crop_master">Download Crop Master</string>
+    <string name="download_production_cluster">Download Production Cluster</string>
+    <string name="download_product_code">Download Product Code</string>
+    <string name="download_seed_batch_no">Download Seed Batch No</string>
 
     <string-array name="country_array">
         <item>Select Country</item>

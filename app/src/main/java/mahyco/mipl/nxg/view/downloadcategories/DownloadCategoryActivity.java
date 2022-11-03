@@ -3,7 +3,6 @@ package mahyco.mipl.nxg.view.downloadcategories;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
 
@@ -11,11 +10,17 @@ import com.google.gson.JsonObject;
 
 import java.util.List;
 
-import mahyco.mipl.nxg.model.SeasonModel;
-import mahyco.mipl.nxg.util.BaseActivity;
 import mahyco.mipl.nxg.R;
 import mahyco.mipl.nxg.model.CategoryChildModel;
 import mahyco.mipl.nxg.model.CategoryModel;
+import mahyco.mipl.nxg.model.CropModel;
+import mahyco.mipl.nxg.model.DownloadGrowerModel;
+import mahyco.mipl.nxg.model.ProductCodeModel;
+import mahyco.mipl.nxg.model.ProductionClusterModel;
+import mahyco.mipl.nxg.model.SeasonModel;
+import mahyco.mipl.nxg.model.SeedBatchNoModel;
+import mahyco.mipl.nxg.model.SeedReceiptModel;
+import mahyco.mipl.nxg.util.BaseActivity;
 import mahyco.mipl.nxg.util.Preferences;
 import mahyco.mipl.nxg.util.SqlightDatabase;
 
@@ -26,6 +31,10 @@ public class DownloadCategoryActivity extends BaseActivity implements View.OnCli
     private CardView mLocationMaster;
     private CardView mSeasonMaster;
     private CardView mGrowerMaster;
+    private CardView mCropMaster;
+    private CardView mProdClusterMaster;
+    private CardView mProdCodeMaster;
+    private CardView mSeedBatchMaster;
 
     private JsonObject mJsonObjectCategory;
 
@@ -34,13 +43,21 @@ public class DownloadCategoryActivity extends BaseActivity implements View.OnCli
     private List<CategoryModel> mCategoryMasterList;
     private List<CategoryChildModel> mLocationMasterList;
     private List<SeasonModel> mSeasonMasterList;
-    private List<CategoryModel> mGrowerMasterList;
+    private List<DownloadGrowerModel> mGrowerMasterList;
+    private List<CropModel> mCropMasterList;
+    private List<ProductionClusterModel> mProductionClusterList;
+    private List<ProductCodeModel> mProductCodeList;
+    private List<SeedBatchNoModel> mSeedBatchNoList;
 
     private String mDatabaseName = "";
     final String LOCATION_MASTER_DATABASE = "LocationMaster";
     final String CATEGORY_MASTER_DATABASE = "CategoryMaster";
     final String SEASON_MASTER_DATABASE = "SeasonMaster";
     final String GROWER_MASTER_DATABASE = "GrowerMaster";
+    final String CROP_MASTER_DATABASE = "CropMaster";
+    final String CLUSTER_MASTER_DATABASE = "ClusterMaster";
+    final String PROD_CODE_MASTER_DATABASE = "ProductCodeMaster";
+    final String SEED_BATCH_NO_MASTER_DATABASE = "SeedBatchNoMaster";
 
 
     @Override
@@ -59,11 +76,19 @@ public class DownloadCategoryActivity extends BaseActivity implements View.OnCli
         mLocationMaster = findViewById(R.id.download_location_master_layout);
         mSeasonMaster = findViewById(R.id.download_season_master_layout);
         mGrowerMaster = findViewById(R.id.download_grower_master_layout);
+        mCropMaster = findViewById(R.id.download_crop_master_layout);
+        mProdClusterMaster = findViewById(R.id.download_prod_cluster_master_layout);
+        mProdCodeMaster = findViewById(R.id.download_prod_code_master_layout);
+        mSeedBatchMaster = findViewById(R.id.download_seed_batch_master_layout);
 
         mCategoryMaster.setOnClickListener(this);
         mLocationMaster.setOnClickListener(this);
         mSeasonMaster.setOnClickListener(this);
         mGrowerMaster.setOnClickListener(this);
+        mCropMaster.setOnClickListener(this);
+        mProdClusterMaster.setOnClickListener(this);
+        mProdCodeMaster.setOnClickListener(this);
+        mSeedBatchMaster.setOnClickListener(this);
 
         mDownloadCategoryApi = new DownloadCategoryApi(mContext, this);
     }
@@ -83,6 +108,18 @@ public class DownloadCategoryActivity extends BaseActivity implements View.OnCli
             case R.id.download_grower_master_layout:
                 downloadGrowerMasterData();
                 break;
+            case R.id.download_crop_master_layout:
+                downloadCropMasterData();
+                break;
+            case R.id.download_prod_cluster_master_layout:
+                downloadProductionClusterMasterData();
+                break;
+            case R.id.download_prod_code_master_layout:
+                downloadProductCodeMasterData();
+                break;
+            case R.id.download_seed_batch_master_layout:
+                downloadSeedBatchNoMasterData();
+                break;
         }
     }
 
@@ -92,48 +129,99 @@ public class DownloadCategoryActivity extends BaseActivity implements View.OnCli
 
     @Override
     public void onListCategoryMasterResponse(List<CategoryModel> lst) {
-       // Toast.makeText(mContext, "" + lst.size(), Toast.LENGTH_SHORT).show();
+        // Toast.makeText(mContext, "" + lst.size(), Toast.LENGTH_SHORT).show();
         if (mCategoryMasterList != null) {
             mCategoryMasterList.clear();
         }
         mCategoryMasterList = lst;
         mDatabaseName = "CategoryMaster";
-        showNoInternetDialog(mContext,"Category Master Downloaded Successfully");
+        showNoInternetDialog(mContext, "Category Master Downloaded Successfully");
         new MasterAsyncTask().execute();
     }
 
     @Override
     public void onListLocationResponse(List<CategoryChildModel> lst) {
-       // Toast.makeText(mContext, "" + lst.size(), Toast.LENGTH_SHORT).show();
+        // Toast.makeText(mContext, "" + lst.size(), Toast.LENGTH_SHORT).show();
         if (mLocationMasterList != null) {
             mLocationMasterList.clear();
         }
         mLocationMasterList = lst;
         mDatabaseName = "LocationMaster";
-        showNoInternetDialog(mContext,"Location Master Downloaded Successfully");
+        showNoInternetDialog(mContext, "Location Master Downloaded Successfully");
         new MasterAsyncTask().execute();
     }
 
     @Override
 
     public void onListSeasonMasterResponse(List<SeasonModel> lst) {
-        Toast.makeText(mContext, "" + lst.size(), Toast.LENGTH_SHORT).show();
+        //  Toast.makeText(mContext, "" + lst.size(), Toast.LENGTH_SHORT).show();
         if (mSeasonMasterList != null) {
             mSeasonMasterList.clear();
         }
         mSeasonMasterList = lst;
         mDatabaseName = "SeasonMaster";
+        showNoInternetDialog(mContext, "Season Master Downloaded Successfully");
         new MasterAsyncTask().execute();
     }
 
     @Override
-    public void onListGrowerResponse(List<CategoryModel> lst) {
-       // Toast.makeText(mContext, "" + lst.size(), Toast.LENGTH_SHORT).show();
+    public void onListGrowerResponse(List<DownloadGrowerModel> lst) {
+        // Toast.makeText(mContext, "" + lst.size(), Toast.LENGTH_SHORT).show();
         if (mGrowerMasterList != null) {
             mGrowerMasterList.clear();
         }
         mGrowerMasterList = lst;
         mDatabaseName = "GrowerMaster";
+        showNoInternetDialog(mContext, "Grower Master Downloaded Successfully");
+        new MasterAsyncTask().execute();
+    }
+
+    @Override
+    public void onListCropResponse(List<CropModel> lst) {
+        if (mCropMasterList != null) {
+            mCropMasterList.clear();
+        }
+        mCropMasterList = lst;
+        mDatabaseName = "CropMaster";
+        showNoInternetDialog(mContext, "Crop Master Downloaded Successfully");
+        new MasterAsyncTask().execute();
+    }
+
+    @Override
+    public void onListProductionClusterResponse(List<ProductionClusterModel> lst) {
+        if (mProductionClusterList != null) {
+            mProductionClusterList.clear();
+        }
+        mProductionClusterList = lst;
+        mDatabaseName = "ClusterMaster";
+        showNoInternetDialog(mContext, "Production Cluster Master Downloaded Successfully");
+        new MasterAsyncTask().execute();
+    }
+
+    @Override
+    public void onListProductCodeResponse(List<ProductCodeModel> lst) {
+        if (mProductCodeList != null) {
+            mProductCodeList.clear();
+        }
+        mProductCodeList = lst;
+        mDatabaseName = "ProductCodeMaster";
+        showNoInternetDialog(mContext, "Product Code Master Downloaded Successfully");
+        new MasterAsyncTask().execute();
+    }
+
+    @Override
+    public void onListSeedReceiptNoResponse(List<SeedReceiptModel> lst) {
+
+    }
+
+    @Override
+    public void onListSeedBatchNoResponse(List<SeedBatchNoModel> lst) {
+        if (mSeedBatchNoList != null) {
+            mSeedBatchNoList.clear();
+        }
+        mSeedBatchNoList = lst;
+        mDatabaseName = "SeedBatchNoMaster";
+        showNoInternetDialog(mContext, "Seed Batch No. Master Downloaded Successfully");
         new MasterAsyncTask().execute();
     }
 
@@ -172,8 +260,8 @@ public class DownloadCategoryActivity extends BaseActivity implements View.OnCli
             try {
                 mJsonObjectCategory = null;
                 mJsonObjectCategory = new JsonObject();
-                mJsonObjectCategory.addProperty("filterValue", "");
-                mJsonObjectCategory.addProperty("FilterOption", "GetCountry");
+                mJsonObjectCategory.addProperty("filterValue", Preferences.get(mContext, Preferences.COUNTRYCODE));
+                mJsonObjectCategory.addProperty("FilterOption", "CountryId");
                 mDownloadCategoryApi.getGrower(mJsonObjectCategory);
             } catch (Exception e) {
             }
@@ -197,6 +285,67 @@ public class DownloadCategoryActivity extends BaseActivity implements View.OnCli
         }
     }
 
+    private void downloadCropMasterData() {
+        if (checkInternetConnection(mContext)) {
+            try {
+                mJsonObjectCategory = null;
+                mJsonObjectCategory = new JsonObject();
+                mJsonObjectCategory.addProperty("filterValue", "");
+                mJsonObjectCategory.addProperty("FilterOption", "");
+                mDownloadCategoryApi.getCrop(mJsonObjectCategory);
+            } catch (Exception e) {
+            }
+        } else {
+            showNoInternetDialog(mContext, "Please check your internet connection");
+        }
+    }
+
+    private void downloadProductionClusterMasterData() {
+        if (checkInternetConnection(mContext)) {
+            try {
+                mJsonObjectCategory = null;
+                mJsonObjectCategory = new JsonObject();
+                mJsonObjectCategory.addProperty("filterValue", "");
+                mJsonObjectCategory.addProperty("FilterOption", "");
+                mDownloadCategoryApi.getProductionCluster(mJsonObjectCategory);
+            } catch (Exception e) {
+            }
+        } else {
+            showNoInternetDialog(mContext, "Please check your internet connection");
+        }
+    }
+
+    private void downloadProductCodeMasterData() {
+        if (checkInternetConnection(mContext)) {
+            try {
+                mJsonObjectCategory = null;
+                mJsonObjectCategory = new JsonObject();
+                mJsonObjectCategory.addProperty("filterValue", "");
+                mJsonObjectCategory.addProperty("FilterOption", "");
+                mDownloadCategoryApi.getProductCode(mJsonObjectCategory);
+            } catch (Exception e) {
+            }
+        } else {
+            showNoInternetDialog(mContext, "Please check your internet connection");
+        }
+    }
+
+    private void downloadSeedBatchNoMasterData() {
+        if (checkInternetConnection(mContext)) {
+            try {
+                mJsonObjectCategory = null;
+                mJsonObjectCategory = new JsonObject();
+                mJsonObjectCategory.addProperty("filterValue", "");
+                mJsonObjectCategory.addProperty("FilterOption", "");
+                mDownloadCategoryApi.getSeedBatchNo(mJsonObjectCategory);
+            } catch (Exception e) {
+            }
+        } else {
+            showNoInternetDialog(mContext, "Please check your internet connection");
+        }
+    }
+
+
     private class MasterAsyncTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected final Void doInBackground(Void... voids) {
@@ -205,12 +354,12 @@ public class DownloadCategoryActivity extends BaseActivity implements View.OnCli
                 database = new SqlightDatabase(mContext);
                 switch (mDatabaseName) {
                     case LOCATION_MASTER_DATABASE:
-                        database.trucateTable("tbl_SeasonMaster");
-                        for (SeasonModel param : mSeasonMasterList) {
-                          /*  if (param.getParentId() == 0) {
+                        database.trucateTable("tbl_locationmaster");
+                        for (CategoryChildModel param : mLocationMasterList) {
+                            if (param.getParentId() == 0) {
                                 Preferences.save(mContext, Preferences.COUNTRY_MASTER_ID, "" + param.getCountryMasterId());
-                            }*/
-                            database.addSeason(param);
+                            }
+                            database.addLocation(param);
                         }
                         break;
                     case CATEGORY_MASTER_DATABASE:
@@ -223,8 +372,15 @@ public class DownloadCategoryActivity extends BaseActivity implements View.OnCli
                         break;
                     case GROWER_MASTER_DATABASE:
                         database = new SqlightDatabase(mContext);
-                        database.trucateTable("tbl_growermastermaster");
-                        for (CategoryModel param : mCategoryMasterList) {
+                        database.trucateTable("tbl_growermaster");
+
+                        DownloadGrowerModel downloadGrowerModel = new DownloadGrowerModel();
+                        downloadGrowerModel.setFullName("Search by Name/Id");
+                        downloadGrowerModel.setUniqueCode("");
+
+                        mGrowerMasterList.add(0, downloadGrowerModel);
+
+                        for (DownloadGrowerModel param : mGrowerMasterList) {
                             database.addGrower(param);
                         }
                         break;
@@ -233,6 +389,34 @@ public class DownloadCategoryActivity extends BaseActivity implements View.OnCli
                         database.trucateTable("tbl_seasonmaster");
                         for (SeasonModel param : mSeasonMasterList) {
                             database.addSeason(param);
+                        }
+                        break;
+                    case CROP_MASTER_DATABASE:
+                        database = new SqlightDatabase(mContext);
+                        database.trucateTable("tbl_cropmaster");
+                        for (CropModel param : mCropMasterList) {
+                            database.addCrop(param);
+                        }
+                        break;
+                    case CLUSTER_MASTER_DATABASE:
+                        database = new SqlightDatabase(mContext);
+                        database.trucateTable("tbl_clustermaster");
+                        for (ProductionClusterModel param : mProductionClusterList) {
+                            database.addProdCluster(param);
+                        }
+                        break;
+                    case PROD_CODE_MASTER_DATABASE:
+                        database = new SqlightDatabase(mContext);
+                        database.trucateTable("tbl_productcodemaster");
+                        for (ProductCodeModel param : mProductCodeList) {
+                            database.addProdCode(param);
+                        }
+                        break;
+                    case SEED_BATCH_NO_MASTER_DATABASE:
+                        database = new SqlightDatabase(mContext);
+                        database.trucateTable("tbl_seedbatchnomaster");
+                        for (SeedBatchNoModel param : mSeedBatchNoList) {
+                            database.addSeedBatchNo(param);
                         }
                         break;
                 }
@@ -250,6 +434,18 @@ public class DownloadCategoryActivity extends BaseActivity implements View.OnCli
                     case SEASON_MASTER_DATABASE:
                         mSeasonMasterList.clear();
                         break;
+                    case CROP_MASTER_DATABASE:
+                        mCropMasterList.clear();
+                        break;
+                    case CLUSTER_MASTER_DATABASE:
+                        mProductionClusterList.clear();
+                        break;
+                    case PROD_CODE_MASTER_DATABASE:
+                        mProductCodeList.clear();
+                        break;
+                    case SEED_BATCH_NO_MASTER_DATABASE:
+                        mSeedBatchNoList.clear();
+                        break;
                 }
                 if (database != null) {
                     database.close();
@@ -257,7 +453,41 @@ public class DownloadCategoryActivity extends BaseActivity implements View.OnCli
             }
             return null;
         }
+
+       /* @Override
+        protected void onPostExecute(Void unused) {
+            new GetCategoriesAsyncTask().execute();
+            super.onPostExecute(unused);
+        }*/
     }
+
+    /*private class GetCategoriesAsyncTask extends AsyncTask<Void, Void, ArrayList<SeedBatchNoModel>> {
+        @Override
+        protected final ArrayList<SeedBatchNoModel> doInBackground(Void... voids) {
+            SqlightDatabase database = null;
+            ArrayList<SeedBatchNoModel> actionModels;
+            try {
+                database = new SqlightDatabase(mContext);
+                actionModels = database.getSeedBatchNoMaster();
+            } finally {
+                if (database != null) {
+                    database.close();
+                }
+            }
+            return actionModels;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<SeedBatchNoModel> result) {
+            if (result != null && result.size() > 0) {
+                for (int i = 0; i < result.size(); i++) {
+                    Log.e("temporary"," NoofMalePkts "+result.get(i).getNoofMalePkts()+
+                            " NoofFemalePkts "+result.get(i).getNoofFemalePkts());
+                }
+            }
+            super.onPostExecute(result);
+        }
+    }*/
 
     @Override
     protected void onDestroy() {

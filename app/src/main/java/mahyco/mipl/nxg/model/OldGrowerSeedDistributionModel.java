@@ -2,24 +2,25 @@ package mahyco.mipl.nxg.model;
 
 public class OldGrowerSeedDistributionModel {
 
-    int CountryId;//": 0,
-    int CountryMasterId;//": 0,
-    String DistributedBy;//": "string",
-    String Season;//": "string",
-    String UniqueCode;//": "string",
-    String Crop;//": "string",
-    String ProductionCode;//": "string",
-    String PlantingYear;//": "string",
-    String StaffName;
-    String SeedProductionArea;
-    String SeedIssueLocation;
-    String SeedBatchNoFemale;
-    String SeedBatchNoMale;
-    String GrowerName;
-    String GrowerAddress;
-    int TempId;
-    int LoginId;
-    String IssueDate;
+    private int CountryId;//": 0,
+    private int CountryMasterId;//": 0,
+    private String DistributedBy;//": "string",
+    private String Season;//": "string",
+    private String UniqueCode;//": "string",
+    private String Crop;//": "string",
+    private String ProductionCode;//": "string",
+    private String PlantingYear;//": "string",
+    private String StaffName;
+    private String SeedProductionArea;
+    private String SeedIssueLocation;
+    private String SeedBatchNoFemale;
+    private String SeedBatchNoMale;
+    private String GrowerName;
+    private String GrowerAddress;
+    private String UniqueId;
+    private int LoginId;
+    private String IssueDate;
+
     public OldGrowerSeedDistributionModel() {
     }
 
@@ -27,7 +28,7 @@ public class OldGrowerSeedDistributionModel {
                                           String uniqueCode, String staffName, String crop,
                                           String distributedBy, String productionCode, String seedProductionArea,
                                           String seedIssueLocation, String seedBatchNoFemale, String seedBatchNoMale,
-                                          String growerName, String growerAddress, int loginId, int tempId, String issueDate) {
+                                          String growerName, String growerAddress, int loginId, String issueDate, String uniqueId) {
 
         GrowerName = growerName;
         GrowerAddress = growerAddress;
@@ -44,7 +45,7 @@ public class OldGrowerSeedDistributionModel {
         Crop = crop;
         DistributedBy = distributedBy;
         ProductionCode = productionCode;
-        TempId = tempId;
+        UniqueId = uniqueId;
         LoginId = loginId;
         IssueDate = issueDate;
     }
@@ -121,12 +122,12 @@ public class OldGrowerSeedDistributionModel {
         StaffName = staffName;
     }
 
-    public int getTempId() {
-        return TempId;
+    public String getUniqueId() {
+        return UniqueId;
     }
 
-    public void setTempId(int tempId) {
-        TempId = TempId;
+    public void setUniqueId(String uniqueId) {
+        UniqueId = uniqueId;
     }
 
 

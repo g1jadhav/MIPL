@@ -272,52 +272,57 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
                     showToast("Please capture the photo first");
                     return;
                 }
-                // open scanner
-                hideKeyboard(mContext);
-                mCodeScanner.startPreview();
-                visibleScannerLayout();
 
-                mCodeScanner.setCamera(CodeScanner.CAMERA_BACK);
-                // or CAMERA_FRONT or specific camera id
-                mCodeScanner.setFormats(CodeScanner.ALL_FORMATS); // list of type BarcodeFormat,
-                mCodeScanner.setAutoFocusMode(AutoFocusMode.SAFE); // or CONTINUOUS
-                mCodeScanner.setScanMode(ScanMode.SINGLE);// or CONTINUOUS or PREVIEW
-                mCodeScanner.setAutoFocusEnabled(true);// Whether to enable auto focus or not
-                mCodeScanner.setFlashEnabled(false);// Whether to enable flash or not
-                mCodeScanner.setDecodeCallback(result -> runOnUiThread(() -> {
-                    if (!result.getText().isEmpty()) {
-                        hideScannerLayout();
-                        String[] results = result.getText().split("~");
+                try {
+                    // open scanner
+                    hideKeyboard(mContext);
+                    mCodeScanner.startPreview();
+                    visibleScannerLayout();
 
-                        if (results.length > 10 && results[1].contains("MWI")
-                        ) {
-                            showToast("Scanner successfully !!");
-                            et_dob.setText(results[9]);
-                            // et_gender.setText(results[8]);
-                            if (results[8].equalsIgnoreCase("male")) {
-                                mFemaleRadioButton.setChecked(false);
-                                mMaleRadioButton.setChecked(true);
-                            } else {
-                                mFemaleRadioButton.setChecked(true);
-                                mMaleRadioButton.setChecked(false);
-                            }
-                            et_fullname.setText(results[4] + " " + results[6]);
+                    mCodeScanner.setCamera(CodeScanner.CAMERA_BACK);
+                    // or CAMERA_FRONT or specific camera id
+                    mCodeScanner.setFormats(CodeScanner.ALL_FORMATS); // list of type BarcodeFormat,
+                    mCodeScanner.setAutoFocusMode(AutoFocusMode.SAFE); // or CONTINUOUS
+                    mCodeScanner.setScanMode(ScanMode.SINGLE);// or CONTINUOUS or PREVIEW
+                    mCodeScanner.setAutoFocusEnabled(true);// Whether to enable auto focus or not
+                    mCodeScanner.setFlashEnabled(false);// Whether to enable flash or not
+                    mCodeScanner.setDecodeCallback(result -> runOnUiThread(() -> {
+                        if (!result.getText().isEmpty()) {
+                            hideScannerLayout();
+                            String[] results = result.getText().split("~");
+
+                            if (results.length > 10 && results[1].contains("MWI")
+                            ) {
+                                showToast("Scanner successfully !!");
+                                et_dob.setText(results[9]);
+                                // et_gender.setText(results[8]);
+                                if (results[8].equalsIgnoreCase("male")) {
+                                    mFemaleRadioButton.setChecked(false);
+                                    mMaleRadioButton.setChecked(true);
+                                } else {
+                                    mFemaleRadioButton.setChecked(true);
+                                    mMaleRadioButton.setChecked(false);
+                                }
+                                et_fullname.setText(results[4] + " " + results[6]);
 //                                    val result = string[2].dropLast(1)
-                            et_uniqcode.setText(
-                                    results[5]
-                                    /*result.replace("<", "")*/
-                            );
+                                et_uniqcode.setText(
+                                        results[5]
+                                        /*result.replace("<", "")*/
+                                );
+                            } else {
+                                showToast("SCANNER ERROR !! INVALID DATA");
+                            }
                         } else {
                             showToast("SCANNER ERROR !! INVALID DATA");
                         }
-                    } else {
-                        showToast("SCANNER ERROR !! INVALID DATA");
-                    }
-                }));
-                mCodeScanner.setErrorCallback(thrown -> runOnUiThread(() -> {
-                    hideScannerLayout();
-                    showToast("Camera initialization error: ${it.message}");
-                }));
+                    }));
+                    mCodeScanner.setErrorCallback(thrown -> runOnUiThread(() -> {
+                        hideScannerLayout();
+                        showToast("Camera initialization error: ${it.message}");
+                    }));
+                } catch (Exception e) {
+                    Log.e("temporary", " e " + e.getCause());
+                }
             }
             break;
         }
@@ -1281,7 +1286,7 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
         } else if (TextUtils.isEmpty(et_mobile.getText().toString().trim())) {
             showToast(getString(R.string.Please_enter_mobile_no));
             return false;
-        }  else if (mDocFrontPhotoFile == null) {
+        } else if (mDocFrontPhotoFile == null) {
             showToast(getString(R.string.please_capture_national_id_photo_front));
             return false;
         } else if (mDocBackPhotoFile == null) {
@@ -1311,7 +1316,7 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
 
     @Override
     public void onBackPressed() {
-        Log.e("temporary", "backpressed " +mCodeScannerView);
+        Log.e("temporary", "backpressed " + mCodeScannerView);
         if (mCodeScannerView != null && mCodeScannerView.getVisibility() == View.VISIBLE) {
             mCodeScanner.releaseResources();
             hideScannerLayout();
