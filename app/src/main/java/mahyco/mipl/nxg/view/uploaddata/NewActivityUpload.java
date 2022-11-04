@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.StrictMode;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +24,7 @@ import mahyco.mipl.nxg.BuildConfig;
 import mahyco.mipl.nxg.R;
 import mahyco.mipl.nxg.model.CategoryChildModel;
 import mahyco.mipl.nxg.model.GrowerModel;
+import mahyco.mipl.nxg.model.OldGrowerSeedDistributionModel;
 import mahyco.mipl.nxg.model.SuccessModel;
 import mahyco.mipl.nxg.util.BaseActivity;
 import mahyco.mipl.nxg.util.Constants;
@@ -32,8 +32,10 @@ import mahyco.mipl.nxg.util.MultipartUtility;
 import mahyco.mipl.nxg.util.SqlightDatabase;
 import mahyco.mipl.nxg.view.growerregistration.GrowerRegistrationAPI;
 import mahyco.mipl.nxg.view.growerregistration.Listener;
+import mahyco.mipl.nxg.view.seeddistribution.DistributionListener;
+import mahyco.mipl.nxg.view.seeddistribution.OldGrowerSeedDistrAPI;
 
-public class NewActivityUpload extends BaseActivity implements View.OnClickListener, Listener {
+public class NewActivityUpload extends BaseActivity implements View.OnClickListener, Listener, DistributionListener {
 
     private AppCompatButton mGrowerRegistrationBtn;
     private AppCompatButton mOrganizerRegistrationBtn;
@@ -42,6 +44,8 @@ public class NewActivityUpload extends BaseActivity implements View.OnClickListe
     private Context mContext;
     private List<GrowerModel> mGrowerList;
     private List<GrowerModel> mOrganizerList;
+    private List<OldGrowerSeedDistributionModel> mSeedDistributionList;
+//    private int mTempIdForSeedDitri;
 
     private TextView mGrowerRecords;
     private TextView mOrganizerRecords;
@@ -49,6 +53,7 @@ public class NewActivityUpload extends BaseActivity implements View.OnClickListe
 
     private int stid = 0;
     private GrowerRegistrationAPI registrationAPI;
+    private OldGrowerSeedDistrAPI mOldGrowerSeedDistrAPI;
     private boolean mGrowerClicked;
     private String mResponseString = "";
 
@@ -74,6 +79,7 @@ public class NewActivityUpload extends BaseActivity implements View.OnClickListe
         mOrganizerRegistrationBtn = findViewById(R.id.organizer_registration_upload);
         mOrganizerRegistrationBtn.setOnClickListener(this);
 
+        mOldGrowerSeedDistrAPI = new OldGrowerSeedDistrAPI(mContext, this);
         mDistributionUploadBtn = findViewById(R.id.seed_distribution_upload);
         mDistributionUploadBtn.setOnClickListener(this);
 
@@ -90,8 +96,10 @@ public class NewActivityUpload extends BaseActivity implements View.OnClickListe
 
         mGrowerList = new ArrayList<>();
         mOrganizerList = new ArrayList<>();
+        mSeedDistributionList = new ArrayList<>();
 
         new GetRegistrationAsyncTaskList().execute();
+        new GetParentSeedDistrAsyncTaskList().execute();
     }
 
     @Override
@@ -158,6 +166,15 @@ public class NewActivityUpload extends BaseActivity implements View.OnClickListe
             }
             break;
             case R.id.seed_distribution_upload: {
+                if (checkInternetConnection(mContext)) {
+                    if (mSeedDistributionList.size() > 0) {
+                        callSeedDistributionApi();
+                    } else {
+                        showNoInternetDialog(mContext, "No data available to upload");
+                    }
+                } else {
+                    showNoInternetDialog(mContext, "Please check your internet connection");
+                }
             }
             break;
         }
@@ -167,6 +184,23 @@ public class NewActivityUpload extends BaseActivity implements View.OnClickListe
     @Override
     public void onResult(String result) {
 
+    }
+
+    @Override
+    public void onSeedDistributionResult(SuccessModel result) {
+        /*if (result.getStatus().equalsIgnoreCase("Success")) {
+            Log.e("temporary", "result.getStatus().equalsIgnoreCase(\"Success\")");
+            mResponseString = result.getComment();
+            showNoInternetDialog(mContext, mResponseString);
+            new DeleteParentSeedDistributiSyncSuccessfully().execute();
+        }*/
+
+        if (mResponseString.contains("Error")) {
+            showNoInternetDialog(mContext, mResponseString);
+        } else {
+            showNoInternetDialog(mContext, "New Parent Seed Distribution Record/s Uploaded Successfully");
+        }
+        new DeleteParentSeedDistributiSyncSuccessfully().execute();
     }
 
     @Override
@@ -506,7 +540,7 @@ public class NewActivityUpload extends BaseActivity implements View.OnClickListe
                     if (mResponseString.contains("Error")) {
                         showNoInternetDialog(mContext, mResponseString);
                     } else {
-                        showNoInternetDialog(mContext, "New Grower Registration "+ mGrowerListSize +" Record/s Uploaded Successfully");
+                        showNoInternetDialog(mContext, "New Grower Registration " + mGrowerListSize + " Record/s Uploaded Successfully");
                     }
 //                    Log.e("temporary", "onGrowerRegister mGrowerUpload all data upload");
                 }
@@ -522,7 +556,7 @@ public class NewActivityUpload extends BaseActivity implements View.OnClickListe
                     if (mResponseString.contains("Error")) {
                         showNoInternetDialog(mContext, mResponseString);
                     } else {
-                        showNoInternetDialog(mContext, "New Organizer Registration "+ mOrganizerSize +"  Record/s Uploaded Successfully");
+                        showNoInternetDialog(mContext, "New Organizer Registration " + mOrganizerSize + "  Record/s Uploaded Successfully");
                     }//                    Log.e("temporary", "onGrowerRegister mGrowerUpload all data upload");
                 }
                 mOrganizerRecords.setText(getString(R.string.no_of_records_for_upload, mOrganizerList.size()));
@@ -689,4 +723,123 @@ public class NewActivityUpload extends BaseActivity implements View.OnClickListe
         }
         registrationAPI.createGrower(jsonObject);
     }
+
+    private void callSeedDistributionApi() {
+
+        ArrayList<OldGrowerSeedDistributionModel> list = new ArrayList<>();
+
+        for (int i = 0; i < mSeedDistributionList.size(); i++) {
+            OldGrowerSeedDistributionModel old = new OldGrowerSeedDistributionModel();
+            old.setCountryId(mSeedDistributionList.get(i).getCountryId());
+            old.setPlantingYear(mSeedDistributionList.get(i).getPlantingYear());
+            old.setSeasonId(mSeedDistributionList.get(i).getSeasonId());
+            old.setCropId(mSeedDistributionList.get(i).getCropId());
+            old.setProductionClusterId(mSeedDistributionList.get(i).getProductionClusterId());
+            old.setOrganizerId(mSeedDistributionList.get(i).getOrganizerId());
+            old.setGrowerId(mSeedDistributionList.get(i).getGrowerId());
+            old.setProductionCode(mSeedDistributionList.get(i).getProductionCode());
+            old.setFemaleParentSeedBatchId(mSeedDistributionList.get(i).getFemaleParentSeedBatchId());
+            old.setMaleParentSeedBatchId(mSeedDistributionList.get(i).getMaleParentSeedBatchId());
+            old.setIssueDt(mSeedDistributionList.get(i).getIssueDt());
+            old.setSeedParentArea(mSeedDistributionList.get(i).getSeedParentArea());
+            old.setCreatedBy(mSeedDistributionList.get(0).getCreatedBy());
+            list.add(old);
+        }
+        /*JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("CountryId", );
+        jsonObject.addProperty("PlantingYear", mSeedDistributionList.get(0).getPlantingYear());
+        jsonObject.addProperty("SeasonId", mSeedDistributionList.get(0).getSeasonId());
+        jsonObject.addProperty("CropId", mSeedDistributionList.get(0).getCropId());
+        jsonObject.addProperty("CropTypeId", mSeedDistributionList.get(0).getCropTypeId());
+        jsonObject.addProperty("ProductionClusterId", mSeedDistributionList.get(0).getProductionClusterId());
+        jsonObject.addProperty("OrganizerId", 0);
+        jsonObject.addProperty("ProductionCode", mSeedDistributionList.get(0).getProductionCode());
+        jsonObject.addProperty("ProductionStaff", Preferences.get(mContext, Preferences.LOGINID));
+        jsonObject.addProperty("IsDelete", false);
+        jsonObject.addProperty("CreatedBy", "");*/
+
+        mOldGrowerSeedDistrAPI.createDistribution(/*jsonObject*/list);
+    }
+
+    private class GetParentSeedDistrAsyncTaskList extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected final Void doInBackground(Void... voids) {
+            SqlightDatabase database = null;
+            try {
+                if (mSeedDistributionList != null && mSeedDistributionList.size() > 0) {
+                    mSeedDistributionList.clear();
+                }
+                database = new SqlightDatabase(mContext);
+                mSeedDistributionList = database.getParentSeedDistributionList();
+               /* if (mSeedDistributionList != null && mSeedDistributionList.size() > 0) {
+                    mTempIdForSeedDitri = mSeedDistributionList.get(0).getTempId();
+                }*/
+            } finally {
+                if (database != null) {
+                    database.close();
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void unused) {
+            mSeedDistributionRecords.setText(getString(R.string.no_of_records_for_upload, mSeedDistributionList.size()));
+            super.onPostExecute(unused);
+        }
+    }
+
+
+    private class DeleteParentSeedDistributiSyncSuccessfully extends AsyncTask<Void, Void, Boolean> {
+        @Override
+        protected final Boolean doInBackground(Void... voids) {
+            SqlightDatabase database = null;
+            boolean b;
+            try {
+                database = new SqlightDatabase(mContext);
+                b = database.deleteSeedDistribution(/*mTempIdForSeedDitri*/);
+            } finally {
+                if (database != null) {
+                    database.close();
+                }
+            }
+            return b;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean deleted) {
+//            Log.e("temporary", " onPostExecute deleted " + deleted);
+            if (deleted) {
+
+            }
+            /*new GetUpadteSeedDistrAfterDeleteAsyncTaskList().execute();*/
+            super.onPostExecute(deleted);
+        }
+    }
+
+   /* private class GetUpadteSeedDistrAfterDeleteAsyncTaskList extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected final Void doInBackground(Void... voids) {
+            SqlightDatabase database = null;
+            try {
+                database = new SqlightDatabase(mContext);
+                mSeedDistributionList = database.getParentSeedDistributionList();
+                mTempIdForSeedDitri = mSeedDistributionList.get(0).getTempId();
+            } finally {
+                if (database != null) {
+                    database.close();
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void unused) {
+            mSeedDistributionRecords.setText(getString(R.string.no_of_records_for_upload, mSeedDistributionList.size()));
+            if (mSeedDistributionList != null && mSeedDistributionList.size() > 0) {
+                callSeedDistributionApi();
+            }
+            super.onPostExecute(unused);
+        }
+    }*/
 }

@@ -13,11 +13,10 @@ import java.util.Vector;
 import mahyco.mipl.nxg.model.CategoryChildModel;
 import mahyco.mipl.nxg.model.CategoryModel;
 import mahyco.mipl.nxg.model.CropModel;
+import mahyco.mipl.nxg.model.CropTypeModel;
 import mahyco.mipl.nxg.model.DownloadGrowerModel;
 import mahyco.mipl.nxg.model.GrowerModel;
-
 import mahyco.mipl.nxg.model.OldGrowerSeedDistributionModel;
-
 import mahyco.mipl.nxg.model.ProductCodeModel;
 import mahyco.mipl.nxg.model.ProductionClusterModel;
 import mahyco.mipl.nxg.model.SeasonModel;
@@ -149,26 +148,21 @@ public class SqlightDatabase extends SQLiteOpenHelper {
         db.execSQL(createRegistration);
 
 
-        String parentSeedDistribution = " Create table "+ tbl_parentSeedDistribution+"(\n" +
+        String parentSeedDistribution = " Create table " + tbl_parentSeedDistribution + "(\n" +
                 "    TempId  INTEGER PRIMARY KEY AUTOINCREMENT, \n" +
                 "    CountryId INTEGER,\n" +
-                "    CountryMasterId INTEGER,\n" +
-                "    plantingYear Text,\n" +
-                "    season text,\n" +
-                "    uniqueCode text,\n" +
-                "    staffName text,\n" +
-                "    crop text,\n" +
-                "    distributedBy text,\n" +
-                "    productionCode text,\n" +
-                "    seedProductionArea text,\n" +
-                "    seedIssueLocation text,\n" +
-                "    seedBatchNoFemale text,\n" +
-                "    seedBatchNoMale text,\n" +
-                "    growerName text,\n" +
-                "    growerAddress text,\n" +
-                "    loginId INTEGER,\n" +
-                "    issueDate text,\n" +
-                "    uniqueId text\n" +
+                "    PlantingYear text,\n" +
+                "    SeasonId INTEGER,\n" +
+                "    CropId INTEGER,\n" +
+                "    ProductionClusterId INTEGER,\n" +
+                "    OrganizerId INTEGER,\n" +
+                "    GrowerId INTEGER,\n" +
+                "    ProductionCode INTEGER,\n" +
+                "    FemaleParentSeedBatchId INTEGER,\n" +
+                "    MaleParentSeedBatchId INTEGER,\n" +
+                "    IssueDt text,\n" +
+                "    SeedParentArea REAL,\n" +
+                "    CreatedBy text\n" +
                 ")";
 
         db.execSQL(parentSeedDistribution);
@@ -269,15 +263,26 @@ public class SqlightDatabase extends SQLiteOpenHelper {
                 "    BatchNo TEXT,\n" +
                 "    NoOfPackets INTEGER,\n" +
                 "    QTYInKG INTEGER,\n" +
-                "    SeedArea  INTEGER,\n" +
-                "    CreatedBy  TEXT,\n" +
-                "    CreatedDt  TEXT,\n" +
-                "    ModifiedBy  TEXT,\n" +
-                "    ModifiedDt  TEXT,\n" +
-                "    ProductionCode  TEXT,\n" +
-                "    ParentSeedReceiptType  TEXT)";
+                "    SeedArea INTEGER,\n" +
+                "    CreatedBy TEXT,\n" +
+                "    CreatedDt TEXT,\n" +
+                "    ModifiedBy TEXT,\n" +
+                "    ModifiedDt TEXT,\n" +
+                "    ProductionCode TEXT,\n" +
+                "    ParentSeedReceiptType TEXT)";
 
         db.execSQL(createseedbatchnomaster);
+
+        String createcroptypemaster = "Create table tbl_croptypemaster(\n" +
+                "TempID Integer PRIMARY KEY AUTOINCREMENT,\n" +
+                "    CropTypeId INTEGER,\n" +
+                "    CropType TEXT,\n" +
+                "    CreatedBy TEXT,\n" +
+                "    CreatedDt  TEXT,\n" +
+                "    ModifiedBy  TEXT,\n" +
+                "    ModifiedDt  TEXT)";
+
+        db.execSQL(createcroptypemaster);
     }
 
     @Override
@@ -294,6 +299,7 @@ public class SqlightDatabase extends SQLiteOpenHelper {
         droptable(db, "tbl_productcodemaster");
         droptable(db, "tbl_seedreciptmaster");
         droptable(db, "tbl_seedbatchnomaster");
+        droptable(db, "tbl_croptypemaster");
         onCreate(db);
     }
 
@@ -411,21 +417,6 @@ public class SqlightDatabase extends SQLiteOpenHelper {
     }
 
     public boolean addRegistration(GrowerModel growerModel) {
-        /*Log.e("temporary","farmer photo "+growerModel.getUploadPhoto() + "\n country id " + growerModel.getCountryId() +
-                "\n CountryMasterId() " + growerModel.getCountryMasterId() +
-                "\nLandMark()" + growerModel.getLandMark() +
-                "\nLandFullName()" + growerModel.getFullName() +
-                "\nLandGender()" + growerModel.getGender() +
-                "\nLandDOB()()" + growerModel.getDOB() +
-                "\nLandMobileNo()" + growerModel.getMobileNo() +
-                "\nLandUniqueCode()" + growerModel.getUniqueCode() +
-                "\nLandRegDt()" + growerModel.getRegDt() +
-                "\nLandStaffNameAndI()" + growerModel.getStaffNameAndId() +
-                "\nLandFrontCopy()" + growerModel.getIdProofFrontCopy() +
-                "\nIsSync()" + growerModel.getIsSync() +
-                "\nreatedBy()" + growerModel.getCreatedBy() +
-                "\nUserType()" + growerModel.getUserType()+
-                "\nBackCopy()" + growerModel.getIdProofBackCopy());*/
         SQLiteDatabase mydb = null;
         try {
             mydb = this.getReadableDatabase();
@@ -496,42 +487,32 @@ public class SqlightDatabase extends SQLiteOpenHelper {
                     "(" +
                     "" +
                     "CountryId," +
-                    "CountryMasterId," +
-                    "plantingYear," +
-                    "season," +
-                    "uniqueCode," +
-                    "staffName," +
-                    "crop," +
-                    "distributedBy," +
-                    "productionCode," +
-                    "seedProductionArea," +
-                    "seedIssueLocation," +
-                    "seedBatchNoFemale," +
-                    "seedBatchNoMale," +
-                    "growerName," +
-                    "growerAddress," +
-                    "loginId," +
-                    "issueDate," +
-                    "uniqueId" +
+                    "PlantingYear," +
+                    "SeasonId," +
+                    "CropId," +
+                    "ProductionClusterId," +
+                    "OrganizerId," +
+                    "GrowerId," +
+                    "ProductionCode," +
+                    "FemaleParentSeedBatchId," +
+                    "MaleParentSeedBatchId," +
+                    "IssueDt," +
+                    "SeedParentArea," +
+                    "CreatedBy" +
                     ") values" +
                     "('" + seedDistributionModel.getCountryId() + "'," +
-                    "'" + seedDistributionModel.getCountryMasterId() + "'," +
                     "'" + seedDistributionModel.getPlantingYear() + "'," +
-                    "'" + seedDistributionModel.getSeason() + "'," +
-                    "'" + seedDistributionModel.getUniqueCode() + "'," +
-                    "'" + seedDistributionModel.getStaffName() + "'," +
-                    "'" + seedDistributionModel.getCrop() + "'," +
-                    "'" + seedDistributionModel.getDistributedBy() + "'," +
+                    "'" + seedDistributionModel.getSeasonId() + "'," +
+                    "'" + seedDistributionModel.getCropId() + "'," +
+                    "'" + seedDistributionModel.getProductionClusterId() + "'," +
+                    "'" + seedDistributionModel.getOrganizerId() + "'," +
+                    "'" + seedDistributionModel.getGrowerId() + "'," +
                     "'" + seedDistributionModel.getProductionCode() + "'," +
-                    "'" + seedDistributionModel.getSeedProductionArea()+ "'," +
-                    "'" + seedDistributionModel.getSeedIssueLocation() + "'," +
-                    "'" + seedDistributionModel.getSeedBatchNoFemale()+ "'," +
-                    "'" + seedDistributionModel.getSeedBatchNoMale()+ "'," +
-                    "'" + seedDistributionModel.getGrowerName()+ "'," +
-                    "'" + seedDistributionModel.getGrowerAddress()+ "'," +
-                    "'" + seedDistributionModel.getLoginId()+ "'," +
-                    "'" + seedDistributionModel.getIssueDate()+ "'," +
-                    "'" + seedDistributionModel.getUniqueId() + "')";
+                    "'" + seedDistributionModel.getFemaleParentSeedBatchId() + "'," +
+                    "'" + seedDistributionModel.getMaleParentSeedBatchId() + "'," +
+                    "'" + seedDistributionModel.getIssueDt() + "'," +
+                    "'" + seedDistributionModel.getSeedParentArea() + "'," +
+                    "'" + seedDistributionModel.getCreatedBy() + "')";
             Log.i("Query is -------> ", "" + q);
             mydb.execSQL(q);
             return true;
@@ -603,7 +584,7 @@ public class SqlightDatabase extends SQLiteOpenHelper {
                             cursorCourses.getInt(19),
                             cursorCourses.getInt(20),
                             cursorCourses.getInt(21)
-                            ));
+                    ));
                 } while (cursorCourses.moveToNext());
             }
             return courseModalArrayList;
@@ -618,29 +599,25 @@ public class SqlightDatabase extends SQLiteOpenHelper {
         SQLiteDatabase myDb = null;
         try {
             myDb = this.getReadableDatabase();
-            String q = "SELECT * FROM "+tbl_parentSeedDistribution;
+            String q = "SELECT * FROM " + tbl_parentSeedDistribution;
             Cursor cursorCourses = myDb.rawQuery(q, null);
             ArrayList<OldGrowerSeedDistributionModel> courseModalArrayList = new ArrayList<>();
             if (cursorCourses.moveToFirst()) {
                 do {
-                    courseModalArrayList.add(new OldGrowerSeedDistributionModel(cursorCourses.getInt(1),
-                            cursorCourses.getInt(2),
-                            cursorCourses.getString(3),
-                            cursorCourses.getString(4),
-                            cursorCourses.getString(5),
-                            cursorCourses.getString(6),
-                            cursorCourses.getString(7),
-                            cursorCourses.getString(8),
-                            cursorCourses.getString(9),
-                            cursorCourses.getString(10),
+                    courseModalArrayList.add(new OldGrowerSeedDistributionModel(
+                            cursorCourses.getInt(1),
+                            cursorCourses.getString(2),
+                            cursorCourses.getInt(3),
+                            cursorCourses.getInt(4),
+                            cursorCourses.getInt(5),
+                            cursorCourses.getInt(6),
+                            cursorCourses.getInt(7),
+                            cursorCourses.getInt(8),
+                            cursorCourses.getInt(9),
+                            cursorCourses.getInt(10),
                             cursorCourses.getString(11),
-                            cursorCourses.getString(12),
-                            cursorCourses.getString(13),
-                            cursorCourses.getString(14),
-                            cursorCourses.getString(15),
-                            cursorCourses.getInt(16),
-                            cursorCourses.getString(17),
-                            cursorCourses.getString(18)
+                            cursorCourses.getInt(12),
+                            cursorCourses.getString(13)
                     ));
                 } while (cursorCourses.moveToNext());
             }
@@ -652,28 +629,12 @@ public class SqlightDatabase extends SQLiteOpenHelper {
         }
     }
 
-    public boolean deleteParentSeedDistribution(String uniqueCode) {
-        SQLiteDatabase mydb = null;
-        try {
-            mydb = this.getReadableDatabase();
-            String q = "DELETE from "+ tbl_parentSeedDistribution+ " where UniqueCode='" + uniqueCode+"'";
-            Log.e("temporary"," deleted Query is -------> " + q);
-            mydb.execSQL(q);
-            return true;
-        } catch (Exception e) {
-            Log.e("temporary"," deleted Error is Clear List " + e.getMessage());
-            return false;
-        } finally {
-            mydb.close();
-        }
-    }
-
     public boolean updateRegistrationStatus(String uniqueCode, int status) {
         SQLiteDatabase mydb = null;
         try {
             mydb = this.getReadableDatabase();
-           // String q = "update  tbl_registrationmaster set IsSync=" + status + " where MobileNo=" + mobileNumber;
-            String q = "update  tbl_registrationmaster set IsSync='" + status + "' where UniqueCode='" + uniqueCode+"'";
+            // String q = "update  tbl_registrationmaster set IsSync=" + status + " where MobileNo=" + mobileNumber;
+            String q = "update  tbl_registrationmaster set IsSync='" + status + "' where UniqueCode='" + uniqueCode + "'";
             Log.i("Query is -------> ", "" + q);
             mydb.execSQL(q);
             return true;
@@ -684,124 +645,56 @@ public class SqlightDatabase extends SQLiteOpenHelper {
             mydb.close();
         }
     }
-    public boolean deleteRegistration(String uniqueCode) {
+
+    public boolean deleteSeedDistribution(/*int tempId*/) {
         SQLiteDatabase mydb = null;
         try {
             mydb = this.getReadableDatabase();
-            String q = "DELETE from tbl_registrationmaster where UniqueCode='" + uniqueCode+"'";
-            Log.e("temporary"," deleted Query is -------> " + q);
+            String q = "DELETE from tbl_parentSeedDistribution"/* where TempId='" + tempId + "'"*/;
+            Log.e("temporary", " deleted Query is -------> " + q);
             mydb.execSQL(q);
             return true;
         } catch (Exception e) {
-            Log.e("temporary"," deleted Error is Clear List " + e.getMessage());
+            Log.e("temporary", " deleted Error is Clear List " + e.getMessage());
             return false;
         } finally {
             mydb.close();
         }
     }
 
-    /*public ArrayList<GrowerModel> deleteRegistration(String uniqueCode) {
-         SQLiteDatabase myDb = null;
+    public boolean deleteRegistration(String uniqueCode) {
+        SQLiteDatabase mydb = null;
         try {
-            myDb = this.getReadableDatabase();
-            String q = "DELETE from tbl_registrationmaster where UniqueCode='" + uniqueCode+"'";
-            Cursor cursorCourses = myDb.rawQuery(q, null);
-            ArrayList<GrowerModel> courseModalArrayList = new ArrayList<>();
-            if (cursorCourses.moveToFirst()) {
-                do {
-                    courseModalArrayList.add(new GrowerModel(cursorCourses.getInt(1),
-                            cursorCourses.getInt(2),
-                            cursorCourses.getString(3),
-                            cursorCourses.getString(4),
-                            cursorCourses.getString(5),
-                            cursorCourses.getString(6),
-                            cursorCourses.getString(7),
-                            cursorCourses.getString(8),
-                            cursorCourses.getString(9),
-                            cursorCourses.getString(10),
-                            cursorCourses.getString(11),
-                            cursorCourses.getString(12),
-                            cursorCourses.getInt(13),
-                            cursorCourses.getString(14),
-                            cursorCourses.getString(15),
-                            cursorCourses.getString(16),
-                            cursorCourses.getInt(17),
-                            cursorCourses.getString(18),
-                            cursorCourses.getInt(0)));
-                } while (cursorCourses.moveToNext());
-            }
-            return courseModalArrayList;
+            mydb = this.getReadableDatabase();
+            String q = "DELETE from tbl_registrationmaster where UniqueCode='" + uniqueCode + "'";
+            Log.e("temporary", " deleted Query is -------> " + q);
+            mydb.execSQL(q);
+            return true;
         } catch (Exception e) {
-            return null;
+            Log.e("temporary", " deleted Error is Clear List " + e.getMessage());
+            return false;
         } finally {
-            myDb.close();
+            mydb.close();
         }
-    }*/
+    }
 
-//    public ArrayList<GrowerModel> updateRegistrationImagePath(String mobileNumber, String imageType, String path) {
-//        SQLiteDatabase myDb = null;
-//        try {
-//            myDb = this.getReadableDatabase();
-//            String q;
-//            if (imageType.equalsIgnoreCase("growerPhoto")) {
-//                q = "update  tbl_registrationmaster set FarmerPhoto='" + path + "' where MobileNo='" + mobileNumber+"'";
-//            } else if (imageType.equalsIgnoreCase("docBackPhoto")) {
-//                q = "update  tbl_registrationmaster set BackPhoto='" + path + "' where MobileNo='" + mobileNumber+"'";
-//            } else {
-//                q = "update  tbl_registrationmaster set FrontPhoto='" + path + "' where MobileNo='" + mobileNumber+"'";
-//            }
-//            Cursor cursorCourses = myDb.rawQuery(q, null);
-//            ArrayList<GrowerModel> courseModalArrayList = new ArrayList<>();
-//            if (cursorCourses.moveToFirst()) {
-//                do {
-//                    courseModalArrayList.add(new GrowerModel(cursorCourses.getInt(1),
-//                            cursorCourses.getInt(2),
-//                            cursorCourses.getString(3),
-//                            cursorCourses.getString(4),
-//                            cursorCourses.getString(5),
-//                            cursorCourses.getString(6),
-//                            cursorCourses.getString(7),
-//                            cursorCourses.getString(8),
-//                            cursorCourses.getString(9),
-//                            cursorCourses.getString(10),
-//                            cursorCourses.getString(11),
-//                            cursorCourses.getString(12),
-//                            cursorCourses.getInt(13),
-//                            cursorCourses.getString(14),
-//                            cursorCourses.getString(15),
-//                            cursorCourses.getString(16),
-//                            cursorCourses.getInt(17),
-//                            cursorCourses.getString(18),
-//                            cursorCourses.getInt(0)));
-//                } while (cursorCourses.moveToNext());
-//            }
-//            return courseModalArrayList;
-//        } catch (Exception e) {
-//            return null;
-//        } finally {
-//            myDb.close();
-//        }
-//    }
-
-    public boolean updateRegistrationImagePath(String uniqueCode, String imageType, String path,int isInsertedValue) {
+    public boolean updateRegistrationImagePath(String uniqueCode, String imageType, String path, int isInsertedValue) {
         SQLiteDatabase mydb = null;
         try {
             mydb = this.getReadableDatabase();
             String q;
             if (imageType.equalsIgnoreCase("growerPhoto")) {
-                q = "update  tbl_registrationmaster set FarmerPhoto='" + path + "',  GrowerImageUpload='" + isInsertedValue +"'where UniqueCode='" + uniqueCode+"'";
+                q = "update  tbl_registrationmaster set FarmerPhoto='" + path + "',  GrowerImageUpload='" + isInsertedValue + "'where UniqueCode='" + uniqueCode + "'";
             } else if (imageType.equalsIgnoreCase("docBackPhoto")) {
-                q = "update  tbl_registrationmaster set BackPhoto='" + path + "',  BackImageUpload='" + isInsertedValue +"'where UniqueCode='" + uniqueCode+"'";
-                // q = "update  tbl_registrationmaster set BackPhoto='" + path + "' where UniqueCode='" + uniqueCode+"'";
+                q = "update  tbl_registrationmaster set BackPhoto='" + path + "',  BackImageUpload='" + isInsertedValue + "'where UniqueCode='" + uniqueCode + "'";
             } else {
-                q = "update  tbl_registrationmaster set FrontPhoto='" + path + "',  FrontImageUpload='" + isInsertedValue +"'where UniqueCode='" + uniqueCode+"'";
-               // q = "update  tbl_registrationmaster set FrontPhoto='" + path + "' where UniqueCode='" + uniqueCode+"'";
+                q = "update  tbl_registrationmaster set FrontPhoto='" + path + "',  FrontImageUpload='" + isInsertedValue + "'where UniqueCode='" + uniqueCode + "'";
             }
-            Log.e("temporary","updateRegistrationImagePath Query is -------> " + q);
+            Log.e("temporary", "updateRegistrationImagePath Query is -------> " + q);
             mydb.execSQL(q);
             return true;
         } catch (Exception e) {
-            Log.e("temporary","updateRegistrationImagePath Error is Added Order Details : " + e.getMessage());
+            Log.e("temporary", "updateRegistrationImagePath Error is Added Order Details : " + e.getMessage());
             return false;
         } finally {
             mydb.close();
@@ -865,7 +758,7 @@ public class SqlightDatabase extends SQLiteOpenHelper {
                     "'" + seasonModel.getCreatedDt() + "'," +
                     "'" + seasonModel.getModifiedBy() + "'," +
                     "'" + seasonModel.getModifiedDt() + "'," +
-                    "'" + seasonModel.getCountryName() + "')" ;
+                    "'" + seasonModel.getCountryName() + "')";
             Log.i("Query is -------> ", "" + q);
             mydb.execSQL(q);
             return true;
@@ -926,7 +819,7 @@ public class SqlightDatabase extends SQLiteOpenHelper {
                     "'" + cropModel.getCreatedBy() + "'," +
                     "'" + cropModel.getCreatedDt() + "'," +
                     "'" + cropModel.getModifiedBy() + "'," +
-                    "'" + cropModel.getModifiedDt() + "')" ;
+                    "'" + cropModel.getModifiedDt() + "')";
             Log.i("Query is -------> ", "" + q);
             mydb.execSQL(q);
             return true;
@@ -990,7 +883,7 @@ public class SqlightDatabase extends SQLiteOpenHelper {
                     "'" + cropModel.getCreatedDt() + "'," +
                     "'" + cropModel.getModifiedBy() + "'," +
                     "'" + cropModel.getModifiedDt() + "'," +
-                    "'" + cropModel.getCountryName() + "')" ;
+                    "'" + cropModel.getCountryName() + "')";
             Log.i("Query is -------> ", "" + q);
             mydb.execSQL(q);
             return true;
@@ -1056,41 +949,41 @@ public class SqlightDatabase extends SQLiteOpenHelper {
                     "'" + cropModel.getProductionCode() + "'," +
                     "'" + cropModel.getParentSeedReceiptType() + "'," +
                     "'" + cropModel.getCountryId() + "'," +
-                    "'" + cropModel.getProductionClusterId()+ "'," +
-                    "'" + cropModel.getUserId()+ "'," +
-                    "'" + cropModel.getPlantingYear()+ "'," +
-                    "'" + cropModel.getSeasonId()+ "'," +
-                    "'" + cropModel.getCropTypeId()+ "'," +
-                    "'" + cropModel.getCropId()+ "'," +
-                    "'" + cropModel.getProductId()+ "'," +
-                    "'" + cropModel.getPlannedArea()+ "'," +
-                    "'" +cropModel.getPlannedProcessedQty()+ "'," +
-                    "'" + cropModel.getPlannedUnprocessedQty()+ "'," +
-                    "'" + cropModel.getNoofFemalePkts()+ "'," +
-                    "'" +cropModel. getNoofMalePkts()+ "'," +
-                    "'" + cropModel.getFemaleSeedRate()+ "'," +
-                    "'" + cropModel.getFemaleSeedPacking()+ "'," +
-                    "'" + cropModel.getMaleSeedRate()+ "'," +
-                    "'" +cropModel. getMaleSeedPacking()+ "'," +
-                    "'" + cropModel.getFemaleParentSeedsArea()+ "'," +
-                    "'" +cropModel.getMaleParentSeedArea()+ "'," +
-                    "'" + cropModel.getTotalFemaleParentSeeds()+ "'," +
-                    "'" + cropModel.getTotalMaleParentSeeds()+ "'," +
-                    "'" + cropModel.getSTONo_DeliveryChallanNo()+ "'," +
-                    "'" + cropModel.getParentSeedReceiptDt()+ "'," +
-                    "'" + cropModel.getCreatedBy()+ "'," +
-                    "'" + cropModel.getCreatedDt()+ "'," +
-                    "'" + cropModel.getModifiedBy()+ "'," +
-                    "'" + cropModel.getModifiedDt()+ "'," +
-                    "'" + cropModel.getCountryName()+ "'," +
-                    "'" + cropModel.getSeason()+ "'," +
-                    "'" + cropModel.getCropCode()+ "'," +
-                    "'" + cropModel.getCropName()+ "'," +
-                    "'" + cropModel.getCropType()+ "'," +
-                    "'" + cropModel.getProductionCluster()+ "'," +
-                    "'" + cropModel.getOrganizerName()+ "'," +
-                    "'" + cropModel.getProductName()+ "'," +
-                    "'" + cropModel.getFullName() + "')" ;
+                    "'" + cropModel.getProductionClusterId() + "'," +
+                    "'" + cropModel.getUserId() + "'," +
+                    "'" + cropModel.getPlantingYear() + "'," +
+                    "'" + cropModel.getSeasonId() + "'," +
+                    "'" + cropModel.getCropTypeId() + "'," +
+                    "'" + cropModel.getCropId() + "'," +
+                    "'" + cropModel.getProductId() + "'," +
+                    "'" + cropModel.getPlannedArea() + "'," +
+                    "'" + cropModel.getPlannedProcessedQty() + "'," +
+                    "'" + cropModel.getPlannedUnprocessedQty() + "'," +
+                    "'" + cropModel.getNoofFemalePkts() + "'," +
+                    "'" + cropModel.getNoofMalePkts() + "'," +
+                    "'" + cropModel.getFemaleSeedRate() + "'," +
+                    "'" + cropModel.getFemaleSeedPacking() + "'," +
+                    "'" + cropModel.getMaleSeedRate() + "'," +
+                    "'" + cropModel.getMaleSeedPacking() + "'," +
+                    "'" + cropModel.getFemaleParentSeedsArea() + "'," +
+                    "'" + cropModel.getMaleParentSeedArea() + "'," +
+                    "'" + cropModel.getTotalFemaleParentSeeds() + "'," +
+                    "'" + cropModel.getTotalMaleParentSeeds() + "'," +
+                    "'" + cropModel.getSTONo_DeliveryChallanNo() + "'," +
+                    "'" + cropModel.getParentSeedReceiptDt() + "'," +
+                    "'" + cropModel.getCreatedBy() + "'," +
+                    "'" + cropModel.getCreatedDt() + "'," +
+                    "'" + cropModel.getModifiedBy() + "'," +
+                    "'" + cropModel.getModifiedDt() + "'," +
+                    "'" + cropModel.getCountryName() + "'," +
+                    "'" + cropModel.getSeason() + "'," +
+                    "'" + cropModel.getCropCode() + "'," +
+                    "'" + cropModel.getCropName() + "'," +
+                    "'" + cropModel.getCropType() + "'," +
+                    "'" + cropModel.getProductionCluster() + "'," +
+                    "'" + cropModel.getOrganizerName() + "'," +
+                    "'" + cropModel.getProductName() + "'," +
+                    "'" + cropModel.getFullName() + "')";
             Log.i("Query is -------> ", "" + q);
             mydb.execSQL(q);
             return true;
@@ -1102,10 +995,11 @@ public class SqlightDatabase extends SQLiteOpenHelper {
         }
     }
 
-    public ArrayList<SeedReceiptModel> getSeedReceiptMaster() {
+    public ArrayList<SeedReceiptModel> getSeedReceiptMaster(/*String cropCode*/) {
         SQLiteDatabase myDb = null;
         try {
             myDb = this.getReadableDatabase();
+//            String q = "SELECT  * FROM tbl_seedreciptmaster where CropCode=" + cropCode;
             String q = "SELECT  * FROM tbl_seedreciptmaster";
             Cursor cursorCourses = myDb.rawQuery(q, null);
             ArrayList<SeedReceiptModel> courseModalArrayList = new ArrayList<>();
@@ -1209,11 +1103,68 @@ public class SqlightDatabase extends SQLiteOpenHelper {
         }
     }
 
+    public boolean addCropType(CropTypeModel cropModel) {
+        SQLiteDatabase mydb = null;
+        try {
+            mydb = this.getReadableDatabase();
+            String q = "insert into tbl_croptypemaster" +
+                    "(" +
+                    "" +
+                    "CropTypeId," +
+                    "CropType," +
+                    "CreatedBy," +
+                    "CreatedDt," +
+                    "ModifiedBy," +
+                    "ModifiedDt" +
+
+                    ") values" +
+                    "('" + cropModel.getCropTypeId() + "'," +
+                    "'" + cropModel.getCropType() + "'," +
+                    "'" + cropModel.getCreatedBy() + "'," +
+                    "'" + cropModel.getCreatedDt() + "'," +
+                    "'" + cropModel.getModifiedBy() + "'," +
+                    "'" + cropModel.getModifiedDt() + "')";
+            Log.i("Query is -------> ", "" + q);
+            mydb.execSQL(q);
+            return true;
+        } catch (Exception e) {
+            Log.i("Error is Product Added ", "" + e.getMessage());
+            return false;
+        } finally {
+            mydb.close();
+        }
+    }
+
+    public ArrayList<CropTypeModel> getCropType() {
+        SQLiteDatabase myDb = null;
+        try {
+            myDb = this.getReadableDatabase();
+            String q = "SELECT  * FROM tbl_croptypemaster";
+            Cursor cursorCourses = myDb.rawQuery(q, null);
+            ArrayList<CropTypeModel> courseModalArrayList = new ArrayList<>();
+            if (cursorCourses.moveToFirst()) {
+                do {
+                    courseModalArrayList.add(new CropTypeModel(cursorCourses.getInt(1),
+                            cursorCourses.getString(2),
+                            cursorCourses.getString(3),
+                            cursorCourses.getString(4),
+                            cursorCourses.getString(5),
+                            cursorCourses.getString(6)));
+                } while (cursorCourses.moveToNext());
+            }
+            return courseModalArrayList;
+        } catch (Exception e) {
+            return null;
+        } finally {
+            myDb.close();
+        }
+    }
+
     public ArrayList<SeedBatchNoModel> getSeedBatchNo(String productionCode) {
         SQLiteDatabase myDb = null;
         try {
             myDb = this.getReadableDatabase();
-            String q = "SELECT  * FROM tbl_seedbatchnomaster  where ProductionCode=" + productionCode;
+            String q = "SELECT  * FROM tbl_seedbatchnomaster  where ProductionCode='" + productionCode+ "'";
             Cursor cursorCourses = myDb.rawQuery(q, null);
             ArrayList<SeedBatchNoModel> courseModalArrayList = new ArrayList<>();
             if (cursorCourses.moveToFirst()) {
@@ -1272,7 +1223,7 @@ public class SqlightDatabase extends SQLiteOpenHelper {
                     "'" + cropModel.getModifiedBy() + "'," +
                     "'" + cropModel.getModifiedDt() + "'," +
                     "'" + cropModel.getCropCode() + "'," +
-                    "'" + cropModel.getCropName() + "')" ;
+                    "'" + cropModel.getCropName() + "')";
             Log.i("Query is -------> ", "" + q);
             mydb.execSQL(q);
             return true;
@@ -1342,18 +1293,18 @@ public class SqlightDatabase extends SQLiteOpenHelper {
         }
     }
 
-    public int checkUniqueCodeInGrowerMaster(String uniqueCode){
+    public int checkUniqueCodeInGrowerMaster(String uniqueCode) {
         SQLiteDatabase mydb = null;
         try {
             mydb = this.getReadableDatabase();
-            String countQuery = "SELECT COUNT (*) FROM tbl_growermaster WHERE UniqueCode='" + uniqueCode+"'";
-            Log.e("temporary","checkUniqueCodeInGrowerMaster Query is -------> " + countQuery);
+            String countQuery = "SELECT COUNT (*) FROM tbl_growermaster WHERE UniqueCode='" + uniqueCode + "'";
+            Log.e("temporary", "checkUniqueCodeInGrowerMaster Query is -------> " + countQuery);
             Cursor cursor = mydb.rawQuery(countQuery, null);
             int count = cursor.getCount();
             cursor.close();
             return count;
         } catch (Exception e) {
-            Log.e("temporary","checkUniqueCodeInGrowerMaster Error  : " + e.getMessage());
+            Log.e("temporary", "checkUniqueCodeInGrowerMaster Error  : " + e.getMessage());
             return -1;
         } finally {
             mydb.close();
@@ -1403,8 +1354,8 @@ public class SqlightDatabase extends SQLiteOpenHelper {
                     "'" + categoryModel.getDOB() + "'," +
                     "'" + categoryModel.getGender() + "'," +
                     "'" + categoryModel.getMobileNo() + "'," +
-                    "'" + categoryModel.getUniqueCode()+ "'," +
-                    "'" + categoryModel.getRegDt()+ "'," +
+                    "'" + categoryModel.getUniqueCode() + "'," +
+                    "'" + categoryModel.getRegDt() + "'," +
                     "'" + categoryModel.getCreatedBy() + "'," +
                     "'" + categoryModel.getCreatedDt() + "'," +
                     "'" + categoryModel.getModifiedBy() + "'," +

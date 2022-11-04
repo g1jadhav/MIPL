@@ -10,15 +10,15 @@ import android.widget.TextView;
 import java.util.List;
 
 import mahyco.mipl.nxg.R;
-import mahyco.mipl.nxg.model.ProductCodeModel;
-import mahyco.mipl.nxg.model.SeedReceiptModel;
+import mahyco.mipl.nxg.model.CropTypeModel;
+import mahyco.mipl.nxg.model.DownloadGrowerModel;
 
-public class ProductCodeAdapter extends ArrayAdapter<SeedReceiptModel> {
+public class CropTypeAdapter extends ArrayAdapter<CropTypeModel> {
 
     LayoutInflater flater;
-    List<SeedReceiptModel> list;
+    List<CropTypeModel> list;
 
-    public ProductCodeAdapter(Context context, int resouceId, List<SeedReceiptModel> list) {
+    public CropTypeAdapter(Context context, int resouceId, List<CropTypeModel> list) {
         super(context, resouceId, list);
         flater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -42,7 +42,7 @@ public class ProductCodeAdapter extends ArrayAdapter<SeedReceiptModel> {
 
     private View rowView(View convertView, int position) {
 
-        SeedReceiptModel rowItem = getItem(position);
+        CropTypeModel rowItem = getItem(position);
 
         viewHolder holder;
         View rowViews = convertView;
@@ -56,7 +56,7 @@ public class ProductCodeAdapter extends ArrayAdapter<SeedReceiptModel> {
         } else {
             holder = (viewHolder) rowViews.getTag();
         }
-        holder.txtTitle.setText(rowItem.getProductionCode());
+        holder.txtTitle.setText(rowItem.getCropType());
 
         return rowViews;
     }

@@ -407,4 +407,8 @@ public class SeedReceiptModel {
     }
 
     private String FullName;
+
+    public String toString() {
+        return ProductionCode;
+    }
 }

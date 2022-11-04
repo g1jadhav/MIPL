@@ -19,5 +19,7 @@ public class Constants {
     public static final String PRODUCTION_CODE = "product/getall";
     public static final String SEED_RECEIPT_BATCH = "parentSeedReceipt/getall";
     public static final String MALE_FEMALE_BATCH = "parentSeedBatch/getall";
+    public static final String CREATE_DISTRIBUTION = "parentSeedDistribution/create";
+    public static final String CROP_TYPE = "cropType/getall";
 
 }

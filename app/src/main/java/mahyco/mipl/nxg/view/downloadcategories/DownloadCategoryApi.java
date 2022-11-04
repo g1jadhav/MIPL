@@ -12,6 +12,7 @@ import java.util.List;
 import mahyco.mipl.nxg.model.CategoryChildModel;
 import mahyco.mipl.nxg.model.CategoryModel;
 import mahyco.mipl.nxg.model.CropModel;
+import mahyco.mipl.nxg.model.CropTypeModel;
 import mahyco.mipl.nxg.model.DownloadGrowerModel;
 import mahyco.mipl.nxg.model.ProductCodeModel;
 import mahyco.mipl.nxg.model.ProductionClusterModel;
@@ -369,6 +370,44 @@ public class DownloadCategoryApi {
 
                 @Override
                 public void onFailure(Call<List<SeedBatchNoModel>> call, Throwable t) {
+                    if (progressDialog.isShowing())
+                        progressDialog.dismiss();
+                    Log.e("Error is", t.getMessage());
+                }
+            });
+        } catch (Exception e) {
+
+        }
+    }
+
+    public void getCropType(JsonObject jsonObject) {
+        try {
+            if (!progressDialog.isShowing())
+                progressDialog.show();
+
+            Call<List<CropTypeModel>> call = null;
+            call = RetrofitClient.getInstance().getMyApi().getCropType(jsonObject);
+            call.enqueue(new Callback<List<CropTypeModel>>() {
+                @Override
+                public void onResponse(Call<List<CropTypeModel>> call, Response<List<CropTypeModel>> response) {
+
+                    if (progressDialog.isShowing())
+                        progressDialog.dismiss();
+
+                    if (response.body() != null) {
+                        List<CropTypeModel> result = response.body();
+                        try {
+                            resultOutput.onListCropTypeResponse(result);
+                        } catch (NullPointerException e) {
+                            Toast.makeText(context, "Error is " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        } catch (Exception e) {
+                            Toast.makeText(context, "Error is " + e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<CropTypeModel>> call, Throwable t) {
                     if (progressDialog.isShowing())
                         progressDialog.dismiss();
                     Log.e("Error is", t.getMessage());

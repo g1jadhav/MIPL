@@ -147,6 +147,6 @@ public class SeedBatchNoModel {
     }
 
     public String toString() {
-        return BatchNo + " " + NoOfPackets + "Pkt/s";
+        return BatchNo;
     }
 }

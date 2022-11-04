@@ -2,12 +2,15 @@ package mahyco.mipl.nxg.util;
 
 import com.google.gson.JsonObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import mahyco.mipl.nxg.model.CategoryChildModel;
 import mahyco.mipl.nxg.model.CategoryModel;
 import mahyco.mipl.nxg.model.CropModel;
+import mahyco.mipl.nxg.model.CropTypeModel;
 import mahyco.mipl.nxg.model.DownloadGrowerModel;
+import mahyco.mipl.nxg.model.OldGrowerSeedDistributionModel;
 import mahyco.mipl.nxg.model.ProductCodeModel;
 import mahyco.mipl.nxg.model.ProductionClusterModel;
 import mahyco.mipl.nxg.model.SeasonModel;
@@ -59,6 +62,9 @@ public interface Api {
     @POST(Constants.MALE_FEMALE_BATCH)
     Call<List<SeedBatchNoModel>> getSeedBatchNo(@Body JsonObject jsonObject);
 
+    @POST(Constants.CROP_TYPE)
+    Call<List<CropTypeModel>> getCropType(@Body JsonObject jsonObject);
+
     @Multipart
     @POST("processInspection/uploadFile?FileType=Image")
     Call<String> uploadProductQualityImage(@Part MultipartBody.Part file, @Part("files") RequestBody items);
@@ -68,4 +74,8 @@ public interface Api {
 
     @POST(Constants.SUBMIT_GROWER)
     Call<SuccessModel> submitGrowerDetails(@Body JsonObject jsonObject);
+
+    //@Body list: List<TourEventParamItem>
+    @POST(Constants.CREATE_DISTRIBUTION)
+    Call<SuccessModel> seedDistribution(@Body ArrayList<OldGrowerSeedDistributionModel> jsonObject);
 }

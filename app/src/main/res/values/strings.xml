@@ -210,6 +210,7 @@
     <string name="planting_year">Planting Year<font color='#FF0000'>*</font></string>
     <string name="season">Season<font color='#FF0000'>*</font></string>
     <string name="crop">Crop<font color='#FF0000'>*</font></string>
+    <string name="crop_type">Crop Type<font color='#FF0000'>*</font></string>
     <string name="production_code">Production Code<font color='#FF0000'>*</font></string>
     <string name="seed_production_area_ha">Seed Production area (Ha)<font color='#FF0000'>*</font></string>
     <string name="parent_seed_issue_location">Parent Seed Issue Cluster<font color='#FF0000'>*</font></string>
@@ -275,6 +276,8 @@
     <string name="download_production_cluster">Download Production Cluster</string>
     <string name="download_product_code">Download Product Code</string>
     <string name="download_seed_batch_no">Download Seed Batch No</string>
+    <string name="download_crop_type_master">Download Crop Type Master</string>
+    <string name="download_parent_seed_receipt">Download Parent Seed Receipt</string>
 
     <string-array name="country_array">
         <item>Select Country</item>

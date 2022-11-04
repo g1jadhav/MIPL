@@ -46,10 +46,10 @@ import mahyco.mipl.nxg.adapter.SeedDistrPlantingYearAdapter;
 import mahyco.mipl.nxg.model.CropModel;
 import mahyco.mipl.nxg.model.DownloadGrowerModel;
 import mahyco.mipl.nxg.model.OldGrowerSeedDistributionModel;
-import mahyco.mipl.nxg.model.ProductCodeModel;
 import mahyco.mipl.nxg.model.ProductionClusterModel;
 import mahyco.mipl.nxg.model.SeasonModel;
 import mahyco.mipl.nxg.model.SeedBatchNoModel;
+import mahyco.mipl.nxg.model.SeedReceiptModel;
 import mahyco.mipl.nxg.util.BaseActivity;
 import mahyco.mipl.nxg.util.Preferences;
 import mahyco.mipl.nxg.util.SqlightDatabase;
@@ -67,15 +67,18 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
     private SearchableSpinner mFemaleBatchNoSpinner;
     private SearchableSpinner mOrganizerNameSpinner;
     private SearchableSpinner mSearchByIdNameSpinner;
+    // private SearchableSpinner mCropTypeSpinner;
 
     private ArrayList<CropModel> mCropList = new ArrayList<>();
     private ArrayList<DownloadGrowerModel> mGrowerList = new ArrayList<>();
     private ArrayList<DownloadGrowerModel> mOrganizerNameList = new ArrayList<>();
     private ArrayList<SeasonModel> mSeasonList = new ArrayList<>();
     private ArrayList<ProductionClusterModel> mProdClusterList = new ArrayList<>();
-    private ArrayList<ProductCodeModel> mProdCodeList = new ArrayList<>();
+    // private ArrayList<ProductCodeModel> mProdCodeList = new ArrayList<>();
     private ArrayList<SeedBatchNoModel> mMaleBatchNoList = new ArrayList<>();
     private ArrayList<SeedBatchNoModel> mFemaleBatchNoList = new ArrayList<>();
+    //private ArrayList<CropTypeModel> mCropTypeList = new ArrayList<>();
+    private ArrayList<SeedReceiptModel> mSeedProductionCodeList = new ArrayList<>();
 
     private AppCompatEditText mAreaEditText;
 
@@ -98,6 +101,8 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
     private OldGrowerSeedDistributionModel mOldGrowerSeedDistributionModel = new OldGrowerSeedDistributionModel();
 
     private boolean mFirstTimeSelectedCrop = false;
+    private boolean mProductFirstTimeSelected = false;
+    private boolean mGrowerRadioBtnSelected = true;
 
     @Override
     protected int getLayout() {
@@ -117,13 +122,21 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
         mRadioGroup.setOnCheckedChangeListener((radioGroup, i) -> {
             switch (i) {
                 case R.id.direct_to_grower_radio_btn: {
+                    // Log.e("temporary", "is check called grower");
+                    mGrowerRadioBtnSelected = true;
                     mOrganizerNameSpinner.setVisibility(View.GONE);
                     mOrganizerNameTextView.setVisibility(View.GONE);
+                    mProductionCodeSpinner.setAdapter(null);
+                    new GetProductionCodeMasterAsyncTask().execute();
                 }
                 break;
                 case R.id.direct_to_orgnizer_radio_btn: {
+                    //Log.e("temporary", "is check called orgnizer");
+                    mGrowerRadioBtnSelected = false;
                     mOrganizerNameSpinner.setVisibility(View.VISIBLE);
                     mOrganizerNameTextView.setVisibility(View.VISIBLE);
+                    mProductionCodeSpinner.setAdapter(null);
+                    new GetProductionCodeMasterAsyncTask().execute();
                 }
                 break;
             }
@@ -142,11 +155,12 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
         mAddressTextView = findViewById(R.id.address_textview);
         mOrganizerNameTextView = findViewById(R.id.organizer_name_textview);
         mSearchByIdNameSpinner = findViewById(R.id.search_grower_by_id_name);
+        // mCropTypeSpinner = findViewById(R.id.crop_type_down);
 
         mSearchByIdNameSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Log.e("temporary", " mSearchByIdNameSpinner.setOnItemSelectedListener");
+                //   Log.e("temporary", " mSearchByIdNameSpinner.setOnItemSelectedListener");
                 if (l != 0) {
                     mGrowerName.setText(mGrowerList.get(i).getFullName());
                     mUniqueCode.setText(mGrowerList.get(i).getUniqueCode());
@@ -167,12 +181,28 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
         mCropSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Log.e("temporary", "selected item called mFirstTimeSelectedCrop " + mFirstTimeSelectedCrop);
+               // Log.e("temporary", "selected item called mFirstTimeSelectedCrop " + mFirstTimeSelectedCrop);
                 if (mFirstTimeSelectedCrop) {
                     mProductionCodeSpinner.setAdapter(null);
-                    new GetCodeMasterAsyncTask().execute();
+                    new GetProductionCodeMasterAsyncTask().execute();
                 } else {
                     mFirstTimeSelectedCrop = true;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
+
+        mPlantingYearSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+               // Log.e("temporary", "selected item called mProductFirstTimeSelected " + mProductFirstTimeSelected);
+                if (mProductFirstTimeSelected) {
+                    new GetProductionCodeMasterAsyncTask().execute();
+                } else {
+                    mProductFirstTimeSelected = true;
                 }
             }
 
@@ -222,6 +252,7 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
 
         new GetGrowerMasterAsyncTask().execute();
         new GetClusterMasterAsyncTask().execute();
+        // new GetCropTypeMasterAsyncTask().execute();
     }
 
     @Override
@@ -252,11 +283,11 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
                     mCodeScanner.setDecodeCallback(result -> runOnUiThread(() -> {
                         if (!result.getText().isEmpty()) {
                             hideScannerLayout();
-                            Log.e("temporary", " result " + result + " length " + result.getText().length());
+                            // Log.e("temporary", " result " + result + " length " + result.getText().length());
                             String[] results = result.getText().split("~");
 
-                            Log.e("temporary", " results " + results.length + " results " + results/*+" 1 " + results[1]
-                        +" 5 " + results[5]*/);
+                            //  Log.e("temporary", " results " + results.length + " results " + results/*+" 1 " + results[1]
+                            // +" 5 " + results[5]*/);
                             if (results.length > 10 && results[1].contains("MWI")
                             ) {
                                 showToast("Scanner successfully !!");
@@ -285,7 +316,7 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
                         showToast("Camera initialization error: ${it.message}");
                     }));
                 } catch (Exception e) {
-                    Log.e("temporary", " e " + e.getCause());
+                    //   Log.e("temporary", " e " + e.getCause());
                 }
             }
             break;
@@ -293,23 +324,25 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
             case R.id.seed_distribution_submit_btn:
                 if (validation()) {
                     try {
-                        Log.e("temporary", " selection value " + mGrowerList.get(mSearchByIdNameSpinner.getSelectedItemPosition()).getUniqueId());
-                        mOldGrowerSeedDistributionModel.setLoginId(Integer.parseInt(Preferences.get(mContext, Preferences.LOGINID).trim()));
+                        //   Log.e("temporary", " selection value " + mGrowerList.get(mSearchByIdNameSpinner.getSelectedItemPosition()).getUniqueId());
                         mOldGrowerSeedDistributionModel.setCountryId(Integer.parseInt(Preferences.get(mContext, Preferences.COUNTRYCODE)));
-                        mOldGrowerSeedDistributionModel.setGrowerName(mGrowerName.getText().toString());
-                        mOldGrowerSeedDistributionModel.setUniqueCode(mUniqueCode.getText().toString());
-                        mOldGrowerSeedDistributionModel.setGrowerAddress(mAddressTextView.getText().toString());
                         mOldGrowerSeedDistributionModel.setPlantingYear(mPlantingYearSpinner.getSelectedItem().toString());
-                        mOldGrowerSeedDistributionModel.setSeason(mSeasonSpinner.getSelectedItem().toString());
-                        mOldGrowerSeedDistributionModel.setCrop(mCropSpinner.getSelectedItem().toString());
-                        mOldGrowerSeedDistributionModel.setProductionCode(mProductionCodeSpinner.getSelectedItem().toString());
-                        mOldGrowerSeedDistributionModel.setSeedProductionArea(mAreaEditText.getText().toString());
-                        mOldGrowerSeedDistributionModel.setSeedIssueLocation(mClusterSpinner.getSelectedItem().toString());
-                        mOldGrowerSeedDistributionModel.setSeedBatchNoFemale(mFemaleBatchNoSpinner.getSelectedItem().toString());
-                        mOldGrowerSeedDistributionModel.setSeedBatchNoMale(mMaleBatchNoSpinner.getSelectedItem().toString());
-                        mOldGrowerSeedDistributionModel.setIssueDate(mParentSeedIssueDate.getText().toString());
-                        mOldGrowerSeedDistributionModel.setStaffName(mStaffTextView.getText().toString());
-                        mOldGrowerSeedDistributionModel.setUniqueId(mGrowerList.get(mSearchByIdNameSpinner.getSelectedItemPosition()).getUniqueId());
+                        mOldGrowerSeedDistributionModel.setSeasonId(mSeasonList.get(mSeasonSpinner.getSelectedItemPosition()).getSeasonId());
+                        mOldGrowerSeedDistributionModel.setCropId(mCropList.get(mCropSpinner.getSelectedItemPosition()).getCropId());
+                        mOldGrowerSeedDistributionModel.setProductionClusterId(mProdClusterList.get(mClusterSpinner.getSelectedItemPosition()).getProductionClusterId());
+
+                        if (mGrowerRadioBtnSelected) {
+                            mOldGrowerSeedDistributionModel.setOrganizerId(mOrganizerNameList.get(mOrganizerNameSpinner.getSelectedItemPosition()).getUserId());
+                        } else {
+                            mOldGrowerSeedDistributionModel.setOrganizerId(0);
+                        }
+                        mOldGrowerSeedDistributionModel.setGrowerId(mOrganizerNameList.get(mOrganizerNameSpinner.getSelectedItemPosition()).getUserId());
+                        mOldGrowerSeedDistributionModel.setProductionCode(mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getParentSeedReceiptId());
+                        mOldGrowerSeedDistributionModel.setCreatedBy(Preferences.get(mContext, Preferences.USER_ID));
+                        mOldGrowerSeedDistributionModel.setFemaleParentSeedBatchId(mFemaleBatchNoList.get(mFemaleBatchNoSpinner.getSelectedItemPosition()).getParentSeedBatchId());
+                        mOldGrowerSeedDistributionModel.setMaleParentSeedBatchId(mMaleBatchNoList.get(mMaleBatchNoSpinner.getSelectedItemPosition()).getParentSeedBatchId());
+                        mOldGrowerSeedDistributionModel.setIssueDt(mParentSeedIssueDate.getText().toString());
+                        mOldGrowerSeedDistributionModel.setSeedParentArea(Float.parseFloat(mAreaEditText.getText().toString()));
 
                         new AddDataAsyncTask().execute();
                     } catch (Exception e) {
@@ -324,8 +357,26 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
         if (mSearchByIdNameSpinner.getSelectedItemPosition() == -1 || mSearchByIdNameSpinner.getSelectedItemPosition() == 0) {
             showToast("Please search grower first by name or id");
             return false;
+        } else if (mSeasonSpinner.getSelectedItemPosition() == -1) {
+            showToast("Please select season");
+            return false;
+        } else if (mCropSpinner.getSelectedItemPosition() == -1) {
+            showToast("Please select crop");
+            return false;
+        } else if (mProductionCodeSpinner.getSelectedItemPosition() == -1) {
+            showToast("Please select production code");
+            return false;
         } else if (TextUtils.isEmpty(mAreaEditText.getText().toString().trim())) {
             showToast("Please enter seed production area");
+            return false;
+        } else if (mClusterSpinner.getSelectedItemPosition() == -1) {
+            showToast("Please select parent seed issue cluster");
+            return false;
+        } else if (mFemaleBatchNoSpinner.getSelectedItemPosition() == -1) {
+            showToast("Please select parent seed batch no. female");
+            return false;
+        } else if (mMaleBatchNoSpinner.getSelectedItemPosition() == -1) {
+            showToast("Please select parent seed batch no. male");
             return false;
         }
         return true;
@@ -403,7 +454,7 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
 
         @Override
         protected void onPreExecute() {
-            Log.e("temporary", "GetGrowerMasterAsyncTask onPreExecute called");
+            //  Log.e("temporary", "GetGrowerMasterAsyncTask onPreExecute called");
             showProgressDialog(mContext);
             super.onPreExecute();
         }
@@ -460,7 +511,7 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
 
         @Override
         protected void onPreExecute() {
-            Log.e("temporary", "GetSeasonMasterAsyncTask onPreExecute called");
+            // Log.e("temporary", "GetSeasonMasterAsyncTask onPreExecute called");
             showProgressDialog(mContext);
             super.onPreExecute();
         }
@@ -501,7 +552,7 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
 
         @Override
         protected void onPreExecute() {
-            Log.e("temporary", "GetCropMasterAsyncTask onPreExecute called");
+            //   Log.e("temporary", "GetCropMasterAsyncTask onPreExecute called");
             showProgressDialog(mContext);
             super.onPreExecute();
         }
@@ -531,17 +582,19 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
                 mCropList = result;
                 CropAdapter adapter = new CropAdapter(mContext, R.layout.spinner_rows, mCropList);
                 mCropSpinner.setAdapter(adapter);
+                new GetProductionCodeMasterAsyncTask().execute();
                 super.onPostExecute(result);
-                new GetCodeMasterAsyncTask().execute();
+                // new GetCodeMasterAsyncTask().execute();
             }
         }
     }
 
+/*
     private class GetCodeMasterAsyncTask extends AsyncTask<Void, Void, ArrayList<ProductCodeModel>> {
 
         @Override
         protected void onPreExecute() {
-            Log.e("temporary", "GetCodeMasterAsyncTask onPreExecute called");
+           // Log.e("temporary", "GetCodeMasterAsyncTask onPreExecute called");
             showProgressDialog(mContext);
             super.onPreExecute();
         }
@@ -552,7 +605,7 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
             ArrayList<ProductCodeModel> actionModels;
             try {
                 database = new SqlightDatabase(mContext);
-                Log.e("temporary", "asynctask crop code " + mCropList.get(mCropSpinner.getSelectedItemPosition()).getCropCode());
+             //   Log.e("temporary", "asynctask crop code " + mCropList.get(mCropSpinner.getSelectedItemPosition()).getCropCode());
                 actionModels = database.getProdCodeMaster(mCropList.get(mCropSpinner.getSelectedItemPosition()).getCropCode());
             } finally {
                 if (database != null) {
@@ -575,18 +628,23 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
                 mProductionCodeSpinner.setAdapter(adapter);
                 super.onPostExecute(result);
 
-                new GetBatchNoMasterAsyncTask().execute();
+                // new GetBatchNoMasterAsyncTask().execute();
+                new GetSeedReceiptMasterAsyncTask().execute();
+            } else {
+                mMaleBatchNoSpinner.setAdapter(null);
+                mFemaleBatchNoSpinner.setAdapter(null);
+            //    Log.e("temporary", "Product master onPostExecute " + result.size());
             }
-            //  new GetClusterMasterAsyncTask().execute();
         }
     }
+*/
 
 
     private class GetClusterMasterAsyncTask extends AsyncTask<Void, Void, ArrayList<ProductionClusterModel>> {
 
         @Override
         protected void onPreExecute() {
-            Log.e("temporary", "GetClusterMasterAsyncTask onPreExecute called");
+            //  Log.e("temporary", "GetClusterMasterAsyncTask onPreExecute called");
             showProgressDialog(mContext);
             super.onPreExecute();
         }
@@ -621,12 +679,76 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
         }
     }
 
-
-    private class GetBatchNoMasterAsyncTask extends AsyncTask<Void, Void, ArrayList<SeedBatchNoModel>> {
+    private class GetProductionCodeMasterAsyncTask extends AsyncTask<Void, Void, ArrayList<SeedReceiptModel>> {
 
         @Override
         protected void onPreExecute() {
-            Log.e("temporary", "GetBatchNoMasterAsyncTask onPreExecute called");
+           // Log.e("temporary", "GetSeedReceiptMasterAsyncTask onPreExecute called");
+            showProgressDialog(mContext);
+            super.onPreExecute();
+        }
+
+        @Override
+        protected final ArrayList<SeedReceiptModel> doInBackground(Void... voids) {
+            SqlightDatabase database = null;
+            ArrayList<SeedReceiptModel> actionModels;
+            try {
+                database = new SqlightDatabase(mContext);
+                //   Log.e("temporary", "mProdCodeList crop code " + mProdCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getCropCode());
+                actionModels = database.getSeedReceiptMaster();
+            } finally {
+                if (database != null) {
+                    database.close();
+                }
+            }
+            return actionModels;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<SeedReceiptModel> result) {
+            hideProgressDialog();
+            if (mSeedProductionCodeList != null) {
+                mSeedProductionCodeList.clear();
+            }
+            // Log.e("temporary", " result " + result);
+            if (result != null && result.size() > 0) {
+                for (int i = 0; i < result.size(); i++) {
+                   /* Log.e("temporary", " result.get(i).getPlantingYear() " + result.get(i).getPlantingYear()
+                            + " year " + mPlantingYearSpinner.getSelectedItem().toString() +
+                            "\n result.get(i).getCropName() " + result.get(i).getCropName() + " crop name " + mCropList.get(mCropSpinner.getSelectedItemPosition()).getCropName() +
+                            "\nmGrowerRadioBtnSelected " + mGrowerRadioBtnSelected);*/
+                    if (result.get(i).getPlantingYear().equalsIgnoreCase(mPlantingYearSpinner.getSelectedItem().toString()) &&
+                            result.get(i).getCropName().equalsIgnoreCase(mCropList.get(mCropSpinner.getSelectedItemPosition()).getCropName())) {
+                        if (mGrowerRadioBtnSelected) {
+                           // Log.e("temporary", "receipt " + result.get(i).getParentSeedReceiptType());
+                            if (result.get(i).getParentSeedReceiptType().equalsIgnoreCase("Country Level")) {
+                             //   Log.e("temporary", "country level");
+                                mSeedProductionCodeList.add(result.get(i));
+                            }
+                        } else {
+                            if (result.get(i).getParentSeedReceiptType().equalsIgnoreCase("Production Organizer Level")) {
+                              //  Log.e("temporary", "Production Organizer Level");
+                                mSeedProductionCodeList.add(result.get(i));
+                            }
+                        }
+                    }
+                }
+                ProductCodeAdapter adapter = new ProductCodeAdapter(mContext, R.layout.spinner_rows, mSeedProductionCodeList);
+                mProductionCodeSpinner.setAdapter(adapter);
+                if (mSeedProductionCodeList.size() > 0) {
+                    new GetBatchNoMasterAsyncTask().execute();
+                } else {
+                    mMaleBatchNoSpinner.setAdapter(null);
+                    mFemaleBatchNoSpinner.setAdapter(null);
+                }
+            }
+        }
+    }
+
+    private class GetBatchNoMasterAsyncTask extends AsyncTask<Void, Void, ArrayList<SeedBatchNoModel>> {
+        @Override
+        protected void onPreExecute() {
+            //  Log.e("temporary", "GetBatchNoMasterAsyncTask onPreExecute called");
             showProgressDialog(mContext);
             super.onPreExecute();
         }
@@ -637,8 +759,8 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
             ArrayList<SeedBatchNoModel> actionModels;
             try {
                 database = new SqlightDatabase(mContext);
-                Log.e("temporary", "mProdCodeList crop code " + mProdCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getCropCode());
-                actionModels = database.getSeedBatchNo(mProdCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getCropCode());
+                //   Log.e("temporary", "mProdCodeList crop code " + mSeedReceiptList.get(0).getProductionCode());
+                actionModels = database.getSeedBatchNo(mSeedProductionCodeList.get(0).getProductionCode());
             } finally {
                 if (database != null) {
                     database.close();
@@ -656,13 +778,29 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
             if (mFemaleBatchNoList != null) {
                 mFemaleBatchNoList.clear();
             }
-            Log.e("temporary", "result " + result);
+            //  Log.e("temporary", "result " + result);
             if (result != null && result.size() > 0) {
                 for (int i = 0; i < result.size(); i++) {
                     if (result.get(i).getParentType().equalsIgnoreCase("Female Batch No")) {
-                        mFemaleBatchNoList.add(result.get(i));
+                        if (mGrowerRadioBtnSelected) {
+                            if (result.get(i).getParentSeedReceiptType().equalsIgnoreCase("Country Level")) {
+                                mFemaleBatchNoList.add(result.get(i));
+                            }
+                        } else {
+                            if (result.get(i).getParentSeedReceiptType().equalsIgnoreCase("Production Organizer Level")) {
+                                mFemaleBatchNoList.add(result.get(i));
+                            }
+                        }
                     } else {
-                        mMaleBatchNoList.add(result.get(i));
+                        if (mGrowerRadioBtnSelected) {
+                            if (result.get(i).getParentSeedReceiptType().equalsIgnoreCase("Country Level")) {
+                                mMaleBatchNoList.add(result.get(i));
+                            }
+                        } else {
+                            if (result.get(i).getParentSeedReceiptType().equalsIgnoreCase("Production Organizer Level")) {
+                                mMaleBatchNoList.add(result.get(i));
+                            }
+                        }
                     }
                 }
                 SeedBatchNoMaleAdapter adapter = new SeedBatchNoMaleAdapter(mContext, R.layout.spinner_rows, mMaleBatchNoList);
@@ -674,6 +812,47 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
             }
         }
     }
+
+    /*private class GetCropTypeMasterAsyncTask extends AsyncTask<Void, Void, ArrayList<CropTypeModel>> {
+
+        @Override
+        protected void onPreExecute() {
+          //  Log.e("temporary", "GetCropTypeMasterAsyncTask onPreExecute called");
+            showProgressDialog(mContext);
+            super.onPreExecute();
+        }
+
+        @Override
+        protected final ArrayList<CropTypeModel> doInBackground(Void... voids) {
+            SqlightDatabase database = null;
+            ArrayList<CropTypeModel> actionModels;
+            try {
+                database = new SqlightDatabase(mContext);
+                actionModels = database.getCropType();
+            } finally {
+                if (database != null) {
+                    database.close();
+                }
+            }
+            return actionModels;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<CropTypeModel> result) {
+            hideProgressDialog();
+           // Log.e("temporary", " result " + result);
+            if (mCropTypeList != null) {
+                mCropTypeList.clear();
+            }
+            if (result != null && result.size() > 0) {
+             //   Log.e("temporary", " result.size() " + result.size());
+                mCropTypeList = result;
+                CropTypeAdapter adapter = new CropTypeAdapter(mContext, R.layout.spinner_rows, mCropTypeList);
+                mCropTypeSpinner.setAdapter(adapter);
+                super.onPostExecute(result);
+            }
+        }
+    }*/
 
 
     @Override

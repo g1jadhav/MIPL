@@ -1316,7 +1316,6 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
 
     @Override
     public void onBackPressed() {
-        Log.e("temporary", "backpressed " + mCodeScannerView);
         if (mCodeScannerView != null && mCodeScannerView.getVisibility() == View.VISIBLE) {
             mCodeScanner.releaseResources();
             hideScannerLayout();
