@@ -20,6 +20,7 @@ import mahyco.mipl.nxg.model.SeasonModel;
 import mahyco.mipl.nxg.model.SeedBatchNoModel;
 import mahyco.mipl.nxg.model.SeedReceiptModel;
 import mahyco.mipl.nxg.model.SuccessModel;
+import mahyco.mipl.nxg.view.seeddistribution.ParentSeedDistributionParameter;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -81,7 +82,7 @@ public interface Api {
 
     //@Body list: List<TourEventParamItem>
     @POST(Constants.CREATE_DISTRIBUTION)
-    Call<SuccessModel> seedDistribution(@Body ArrayList<OldGrowerSeedDistributionModel> jsonObject);
+    Call<SuccessModel> seedDistribution(@Body /*ArrayList<OldGrowerSeedDistributionModel>*/ParentSeedDistributionParameter jsonObject);
 
     @POST(Constants.PARENT_SEED_DISTRIBUTION_GET_ALL)
     Call<List<GetAllSeedDistributionModel>> getSeedDistributionList(@Body JsonObject jsonObject);

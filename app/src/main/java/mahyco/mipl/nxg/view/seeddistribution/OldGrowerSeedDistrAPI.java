@@ -30,7 +30,7 @@ public class OldGrowerSeedDistrAPI {
         progressDialog.setMessage("Please Wait..");
     }
 
-    public void createDistribution(ArrayList<OldGrowerSeedDistributionModel> jsonObject) {
+    public void createDistribution(/*ArrayList<OldGrowerSeedDistributionModel>*/ParentSeedDistributionParameter jsonObject) {
         try {
             if (!progressDialog.isShowing())
                 progressDialog.show();

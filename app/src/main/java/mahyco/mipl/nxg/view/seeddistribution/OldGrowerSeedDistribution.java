@@ -684,7 +684,7 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
 
         @Override
         protected void onPreExecute() {
-            Log.e("temporary", "GetSeedReceiptMasterAsyncTask onPreExecute called");
+          //  Log.e("temporary", "GetSeedReceiptMasterAsyncTask onPreExecute called");
             showProgressDialog(mContext);
             super.onPreExecute();
         }
