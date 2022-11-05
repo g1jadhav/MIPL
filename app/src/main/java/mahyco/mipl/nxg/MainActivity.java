@@ -224,8 +224,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 //downloadLocationData();
                 Intent upload = new Intent(context, /*ActivityUpload*/NewActivityUpload.class);
                 startActivity(upload);
-
-
                 break;
 
             case R.id.new_grower_registration_layout: {
