@@ -1,15 +1,16 @@
 package mahyco.mipl.nxg.view.registration;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.JsonObject;
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
@@ -21,7 +22,7 @@ import mahyco.mipl.nxg.model.CategoryModel;
 
 public class Registration extends AppCompatActivity implements RegistrationListener {
 
-    EditText et_staffname, et_staffid, et_mobileno, et_password, et_confirmpassword;
+    EditText et_staffname, et_staffid, et_mobileno, et_password, et_confirmpassword, et_email;
     SearchableSpinner sp_country;
     Context context;
 
@@ -31,7 +32,8 @@ public class Registration extends AppCompatActivity implements RegistrationListe
     RegisrationAPI regisrationAPI;
     ArrayAdapter adapter;
     JsonObject categoryJson;
-    int ccode=0;
+    int ccode = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -50,8 +52,7 @@ public class Registration extends AppCompatActivity implements RegistrationListe
         et_password = findViewById(R.id.registration_password);
         et_confirmpassword = findViewById(R.id.registration_confirm_password);
         sp_country = findViewById(R.id.registration_country_drop_down);
-
-
+        et_email = findViewById(R.id.emailid);
 
         categoryJson = new JsonObject();
         categoryJson.addProperty("filterValue", "0");
@@ -71,6 +72,31 @@ public class Registration extends AppCompatActivity implements RegistrationListe
 
     public void register() {
 
+        if (TextUtils.isEmpty(et_staffname.getText().toString().trim())) {
+            Toast.makeText(this, "Please enter staff name", Toast.LENGTH_SHORT).show();
+            return;
+        } else if (TextUtils.isEmpty(et_staffid.getText().toString().trim())) {
+            Toast.makeText(this, "Please enter staff id", Toast.LENGTH_SHORT).show();
+            return;
+        } else if (TextUtils.isEmpty(et_mobileno.getText().toString().trim())) {
+            Toast.makeText(this, "Please enter mobile no", Toast.LENGTH_SHORT).show();
+            return;
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(et_email.getText().toString().trim()).matches()) {
+            Toast.makeText(this, "Please enter valid email id", Toast.LENGTH_SHORT).show();
+            return;
+        } else if (TextUtils.isEmpty(et_email.getText().toString().trim())) {
+            Toast.makeText(this, "Please enter mobile no", Toast.LENGTH_SHORT).show();
+            return;
+        } else if (TextUtils.isEmpty(et_password.getText().toString().trim())) {
+            Toast.makeText(this, "Please enter password", Toast.LENGTH_SHORT).show();
+            return;
+        } else if (TextUtils.isEmpty(et_confirmpassword.getText().toString().trim())) {
+            Toast.makeText(this, "Please enter confirm password", Toast.LENGTH_SHORT).show();
+            return;
+        } else if (!et_password.getText().toString().trim().equalsIgnoreCase(et_confirmpassword.getText().toString().trim())) {
+            Toast.makeText(this, "Password and confirm password not match", Toast.LENGTH_SHORT).show();
+            return;
+        }
         str_staffname = et_staffname.getText().toString().trim();
         str_staffid = et_staffid.getText().toString().trim();
         str_mobile = et_mobileno.getText().toString().trim();
@@ -78,7 +104,7 @@ public class Registration extends AppCompatActivity implements RegistrationListe
         str_confirmpassword = et_confirmpassword.getText().toString().trim();
         str_countrycode = sp_country.getSelectedItem().toString();
 
-        Toast.makeText(context, ""+str_countrycode, Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "" + str_countrycode, Toast.LENGTH_SHORT).show();
 
    /*     if(str_countrycode.trim().equals("Zimbabwe"))
         {
@@ -104,7 +130,7 @@ public class Registration extends AppCompatActivity implements RegistrationListe
         jsonObject.addProperty("UserType", "OnRole");
         jsonObject.addProperty("UserName", str_staffname);
         jsonObject.addProperty("UserCode", str_staffid);
-        jsonObject.addProperty("EmailId", "");
+        jsonObject.addProperty("EmailId", et_password.getText().toString().trim());
         jsonObject.addProperty("MobileNo", str_mobile);
         jsonObject.addProperty("Password", str_password);
         jsonObject.addProperty("ConfirmPassword", str_confirmpassword);
@@ -125,7 +151,7 @@ public class Registration extends AppCompatActivity implements RegistrationListe
 
     @Override
     public void onResult(String result) {
-        Toast.makeText(context, ""+result, Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "" + result, Toast.LENGTH_SHORT).show();
 
         finish();
 
@@ -133,17 +159,17 @@ public class Registration extends AppCompatActivity implements RegistrationListe
 
     @Override
     public void onListResponce(List<CategoryModel> result) {
-        try{
+        try {
 
-            adapter=new ArrayAdapter(context, android.R.layout.simple_list_item_1,result);
+            adapter = new ArrayAdapter(context, android.R.layout.simple_list_item_1, result);
             sp_country.setAdapter(adapter);
             sp_country.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                    CategoryModel categoryModel=(CategoryModel)parent.getItemAtPosition(position);
-                    Toast.makeText(context, ""+categoryModel.getCategoryName(), Toast.LENGTH_SHORT).show();
-                    ccode=categoryModel.getCategoryId();
+                    CategoryModel categoryModel = (CategoryModel) parent.getItemAtPosition(position);
+                    Toast.makeText(context, "" + categoryModel.getCategoryName(), Toast.LENGTH_SHORT).show();
+                    ccode = categoryModel.getCategoryId();
                 }
 
                 @Override
@@ -152,8 +178,7 @@ public class Registration extends AppCompatActivity implements RegistrationListe
                 }
             });
 
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
 
         }
     }

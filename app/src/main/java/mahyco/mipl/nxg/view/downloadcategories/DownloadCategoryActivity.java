@@ -422,6 +422,7 @@ public class DownloadCategoryActivity extends BaseActivity implements View.OnCli
                 switch (mDatabaseName) {
                     case LOCATION_MASTER_DATABASE:
                         database.trucateTable("tbl_locationmaster");
+                        Preferences.save(mContext, Preferences.COUNTRY_MASTER_ID,"");
                         for (CategoryChildModel param : mLocationMasterList) {
                             if (param.getParentId() == 0) {
                                 Preferences.save(mContext, Preferences.COUNTRY_MASTER_ID, "" + param.getCountryMasterId());
@@ -432,6 +433,7 @@ public class DownloadCategoryActivity extends BaseActivity implements View.OnCli
                     case CATEGORY_MASTER_DATABASE:
                         database = new SqlightDatabase(mContext);
                         database.trucateTable("tbl_categorymaster");
+                        Preferences.save(mContext, Preferences.STORED_CATEGORY_SIZE, "");
                         for (CategoryModel param : mCategoryMasterList) {
                             Preferences.save(mContext, Preferences.STORED_CATEGORY_SIZE, "" + mCategoryMasterList.size());
                             database.addCategory(param);

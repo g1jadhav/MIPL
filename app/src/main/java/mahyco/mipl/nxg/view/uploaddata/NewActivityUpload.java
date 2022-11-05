@@ -742,7 +742,7 @@ public class NewActivityUpload extends BaseActivity implements View.OnClickListe
             old.setMaleParentSeedBatchId(mSeedDistributionList.get(i).getMaleParentSeedBatchId());
             old.setIssueDt(mSeedDistributionList.get(i).getIssueDt());
             old.setSeedParentArea(mSeedDistributionList.get(i).getSeedParentArea());
-            old.setCreatedBy(mSeedDistributionList.get(0).getCreatedBy());
+            old.setCreatedBy(mSeedDistributionList.get(i).getCreatedBy());
             list.add(old);
         }
         /*JsonObject jsonObject = new JsonObject();
