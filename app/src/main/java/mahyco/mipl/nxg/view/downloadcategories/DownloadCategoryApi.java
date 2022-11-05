@@ -14,6 +14,7 @@ import mahyco.mipl.nxg.model.CategoryModel;
 import mahyco.mipl.nxg.model.CropModel;
 import mahyco.mipl.nxg.model.CropTypeModel;
 import mahyco.mipl.nxg.model.DownloadGrowerModel;
+import mahyco.mipl.nxg.model.GetAllSeedDistributionModel;
 import mahyco.mipl.nxg.model.ProductCodeModel;
 import mahyco.mipl.nxg.model.ProductionClusterModel;
 import mahyco.mipl.nxg.model.SeasonModel;
@@ -418,4 +419,41 @@ public class DownloadCategoryApi {
         }
     }
 
+    public void getAllSeedDistributionList(JsonObject jsonObject) {
+        try {
+            if (!progressDialog.isShowing())
+                progressDialog.show();
+
+            Call<List<GetAllSeedDistributionModel>> call = null;
+            call = RetrofitClient.getInstance().getMyApi().getSeedDistributionList(jsonObject);
+            call.enqueue(new Callback<List<GetAllSeedDistributionModel>>() {
+                @Override
+                public void onResponse(Call<List<GetAllSeedDistributionModel>> call, Response<List<GetAllSeedDistributionModel>> response) {
+
+                    if (progressDialog.isShowing())
+                        progressDialog.dismiss();
+
+                    if (response.body() != null) {
+                        List<GetAllSeedDistributionModel> result = response.body();
+                        try {
+                            resultOutput.onListAllSeedDistributionResponse(result);
+                        } catch (NullPointerException e) {
+                            Toast.makeText(context, "Error is " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        } catch (Exception e) {
+                            Toast.makeText(context, "Error is " + e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<GetAllSeedDistributionModel>> call, Throwable t) {
+                    if (progressDialog.isShowing())
+                        progressDialog.dismiss();
+                    Log.e("Error is", t.getMessage());
+                }
+            });
+        } catch (Exception e) {
+
+        }
+    }
 }

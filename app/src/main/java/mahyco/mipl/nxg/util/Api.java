@@ -2,6 +2,8 @@ package mahyco.mipl.nxg.util;
 
 import com.google.gson.JsonObject;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +12,7 @@ import mahyco.mipl.nxg.model.CategoryModel;
 import mahyco.mipl.nxg.model.CropModel;
 import mahyco.mipl.nxg.model.CropTypeModel;
 import mahyco.mipl.nxg.model.DownloadGrowerModel;
+import mahyco.mipl.nxg.model.GetAllSeedDistributionModel;
 import mahyco.mipl.nxg.model.OldGrowerSeedDistributionModel;
 import mahyco.mipl.nxg.model.ProductCodeModel;
 import mahyco.mipl.nxg.model.ProductionClusterModel;
@@ -21,6 +24,7 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
@@ -78,4 +82,7 @@ public interface Api {
     //@Body list: List<TourEventParamItem>
     @POST(Constants.CREATE_DISTRIBUTION)
     Call<SuccessModel> seedDistribution(@Body ArrayList<OldGrowerSeedDistributionModel> jsonObject);
+
+    @POST(Constants.PARENT_SEED_DISTRIBUTION_GET_ALL)
+    Call<List<GetAllSeedDistributionModel>> getSeedDistributionList(@Body JsonObject jsonObject);
 }

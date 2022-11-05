@@ -331,7 +331,7 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
                         mOldGrowerSeedDistributionModel.setCropId(mCropList.get(mCropSpinner.getSelectedItemPosition()).getCropId());
                         mOldGrowerSeedDistributionModel.setProductionClusterId(mProdClusterList.get(mClusterSpinner.getSelectedItemPosition()).getProductionClusterId());
 
-                        if (mGrowerRadioBtnSelected) {
+                        if (!mGrowerRadioBtnSelected) {
                             mOldGrowerSeedDistributionModel.setOrganizerId(mOrganizerNameList.get(mOrganizerNameSpinner.getSelectedItemPosition()).getUserId());
                         } else {
                             mOldGrowerSeedDistributionModel.setOrganizerId(0);
@@ -366,7 +366,8 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
         } else if (mProductionCodeSpinner.getSelectedItemPosition() == -1) {
             showToast("Please select production code");
             return false;
-        } else if (TextUtils.isEmpty(mAreaEditText.getText().toString().trim())) {
+        } else if (TextUtils.isEmpty(mAreaEditText.getText().toString().trim()) ||
+                mAreaEditText.getText().toString().trim().equalsIgnoreCase(".")) {
             showToast("Please enter seed production area");
             return false;
         } else if (mClusterSpinner.getSelectedItemPosition() == -1) {
@@ -683,7 +684,7 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
 
         @Override
         protected void onPreExecute() {
-           // Log.e("temporary", "GetSeedReceiptMasterAsyncTask onPreExecute called");
+            Log.e("temporary", "GetSeedReceiptMasterAsyncTask onPreExecute called");
             showProgressDialog(mContext);
             super.onPreExecute();
         }
@@ -694,7 +695,7 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
             ArrayList<SeedReceiptModel> actionModels;
             try {
                 database = new SqlightDatabase(mContext);
-                //   Log.e("temporary", "mProdCodeList crop code " + mProdCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getCropCode());
+                //  Log.e("temporary", "mProdCodeList crop code " + mProdCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getCropCode());
                 actionModels = database.getSeedReceiptMaster();
             } finally {
                 if (database != null) {
@@ -710,24 +711,24 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
             if (mSeedProductionCodeList != null) {
                 mSeedProductionCodeList.clear();
             }
-            // Log.e("temporary", " result " + result);
+//             Log.e("temporary", " result " + result);
             if (result != null && result.size() > 0) {
                 for (int i = 0; i < result.size(); i++) {
-                   /* Log.e("temporary", " result.get(i).getPlantingYear() " + result.get(i).getPlantingYear()
+                    /*Log.e("temporary", " result.get(i).getPlantingYear() " + result.get(i).getPlantingYear()
                             + " year " + mPlantingYearSpinner.getSelectedItem().toString() +
                             "\n result.get(i).getCropName() " + result.get(i).getCropName() + " crop name " + mCropList.get(mCropSpinner.getSelectedItemPosition()).getCropName() +
                             "\nmGrowerRadioBtnSelected " + mGrowerRadioBtnSelected);*/
                     if (result.get(i).getPlantingYear().equalsIgnoreCase(mPlantingYearSpinner.getSelectedItem().toString()) &&
                             result.get(i).getCropName().equalsIgnoreCase(mCropList.get(mCropSpinner.getSelectedItemPosition()).getCropName())) {
                         if (mGrowerRadioBtnSelected) {
-                           // Log.e("temporary", "receipt " + result.get(i).getParentSeedReceiptType());
+                          // Log.e("temporary", "receipt " + result.get(i).getParentSeedReceiptType());
                             if (result.get(i).getParentSeedReceiptType().equalsIgnoreCase("Country Level")) {
-                             //   Log.e("temporary", "country level");
+                              // Log.e("temporary", "country level");
                                 mSeedProductionCodeList.add(result.get(i));
                             }
                         } else {
                             if (result.get(i).getParentSeedReceiptType().equalsIgnoreCase("Production Organizer Level")) {
-                              //  Log.e("temporary", "Production Organizer Level");
+                              // Log.e("temporary", "Production Organizer Level");
                                 mSeedProductionCodeList.add(result.get(i));
                             }
                         }

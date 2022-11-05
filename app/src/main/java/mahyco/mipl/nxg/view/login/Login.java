@@ -87,7 +87,7 @@ public class Login extends AppCompatActivity implements LoginAPIListener {
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("username", str_usercode);
             jsonObject.addProperty("password", str_password);
-            jsonObject.addProperty("CountryId", countrycode);
+            jsonObject.addProperty("CountryId", /*countrycode*/1);
             loginAPI.validateLogin(jsonObject);
         }
 

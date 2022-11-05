@@ -28,7 +28,7 @@ public class ParentSeedDistributionParameter {
         @SerializedName("OrganizerId")
         int organizerId;
 
-        @SerializedName("ProductionCode")
+        @SerializedName("ParentSeedReceiptId")
         int productionCode;
 
         @SerializedName("CreatedBy")
@@ -46,7 +46,7 @@ public class ParentSeedDistributionParameter {
         @SerializedName("GrowerId")
         int growerId;
 
-        @SerializedName("SeedParentArea")
+        @SerializedName("SeedProductionArea")
         float seedParentArea;
     }
 }

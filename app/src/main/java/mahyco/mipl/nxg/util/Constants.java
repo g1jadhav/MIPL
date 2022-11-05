@@ -2,7 +2,7 @@ package mahyco.mipl.nxg.util;
 
 public class Constants {
     //Live Server
-    public static final String BASE_URL = "http://10.80.50.153/MIPL/api/";
+    public static final String BASE_URL = "http://10.80.50.26/MIPL/api/";
   // Test Server
    // public static final String BASE_URL = "http://10.80.50.153/MIPL/api/";
 
@@ -21,5 +21,6 @@ public class Constants {
     public static final String MALE_FEMALE_BATCH = "parentSeedBatch/getall";
     public static final String CREATE_DISTRIBUTION = "parentSeedDistribution/create";
     public static final String CROP_TYPE = "cropType/getall";
+    public static final String PARENT_SEED_DISTRIBUTION_GET_ALL = "parentSeedDistribution/getall";
 
 }

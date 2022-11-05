@@ -7,6 +7,7 @@ import mahyco.mipl.nxg.model.CategoryModel;
 import mahyco.mipl.nxg.model.CropModel;
 import mahyco.mipl.nxg.model.CropTypeModel;
 import mahyco.mipl.nxg.model.DownloadGrowerModel;
+import mahyco.mipl.nxg.model.GetAllSeedDistributionModel;
 import mahyco.mipl.nxg.model.ProductCodeModel;
 import mahyco.mipl.nxg.model.ProductionClusterModel;
 import mahyco.mipl.nxg.model.SeasonModel;
@@ -25,4 +26,5 @@ public interface DownloadCategoryListListener {
     public void onListSeedReceiptNoResponse(List<SeedReceiptModel> result);
     public void onListSeedBatchNoResponse(List<SeedBatchNoModel> result);
     public void onListCropTypeResponse(List<CropTypeModel> result);
+    public void onListAllSeedDistributionResponse(List<GetAllSeedDistributionModel> result);
 }

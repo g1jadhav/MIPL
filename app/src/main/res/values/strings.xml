@@ -278,6 +278,7 @@
     <string name="download_seed_batch_no">Download Seed Batch No</string>
     <string name="download_crop_type_master">Download Crop Type Master</string>
     <string name="download_parent_seed_receipt">Download Parent Seed Receipt</string>
+    <string name="download_parent_seed_distribution">Download Parent Seed Distribution</string>
 
     <string-array name="country_array">
         <item>Select Country</item>

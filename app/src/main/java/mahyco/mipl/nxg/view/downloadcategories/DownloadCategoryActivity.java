@@ -18,6 +18,7 @@ import mahyco.mipl.nxg.model.CategoryModel;
 import mahyco.mipl.nxg.model.CropModel;
 import mahyco.mipl.nxg.model.CropTypeModel;
 import mahyco.mipl.nxg.model.DownloadGrowerModel;
+import mahyco.mipl.nxg.model.GetAllSeedDistributionModel;
 import mahyco.mipl.nxg.model.ProductCodeModel;
 import mahyco.mipl.nxg.model.ProductionClusterModel;
 import mahyco.mipl.nxg.model.SeasonModel;
@@ -40,6 +41,7 @@ public class DownloadCategoryActivity extends BaseActivity implements View.OnCli
     private CardView mSeedBatchMaster;
     private CardView mCropTypeMaster;
     private CardView mParentSeedReceiptMaster;
+    private CardView mGetAllSeedDistributionMaster;
 
     private JsonObject mJsonObjectCategory;
 
@@ -55,6 +57,7 @@ public class DownloadCategoryActivity extends BaseActivity implements View.OnCli
     private List<SeedBatchNoModel> mSeedBatchNoList;
     private List<CropTypeModel> mCropTypeList;
     private List<SeedReceiptModel> mParentSeedReceiptList;
+    private List<GetAllSeedDistributionModel> mGetAllSeedDistributionList;
 
     private String mDatabaseName = "";
     final String LOCATION_MASTER_DATABASE = "LocationMaster";
@@ -67,6 +70,7 @@ public class DownloadCategoryActivity extends BaseActivity implements View.OnCli
     final String SEED_BATCH_NO_MASTER_DATABASE = "SeedBatchNoMaster";
     final String CROP_TYPE_MASTER_DATABASE = "CropTypeMaster";
     final String PARENT_SEED_RECEIPT_MASTER_DATABASE = "ParentSeedReceiptMaster";
+    final String GET_ALL_SEED_DISTRIBUTION_MASTER_DATABASE = "GetAllSeedDistributionMaster";
 
 
     @Override
@@ -91,6 +95,7 @@ public class DownloadCategoryActivity extends BaseActivity implements View.OnCli
         mSeedBatchMaster = findViewById(R.id.download_seed_batch_master_layout);
         mCropTypeMaster = findViewById(R.id.download_crop_type_master_layout);
         mParentSeedReceiptMaster = findViewById(R.id.download_parent_seed_receipt_master_layout);
+        mGetAllSeedDistributionMaster = findViewById(R.id.download_parent_seed_distribution_master_layout);
 
         mCategoryMaster.setOnClickListener(this);
         mLocationMaster.setOnClickListener(this);
@@ -102,6 +107,7 @@ public class DownloadCategoryActivity extends BaseActivity implements View.OnCli
         mSeedBatchMaster.setOnClickListener(this);
         mCropTypeMaster.setOnClickListener(this);
         mParentSeedReceiptMaster.setOnClickListener(this);
+        mGetAllSeedDistributionMaster.setOnClickListener(this);
 
         mDownloadCategoryApi = new DownloadCategoryApi(mContext, this);
     }
@@ -138,6 +144,9 @@ public class DownloadCategoryActivity extends BaseActivity implements View.OnCli
                 break;
             case R.id.download_parent_seed_receipt_master_layout:
                 downloadParentSeedReceiptMasterData();
+                break;
+            case R.id.download_parent_seed_distribution_master_layout:
+                downloadAllSeedDistributionMasterData();
                 break;
         }
     }
@@ -261,6 +270,18 @@ public class DownloadCategoryActivity extends BaseActivity implements View.OnCli
         showNoInternetDialog(mContext, "Crop Type Master Downloaded Successfully");
         new MasterAsyncTask().execute();
     }
+
+    @Override
+    public void onListAllSeedDistributionResponse(List<GetAllSeedDistributionModel> lst) {
+        if (mGetAllSeedDistributionList != null) {
+            mGetAllSeedDistributionList.clear();
+        }
+        mGetAllSeedDistributionList = lst;
+        mDatabaseName = "GetAllSeedDistributionMaster";
+        showNoInternetDialog(mContext, "All Seed Distribution Master Downloaded Successfully");
+        new MasterAsyncTask().execute();
+    }
+
 
     private void downloadLocationData() {
         if (checkInternetConnection(mContext)) {
@@ -411,6 +432,20 @@ public class DownloadCategoryActivity extends BaseActivity implements View.OnCli
             showNoInternetDialog(mContext, "Please check your internet connection");
         }
     }
+    private void downloadAllSeedDistributionMasterData() {
+        if (checkInternetConnection(mContext)) {
+            try {
+                mJsonObjectCategory = null;
+                mJsonObjectCategory = new JsonObject();
+                mJsonObjectCategory.addProperty("filterValue", "");
+                mJsonObjectCategory.addProperty("FilterOption", "");
+                mDownloadCategoryApi.getAllSeedDistributionList(mJsonObjectCategory);
+            } catch (Exception e) {
+            }
+        } else {
+            showNoInternetDialog(mContext, "Please check your internet connection");
+        }
+    }
 
 
     private class MasterAsyncTask extends AsyncTask<Void, Void, Void> {
@@ -502,6 +537,14 @@ public class DownloadCategoryActivity extends BaseActivity implements View.OnCli
                             database.addSeedReceipt(param);
                         }
                         break;
+                    case GET_ALL_SEED_DISTRIBUTION_MASTER_DATABASE:
+                        database = new SqlightDatabase(mContext);
+                        database.trucateTable("tbl_allseeddistributionmaster");
+//                        Log.e("temporary","mGetAllSeedDistributionList "+ mGetAllSeedDistributionList.size());
+                        for (GetAllSeedDistributionModel param : mGetAllSeedDistributionList) {
+                            database.addAllSeedDistributionList(param);
+                        }
+                        break;
                 }
             } finally {
                 switch (mDatabaseName) {
@@ -534,6 +577,9 @@ public class DownloadCategoryActivity extends BaseActivity implements View.OnCli
                         break;
                     case PARENT_SEED_RECEIPT_MASTER_DATABASE:
                         mParentSeedReceiptList.clear();
+                        break;
+                    case GET_ALL_SEED_DISTRIBUTION_MASTER_DATABASE:
+                        mGetAllSeedDistributionList.clear();
                         break;
                 }
                 if (database != null) {
@@ -571,8 +617,8 @@ public class DownloadCategoryActivity extends BaseActivity implements View.OnCli
             Log.e("temporary"," result "+result);
             if (result != null && result.size() > 0) {
                 for (int i = 0; i < result.size(); i++) {
-                    Log.e("temporary"," getCropType "+result.get(i).getProductionCode()+
-                            " getCropTypeId "+result.get(i).getCropName());
+                    Log.e("temporary"," year "+result.get(i).getPlantingYear()+
+                            " crop name "+result.get(i).getCropName());
                 }
             }
             super.onPostExecute(result);

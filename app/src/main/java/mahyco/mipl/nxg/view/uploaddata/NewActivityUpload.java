@@ -188,19 +188,14 @@ public class NewActivityUpload extends BaseActivity implements View.OnClickListe
 
     @Override
     public void onSeedDistributionResult(SuccessModel result) {
-        /*if (result.getStatus().equalsIgnoreCase("Success")) {
-            Log.e("temporary", "result.getStatus().equalsIgnoreCase(\"Success\")");
+        if (result.getStatus().equalsIgnoreCase("Success")) {
             mResponseString = result.getComment();
             showNoInternetDialog(mContext, mResponseString);
-            new DeleteParentSeedDistributiSyncSuccessfully().execute();
-        }*/
-
-        if (mResponseString.contains("Error")) {
-            showNoInternetDialog(mContext, mResponseString);
-        } else {
             showNoInternetDialog(mContext, "New Parent Seed Distribution Record/s Uploaded Successfully");
+            new DeleteParentSeedDistributiSyncSuccessfully().execute();
+        } else {
+            showNoInternetDialog(mContext, result.getComment());
         }
-        new DeleteParentSeedDistributiSyncSuccessfully().execute();
     }
 
     @Override
@@ -810,7 +805,7 @@ public class NewActivityUpload extends BaseActivity implements View.OnClickListe
         protected void onPostExecute(Boolean deleted) {
 //            Log.e("temporary", " onPostExecute deleted " + deleted);
             if (deleted) {
-
+                mSeedDistributionRecords.setText(getString(R.string.no_of_records_for_upload, 0));
             }
             /*new GetUpadteSeedDistrAfterDeleteAsyncTaskList().execute();*/
             super.onPostExecute(deleted);

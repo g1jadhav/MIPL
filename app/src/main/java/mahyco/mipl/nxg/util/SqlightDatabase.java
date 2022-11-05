@@ -15,6 +15,7 @@ import mahyco.mipl.nxg.model.CategoryModel;
 import mahyco.mipl.nxg.model.CropModel;
 import mahyco.mipl.nxg.model.CropTypeModel;
 import mahyco.mipl.nxg.model.DownloadGrowerModel;
+import mahyco.mipl.nxg.model.GetAllSeedDistributionModel;
 import mahyco.mipl.nxg.model.GrowerModel;
 import mahyco.mipl.nxg.model.OldGrowerSeedDistributionModel;
 import mahyco.mipl.nxg.model.ProductCodeModel;
@@ -283,6 +284,57 @@ public class SqlightDatabase extends SQLiteOpenHelper {
                 "    ModifiedDt  TEXT)";
 
         db.execSQL(createcroptypemaster);
+
+        String createallseeddistributionmaster = "Create table tbl_allseeddistributionmaster(\n" +
+                " TempID Integer PRIMARY KEY AUTOINCREMENT,\n" +
+                "    ParentSeedDistributionId INTEGER,\n" +
+                " GrowerId INTEGER,\n" +
+                " CountryId INTEGER,\n" +
+                " PlantingYear text,\n" +
+                " SeasonId INTEGER,\n" +
+                " CropId INTEGER,\n" +
+                " OrganizerId INTEGER,\n" +
+                " ParentSeedReceiptId INTEGER,\n" +
+                " SeedProductionArea REAL,\n" +
+                " ProductionClusterId INTEGER,\n" +
+                " FemaleParentSeedBatchId INTEGER,\n" +
+                " MaleParentSeedBatchId INTEGER,\n" +
+                " IssueDt text,\n" +
+                " CreatedBy text,\n" +
+                " CreatedDt text,\n" +
+                " ModifiedBy text,\n" +
+                " ModifiedDt text,\n" +
+                " CountryName text,\n" +
+                " CountryCode text,\n" +
+                " Season text,\n" +
+                " CropCode text,\n" +
+                " CropName text,\n" +
+                " Grower text,\n" +
+                " GrowerUniqueId text,\n" +
+                " GrowerFullName text,\n" +
+                " GrowerMobileNo text,\n" +
+                " GrowerUniqueCode text,\n" +
+                " Organizer text,\n" +
+                " OrganizerUniqueId text,\n" +
+                " OrganizerFullName text,\n" +
+                " OrganizerMobileNo text,\n" +
+                " OrganizerUniqueCode text,\n" +
+                " ProductionCode text,\n" +
+                " ParentSeedReceiptType text,\n" +
+                " ParentSeedReceiptDt text,\n" +
+                " FemaleParentType text,\n" +
+                " FemaleBatchNo text,\n" +
+                " FemaleNoOfPackets text,\n" +
+                " FemaleQTYInKG text,\n" +
+                " FemaleSeedArea text,\n" +
+                " MaleParentType text,\n" +
+                " MaleBatchNo text,\n" +
+                " MaleoOfPackets text,\n" +
+                " MaleQTYInKG text,\n" +
+                " MaleSeedArea text)";
+
+        db.execSQL(createallseeddistributionmaster);
+
     }
 
     @Override
@@ -300,6 +352,7 @@ public class SqlightDatabase extends SQLiteOpenHelper {
         droptable(db, "tbl_seedreciptmaster");
         droptable(db, "tbl_seedbatchnomaster");
         droptable(db, "tbl_croptypemaster");
+        droptable(db, "tbl_allseeddistributionmaster");
         onCreate(db);
     }
 
@@ -1045,6 +1098,179 @@ public class SqlightDatabase extends SQLiteOpenHelper {
                             cursorCourses.getString(38),
                             cursorCourses.getString(39),
                             cursorCourses.getString(40)));
+                } while (cursorCourses.moveToNext());
+            }
+            return courseModalArrayList;
+        } catch (Exception e) {
+            return null;
+        } finally {
+            myDb.close();
+        }
+    }
+
+    public boolean addAllSeedDistributionList(GetAllSeedDistributionModel categoryModel) {
+        SQLiteDatabase mydb = null;
+        try {
+            mydb = this.getReadableDatabase();
+            String q = "insert into tbl_allseeddistributionmaster" +
+                    "(" +
+                    "" +
+                    "ParentSeedDistributionId," +
+                    "GrowerId," +
+                    "CountryId," +
+                    "PlantingYear," +
+                    "SeasonId," +
+                    "CropId," +
+                    "OrganizerId," +
+                    "ParentSeedReceiptId," +
+                    "SeedProductionArea," +
+                    "ProductionClusterId," +
+                    "FemaleParentSeedBatchId," +
+                    "MaleParentSeedBatchId," +
+                    "IssueDt," +
+                    "CreatedBy," +
+                    "CreatedDt," +
+                    "ModifiedBy," +
+                    "ModifiedDt," +
+                    "CountryName," +
+                    "CountryCode," +
+                    "Season ," +
+                    "CropCode ," +
+                    "CropName," +
+                    "Grower," +
+                    "GrowerUniqueId," +
+                    "GrowerFullName," +
+                    "GrowerMobileNo," +
+                    "GrowerUniqueCode," +
+                    "Organizer," +
+                    "OrganizerUniqueId," +
+                    "OrganizerFullName," +
+                    "OrganizerMobileNo," +
+                    "OrganizerUniqueCode," +
+                    "ProductionCode," +
+                    "ParentSeedReceiptType," +
+                    "ParentSeedReceiptDt," +
+                    "FemaleParentType," +
+                    "FemaleBatchNo," +
+                    "FemaleNoOfPackets," +
+                    "FemaleQTYInKG," +
+                    "FemaleSeedArea," +
+                    "MaleParentType," +
+                    "MaleBatchNo," +
+                    "MaleoOfPackets," +
+                    "MaleQTYInKG," +
+                    "MaleSeedArea" +
+                    ") values" +
+                    "('" + categoryModel.getParentSeedDistributionId() + "'," +
+                    "'" + categoryModel.getGrowerId() + "'," +
+                    "'" + categoryModel.getCountryId() + "'," +
+                    "'" + categoryModel.getPlantingYear() + "'," +
+                    "'" + categoryModel.getSeasonId() + "'," +
+                    "'" + categoryModel.getCropId() + "'," +
+                    "'" + categoryModel.getOrganizerId() + "'," +
+                    "'" + categoryModel.getParentSeedReceiptId() + "'," +
+                    "'" + categoryModel.getSeedProductionArea() + "'," +
+                    "'" + categoryModel.getProductionClusterId() + "'," +
+                    "'" + categoryModel.getFemaleParentSeedBatchId() + "'," +
+                    "'" + categoryModel.getMaleParentSeedBatchId()+ "'," +
+                    "'" + categoryModel.getIssueDt() + "'," +
+                    "'" + categoryModel.getCreatedBy() + "'," +
+                    "'" + categoryModel.getCreatedDt() + "'," +
+                    "'" + categoryModel.getModifiedBy() + "'," +
+                    "'" + categoryModel.getModifiedDt() + "'," +
+                    "'" + categoryModel.getCountryName() + "'," +
+                    "'" + categoryModel.getCountryCode() + "'," +
+                    "'" + categoryModel.getSeason() + "'," +
+                    "'" + categoryModel.getCropCode() + "'," +
+                    "'" + categoryModel.getCropName() + "'," +
+                    "'" + categoryModel.getGrower() + "'," +
+                    "'" + categoryModel.getGrowerUniqueId() + "'," +
+                    "'" + categoryModel.getGrowerFullName() + "'," +
+                    "'" + categoryModel.getGrowerMobileNo() + "'," +
+                    "'" + categoryModel.getGrowerUniqueCode() + "'," +
+                    "'" + categoryModel.getOrganizer() + "'," +
+                    "'" + categoryModel.getOrganizerUniqueId() + "'," +
+                    "'" + categoryModel.getOrganizerFullName() + "'," +
+                    "'" + categoryModel.getOrganizerMobileNo() + "'," +
+                    "'" + categoryModel.getOrganizerUniqueCode() + "'," +
+                    "'" + categoryModel.getProductionCode() + "'," +
+                    "'" + categoryModel.getParentSeedReceiptType() + "'," +
+                    "'" + categoryModel.getParentSeedReceiptDt() + "'," +
+                    "'" + categoryModel.getFemaleParentType() + "'," +
+                    "'" + categoryModel.getFemaleBatchNo() + "'," +
+                    "'" + categoryModel.getFemaleNoOfPackets() + "'," +
+                    "'" + categoryModel.getFemaleQTYInKG() + "'," +
+                    "'" + categoryModel.getFemaleSeedArea() + "'," +
+                    "'" + categoryModel.getMaleParentType() + "'," +
+                    "'" + categoryModel.getMaleBatchNo() + "'," +
+                    "'" + categoryModel.getMaleoOfPackets() + "'," +
+                    "'" + categoryModel.getMaleQTYInKG() + "'," +
+                    "'" + categoryModel.getMaleSeedArea() + "')";
+            Log.i("Query is -------> ", "" + q);
+            mydb.execSQL(q);
+            return true;
+        } catch (Exception e) {
+            Log.i("Error is Product Added ", "" + e.getMessage());
+            return false;
+        } finally {
+            mydb.close();
+        }
+    }
+
+    public ArrayList<GetAllSeedDistributionModel> getAllSeedDistributionListNo() {
+        SQLiteDatabase myDb = null;
+        try {
+            myDb = this.getReadableDatabase();
+            String q = "SELECT  * FROM tbl_allseeddistributionmaster";
+            Cursor cursorCourses = myDb.rawQuery(q, null);
+            ArrayList<GetAllSeedDistributionModel> courseModalArrayList = new ArrayList<>();
+            if (cursorCourses.moveToFirst()) {
+                do {
+                    courseModalArrayList.add(new GetAllSeedDistributionModel(cursorCourses.getInt(1),
+                            cursorCourses.getInt(2),
+                            cursorCourses.getInt(3),
+                            cursorCourses.getString(4),
+                            cursorCourses.getInt(5),
+                            cursorCourses.getInt(6),
+                            cursorCourses.getInt(7),
+                            cursorCourses.getInt(8),
+                            cursorCourses.getFloat(9),
+                            cursorCourses.getInt(10),
+                            cursorCourses.getInt(11),
+                            cursorCourses.getInt(12),
+                            cursorCourses.getString(13),
+                            cursorCourses.getString(14),
+                            cursorCourses.getString(15),
+                            cursorCourses.getString(16),
+                            cursorCourses.getString(17),
+                            cursorCourses.getString(18),
+                            cursorCourses.getString(19),
+                            cursorCourses.getString(20),
+                            cursorCourses.getString(21),
+                            cursorCourses.getString(22),
+                            cursorCourses.getString(23),
+                            cursorCourses.getString(24),
+                            cursorCourses.getString(25),
+                            cursorCourses.getString(26),
+                            cursorCourses.getString(27),
+                            cursorCourses.getString(28),
+                            cursorCourses.getString(29),
+                            cursorCourses.getString(30),
+                            cursorCourses.getString(31),
+                            cursorCourses.getString(32),
+                            cursorCourses.getString(33),
+                            cursorCourses.getString(34),
+                            cursorCourses.getString(35),
+                            cursorCourses.getString(36),
+                            cursorCourses.getString(37),
+                            cursorCourses.getString(38),
+                            cursorCourses.getString(39),
+                            cursorCourses.getString(40),
+                            cursorCourses.getString(41),
+                            cursorCourses.getString(42),
+                            cursorCourses.getString(43),
+                            cursorCourses.getString(44),
+                            cursorCourses.getString(45)));
                 } while (cursorCourses.moveToNext());
             }
             return courseModalArrayList;
