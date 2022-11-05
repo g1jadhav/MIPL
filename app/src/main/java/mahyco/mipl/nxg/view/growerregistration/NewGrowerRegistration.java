@@ -2,8 +2,10 @@ package mahyco.mipl.nxg.view.growerregistration;
 
 import android.Manifest;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
@@ -22,6 +24,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -449,7 +452,19 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
         @Override
         protected void onPostExecute(Void unused) {
             /*new GetRegistrationAsyncTaskList().execute();*/
-            finish();
+            Dialog mDialog = null;
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
+            alertDialog.setCancelable(false);
+            alertDialog.setTitle("MIPL");
+            alertDialog.setMessage("Registration data stored successfully");
+            alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    finish();
+                }
+            });
+            mDialog = alertDialog.create();
+            mDialog.show();
             super.onPostExecute(unused);
         }
     }

@@ -81,11 +81,11 @@ public class Registration extends AppCompatActivity implements RegistrationListe
         } else if (TextUtils.isEmpty(et_mobileno.getText().toString().trim())) {
             Toast.makeText(this, "Please enter mobile no", Toast.LENGTH_SHORT).show();
             return;
+        } else if (TextUtils.isEmpty(et_email.getText().toString().trim())) {
+            Toast.makeText(this, "Please enter email id", Toast.LENGTH_SHORT).show();
+            return;
         } else if (!Patterns.EMAIL_ADDRESS.matcher(et_email.getText().toString().trim()).matches()) {
             Toast.makeText(this, "Please enter valid email id", Toast.LENGTH_SHORT).show();
-            return;
-        } else if (TextUtils.isEmpty(et_email.getText().toString().trim())) {
-            Toast.makeText(this, "Please enter mobile no", Toast.LENGTH_SHORT).show();
             return;
         } else if (TextUtils.isEmpty(et_password.getText().toString().trim())) {
             Toast.makeText(this, "Please enter password", Toast.LENGTH_SHORT).show();
@@ -130,7 +130,7 @@ public class Registration extends AppCompatActivity implements RegistrationListe
         jsonObject.addProperty("UserType", "OnRole");
         jsonObject.addProperty("UserName", str_staffname);
         jsonObject.addProperty("UserCode", str_staffid);
-        jsonObject.addProperty("EmailId", et_password.getText().toString().trim());
+        jsonObject.addProperty("EmailId", et_email.getText().toString().trim());
         jsonObject.addProperty("MobileNo", str_mobile);
         jsonObject.addProperty("Password", str_password);
         jsonObject.addProperty("ConfirmPassword", str_confirmpassword);
