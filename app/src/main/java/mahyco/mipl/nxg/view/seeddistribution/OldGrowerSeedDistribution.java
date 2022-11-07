@@ -337,7 +337,7 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
                         } else {
                             mOldGrowerSeedDistributionModel.setOrganizerId(0);
                         }
-                        mOldGrowerSeedDistributionModel.setGrowerId(mOrganizerNameList.get(mOrganizerNameSpinner.getSelectedItemPosition()).getUserId());
+                        mOldGrowerSeedDistributionModel.setGrowerId(mGrowerList.get(mSearchByIdNameSpinner.getSelectedItemPosition()).getUserId());
                         mOldGrowerSeedDistributionModel.setParentSeedReceiptId(mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getParentSeedReceiptId());
                         mOldGrowerSeedDistributionModel.setCreatedBy(Preferences.get(mContext, Preferences.USER_ID));
                         mOldGrowerSeedDistributionModel.setFemaleParentSeedBatchId(mFemaleBatchNoList.get(mFemaleBatchNoSpinner.getSelectedItemPosition()).getParentSeedBatchId());
@@ -402,8 +402,7 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
         } else if (mMaleBatchNoSpinner.getVisibility() == View.VISIBLE && mMaleBatchNoSpinner.getSelectedItemPosition() == -1) {
             showToast("Please select parent seed batch no. male");
             return false;
-        }
-        if (mMaleBatchNoSpinner.getVisibility() == View.VISIBLE &&
+        } else if (mMaleBatchNoSpinner.getVisibility() == View.VISIBLE &&
                 (Preferences.getFloat(mContext, Preferences.MALE_PARENT_SEED_AREA +
                         mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getParentSeedReceiptId())
                         <= Float.parseFloat(mAreaEditText.getText().toString()))) {

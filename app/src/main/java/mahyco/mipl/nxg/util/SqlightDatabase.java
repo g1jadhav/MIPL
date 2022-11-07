@@ -669,7 +669,7 @@ public class SqlightDatabase extends SQLiteOpenHelper {
                             cursorCourses.getInt(9),
                             cursorCourses.getInt(10),
                             cursorCourses.getString(11),
-                            cursorCourses.getInt(12),
+                            cursorCourses.getFloat(12),
                             cursorCourses.getString(13)
                     ));
                 } while (cursorCourses.moveToNext());
