@@ -192,7 +192,6 @@ public class NewActivityUpload extends BaseActivity implements View.OnClickListe
     public void onSeedDistributionResult(SuccessModel result) {
         if (result.getStatus().equalsIgnoreCase("Success")) {
             mResponseString = result.getComment();
-            showNoInternetDialog(mContext, mResponseString);
             showNoInternetDialog(mContext, "New Parent Seed Distribution Record/s Uploaded Successfully");
             new DeleteParentSeedDistributiSyncSuccessfully().execute();
         } else {
@@ -734,18 +733,18 @@ public class NewActivityUpload extends BaseActivity implements View.OnClickListe
             old.setProductionClusterId(mSeedDistributionList.get(i).getProductionClusterId());
             old.setOrganizerId(mSeedDistributionList.get(i).getOrganizerId());
             old.setGrowerId(mSeedDistributionList.get(i).getGrowerId());
-            old.setProductionCode(mSeedDistributionList.get(i).getProductionCode());
+            old.setParentSeedReceiptId(mSeedDistributionList.get(i).getParentSeedReceiptId());
             old.setFemaleParentSeedBatchId(mSeedDistributionList.get(i).getFemaleParentSeedBatchId());
             old.setMaleParentSeedBatchId(mSeedDistributionList.get(i).getMaleParentSeedBatchId());
             old.setIssueDt(mSeedDistributionList.get(i).getIssueDt());
-            old.setSeedParentArea(mSeedDistributionList.get(i).getSeedParentArea());
+            old.setSeedProductionArea(mSeedDistributionList.get(i).getSeedProductionArea());
             old.setCreatedBy(mSeedDistributionList.get(i).getCreatedBy());
             list.add(old);
         }
         ParentSeedDistributionParameter parentSeedDistributionParameter
                 = new ParentSeedDistributionParameter(list);
 
-        Log.e("temporary"," list "+parentSeedDistributionParameter.list);
+       // Log.e("temporary"," list "+parentSeedDistributionParameter.list);
 
         /*JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("CountryId", );

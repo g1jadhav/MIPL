@@ -9,12 +9,12 @@ public class OldGrowerSeedDistributionModel {
     private int ProductionClusterId;
     private int OrganizerId;
     private int GrowerId;
-    private int ProductionCode;
+    private int ParentSeedReceiptId;
     private String CreatedBy;
     private int FemaleParentSeedBatchId;
     private int MaleParentSeedBatchId;
     private String IssueDt;
-    private float SeedParentArea;
+    private float SeedProductionArea;
 
     public OldGrowerSeedDistributionModel(int countryId,
                                           String plantingYear,
@@ -23,11 +23,11 @@ public class OldGrowerSeedDistributionModel {
                                           int productionClusterId,
                                           int organizerId,
                                           int growerId,
-                                          int productionCode,
+                                          int parentSeedReceiptId,
                                           int femaleParentSeedBatchId,
                                           int maleParentSeedBatchId,
                                           String issueDt,
-                                          float seedParentArea,
+                                          float seedProductionArea,
                                           String createdBy) {
 
         CountryId = countryId;
@@ -38,11 +38,11 @@ public class OldGrowerSeedDistributionModel {
         FemaleParentSeedBatchId = femaleParentSeedBatchId;
         ProductionClusterId = productionClusterId;
         OrganizerId = organizerId;
-        ProductionCode = productionCode;
+        ParentSeedReceiptId = parentSeedReceiptId;
         MaleParentSeedBatchId = maleParentSeedBatchId;
         CreatedBy = createdBy;
         GrowerId = growerId;
-        SeedParentArea = seedParentArea;
+        SeedProductionArea = seedProductionArea;
     }
 
     public int getCountryId() {
@@ -93,12 +93,12 @@ public class OldGrowerSeedDistributionModel {
         OrganizerId = organizerId;
     }
 
-    public int getProductionCode() {
-        return ProductionCode;
+    public int getParentSeedReceiptId() {
+        return ParentSeedReceiptId;
     }
 
-    public void setProductionCode(int productionCode) {
-        ProductionCode = productionCode;
+    public void setParentSeedReceiptId(int parentSeedReceiptId) {
+        ParentSeedReceiptId = parentSeedReceiptId;
     }
 
     public String getCreatedBy() {
@@ -141,12 +141,12 @@ public class OldGrowerSeedDistributionModel {
         GrowerId = growerId;
     }
 
-    public float getSeedParentArea() {
-        return SeedParentArea;
+    public float getSeedProductionArea() {
+        return SeedProductionArea;
     }
 
-    public void setSeedParentArea(float seedParentArea) {
-        SeedParentArea = seedParentArea;
+    public void setSeedProductionArea(float seedProductionArea) {
+        SeedProductionArea = seedProductionArea;
     }
 
 

@@ -8,7 +8,7 @@ import mahyco.mipl.nxg.model.OldGrowerSeedDistributionModel;
 
 public class ParentSeedDistributionParameter {
     @SerializedName("createParentSeedDistributionModel")
-    public ArrayList<OldGrowerSeedDistributionModel> list = new ArrayList<>();
+    public ArrayList<OldGrowerSeedDistributionModel> list;
 
     public ParentSeedDistributionParameter(ArrayList<OldGrowerSeedDistributionModel> list) {
         this.list = list;

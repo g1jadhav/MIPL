@@ -318,6 +318,7 @@
                 android:background="@drawable/login_spinner_style" />
 
             <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/male_batch_no_textview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"

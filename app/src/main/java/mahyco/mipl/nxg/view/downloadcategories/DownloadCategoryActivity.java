@@ -534,6 +534,11 @@ public class DownloadCategoryActivity extends BaseActivity implements View.OnCli
                         database = new SqlightDatabase(mContext);
                         database.trucateTable("tbl_seedreciptmaster");
                         for (SeedReceiptModel param : mParentSeedReceiptList) {
+                            Preferences.saveInt(mContext, Preferences.PARENT_SEED_RECEIPT_ID+param.getParentSeedReceiptId(), param.getParentSeedReceiptId());
+                            Preferences.saveFloat(mContext, Preferences.MALE_PARENT_SEED_AREA + param.getParentSeedReceiptId()
+                                    , Float.parseFloat(""+param.getMaleParentSeedArea()));
+                            Preferences.saveFloat(mContext, Preferences.FEMALE_PARENT_SEED_AREA + param.getParentSeedReceiptId()
+                                    , Float.parseFloat(""+param.getFemaleParentSeedsArea()));
                             database.addSeedReceipt(param);
                         }
                         break;

@@ -10,7 +10,6 @@ import android.provider.Settings;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -103,6 +102,7 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
     private boolean mFirstTimeSelectedCrop = false;
     private boolean mProductFirstTimeSelected = false;
     private boolean mGrowerRadioBtnSelected = true;
+    private AppCompatTextView mMaleBatchNoTextView;
 
     @Override
     protected int getLayout() {
@@ -142,6 +142,7 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
             }
         });
 
+        mMaleBatchNoTextView = findViewById(R.id.male_batch_no_textview);
         mPlantingYearSpinner = findViewById(R.id.planting_year_drop_down);
         mOrganizerNameSpinner = findViewById(R.id.organizer_name_drop_down);
         mSeasonSpinner = findViewById(R.id.season_drop_down);
@@ -181,7 +182,7 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
         mCropSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-               // Log.e("temporary", "selected item called mFirstTimeSelectedCrop " + mFirstTimeSelectedCrop);
+                // Log.e("temporary", "selected item called mFirstTimeSelectedCrop " + mFirstTimeSelectedCrop);
                 if (mFirstTimeSelectedCrop) {
                     mProductionCodeSpinner.setAdapter(null);
                     new GetProductionCodeMasterAsyncTask().execute();
@@ -198,7 +199,7 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
         mPlantingYearSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-               // Log.e("temporary", "selected item called mProductFirstTimeSelected " + mProductFirstTimeSelected);
+                // Log.e("temporary", "selected item called mProductFirstTimeSelected " + mProductFirstTimeSelected);
                 if (mProductFirstTimeSelected) {
                     new GetProductionCodeMasterAsyncTask().execute();
                 } else {
@@ -337,13 +338,29 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
                             mOldGrowerSeedDistributionModel.setOrganizerId(0);
                         }
                         mOldGrowerSeedDistributionModel.setGrowerId(mOrganizerNameList.get(mOrganizerNameSpinner.getSelectedItemPosition()).getUserId());
-                        mOldGrowerSeedDistributionModel.setProductionCode(mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getParentSeedReceiptId());
+                        mOldGrowerSeedDistributionModel.setParentSeedReceiptId(mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getParentSeedReceiptId());
                         mOldGrowerSeedDistributionModel.setCreatedBy(Preferences.get(mContext, Preferences.USER_ID));
                         mOldGrowerSeedDistributionModel.setFemaleParentSeedBatchId(mFemaleBatchNoList.get(mFemaleBatchNoSpinner.getSelectedItemPosition()).getParentSeedBatchId());
-                        mOldGrowerSeedDistributionModel.setMaleParentSeedBatchId(mMaleBatchNoList.get(mMaleBatchNoSpinner.getSelectedItemPosition()).getParentSeedBatchId());
-                        mOldGrowerSeedDistributionModel.setIssueDt(mParentSeedIssueDate.getText().toString());
-                        mOldGrowerSeedDistributionModel.setSeedParentArea(Float.parseFloat(mAreaEditText.getText().toString()));
 
+                        if (mMaleBatchNoSpinner.getVisibility() == View.VISIBLE) {
+
+                            Preferences.saveFloat(mContext, Preferences.MALE_PARENT_SEED_AREA +
+                                            mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getParentSeedReceiptId()
+                                    , Preferences.getFloat(mContext, Preferences.MALE_PARENT_SEED_AREA +
+                                            mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getParentSeedReceiptId()) - Float.parseFloat(mAreaEditText.getText().toString()));
+
+                            mOldGrowerSeedDistributionModel.setMaleParentSeedBatchId(mMaleBatchNoList.get(mMaleBatchNoSpinner.getSelectedItemPosition()).getParentSeedBatchId());
+                        } else {
+                            mOldGrowerSeedDistributionModel.setMaleParentSeedBatchId(0);
+
+                        }
+                        mOldGrowerSeedDistributionModel.setIssueDt(mParentSeedIssueDate.getText().toString());
+                        mOldGrowerSeedDistributionModel.setSeedProductionArea(Float.parseFloat(mAreaEditText.getText().toString()));
+
+                        Preferences.saveFloat(mContext, Preferences.FEMALE_PARENT_SEED_AREA +
+                                        mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getParentSeedReceiptId()
+                                , Preferences.getFloat(mContext, Preferences.FEMALE_PARENT_SEED_AREA +
+                                        mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getParentSeedReceiptId()) - Float.parseFloat(mAreaEditText.getText().toString()));
                         new AddDataAsyncTask().execute();
                     } catch (Exception e) {
                         showToast("Data not found");
@@ -376,8 +393,22 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
         } else if (mFemaleBatchNoSpinner.getSelectedItemPosition() == -1) {
             showToast("Please select parent seed batch no. female");
             return false;
-        } else if (mMaleBatchNoSpinner.getSelectedItemPosition() == -1) {
+        } else if (Preferences.getFloat(mContext, Preferences.FEMALE_PARENT_SEED_AREA +
+                mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getParentSeedReceiptId())
+                <= Float.parseFloat(mAreaEditText.getText().toString())) {
+            showToast("Remaining Female Parent Seed Area " + Preferences.getFloat(mContext, Preferences.FEMALE_PARENT_SEED_AREA +
+                    mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getParentSeedReceiptId()));
+            return false;
+        } else if (mMaleBatchNoSpinner.getVisibility() == View.VISIBLE && mMaleBatchNoSpinner.getSelectedItemPosition() == -1) {
             showToast("Please select parent seed batch no. male");
+            return false;
+        }
+        if (mMaleBatchNoSpinner.getVisibility() == View.VISIBLE &&
+                (Preferences.getFloat(mContext, Preferences.MALE_PARENT_SEED_AREA +
+                        mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getParentSeedReceiptId())
+                        <= Float.parseFloat(mAreaEditText.getText().toString()))) {
+            showToast("Remaining Male Parent Seed Area " + Preferences.getFloat(mContext, Preferences.MALE_PARENT_SEED_AREA +
+                    mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getParentSeedReceiptId()));
             return false;
         }
         return true;
@@ -684,7 +715,7 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
 
         @Override
         protected void onPreExecute() {
-          //  Log.e("temporary", "GetSeedReceiptMasterAsyncTask onPreExecute called");
+            //  Log.e("temporary", "GetSeedReceiptMasterAsyncTask onPreExecute called");
             showProgressDialog(mContext);
             super.onPreExecute();
         }
@@ -721,14 +752,14 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
                     if (result.get(i).getPlantingYear().equalsIgnoreCase(mPlantingYearSpinner.getSelectedItem().toString()) &&
                             result.get(i).getCropName().equalsIgnoreCase(mCropList.get(mCropSpinner.getSelectedItemPosition()).getCropName())) {
                         if (mGrowerRadioBtnSelected) {
-                          // Log.e("temporary", "receipt " + result.get(i).getParentSeedReceiptType());
+                            // Log.e("temporary", "receipt " + result.get(i).getParentSeedReceiptType());
                             if (result.get(i).getParentSeedReceiptType().equalsIgnoreCase("Country Level")) {
-                              // Log.e("temporary", "country level");
+                                // Log.e("temporary", "country level");
                                 mSeedProductionCodeList.add(result.get(i));
                             }
                         } else {
                             if (result.get(i).getParentSeedReceiptType().equalsIgnoreCase("Production Organizer Level")) {
-                              // Log.e("temporary", "Production Organizer Level");
+                                // Log.e("temporary", "Production Organizer Level");
                                 mSeedProductionCodeList.add(result.get(i));
                             }
                         }
@@ -737,6 +768,14 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
                 ProductCodeAdapter adapter = new ProductCodeAdapter(mContext, R.layout.spinner_rows, mSeedProductionCodeList);
                 mProductionCodeSpinner.setAdapter(adapter);
                 if (mSeedProductionCodeList.size() > 0) {
+                    if (mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getCropType().equalsIgnoreCase("Hybrid")) {
+                        mMaleBatchNoTextView.setVisibility(View.VISIBLE);
+                        mMaleBatchNoSpinner.setVisibility(View.VISIBLE);
+                    } else {
+                        mMaleBatchNoTextView.setVisibility(View.GONE);
+                        mMaleBatchNoSpinner.setVisibility(View.GONE);
+                    }
+                    mFemaleBatchNoSpinner.setVisibility(View.VISIBLE);
                     new GetBatchNoMasterAsyncTask().execute();
                 } else {
                     mMaleBatchNoSpinner.setAdapter(null);

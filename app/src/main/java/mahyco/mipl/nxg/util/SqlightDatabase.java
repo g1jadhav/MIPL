@@ -158,7 +158,7 @@ public class SqlightDatabase extends SQLiteOpenHelper {
                 "    ProductionClusterId INTEGER,\n" +
                 "    OrganizerId INTEGER,\n" +
                 "    GrowerId INTEGER,\n" +
-                "    ProductionCode INTEGER,\n" +
+                "    ParentSeedReceiptId INTEGER,\n" +
                 "    FemaleParentSeedBatchId INTEGER,\n" +
                 "    MaleParentSeedBatchId INTEGER,\n" +
                 "    IssueDt text,\n" +
@@ -546,7 +546,7 @@ public class SqlightDatabase extends SQLiteOpenHelper {
                     "ProductionClusterId," +
                     "OrganizerId," +
                     "GrowerId," +
-                    "ProductionCode," +
+                    "ParentSeedReceiptId," +
                     "FemaleParentSeedBatchId," +
                     "MaleParentSeedBatchId," +
                     "IssueDt," +
@@ -560,17 +560,17 @@ public class SqlightDatabase extends SQLiteOpenHelper {
                     "'" + seedDistributionModel.getProductionClusterId() + "'," +
                     "'" + seedDistributionModel.getOrganizerId() + "'," +
                     "'" + seedDistributionModel.getGrowerId() + "'," +
-                    "'" + seedDistributionModel.getProductionCode() + "'," +
+                    "'" + seedDistributionModel.getParentSeedReceiptId() + "'," +
                     "'" + seedDistributionModel.getFemaleParentSeedBatchId() + "'," +
                     "'" + seedDistributionModel.getMaleParentSeedBatchId() + "'," +
                     "'" + seedDistributionModel.getIssueDt() + "'," +
-                    "'" + seedDistributionModel.getSeedParentArea() + "'," +
+                    "'" + seedDistributionModel.getSeedProductionArea() + "'," +
                     "'" + seedDistributionModel.getCreatedBy() + "')";
-            Log.i("Query is -------> ", "" + q);
+            Log.e("temporary","Query is -------> " + q);
             mydb.execSQL(q);
             return true;
         } catch (Exception e) {
-            Log.i("Error is Product Added ", "" + e.getMessage());
+            Log.e("temporary","Error is Product Added " + e.getMessage());
             return false;
         } finally {
             mydb.close();
