@@ -432,7 +432,7 @@
                     android:fontFamily="@font/comforta"
                     android:gravity="center"
                     android:padding="10dp"
-                    android:text="V 1.0.0" />
+                      />
 
             </LinearLayout>
         </LinearLayout>

@@ -16,26 +16,25 @@
         android:id="@+id/logo_imageview"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:padding="50dp"
-        android:src="@drawable/logo"
+        android:src="@drawable/mipl_final_logo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias=".01" />
+        app:layout_constraintVertical_bias=".00" />
 
 
     <ImageView
         android:id="@+id/app_name_imageview"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:padding="20dp"
-        android:src="@drawable/name"
+        android:padding="10dp"
+        android:src="@drawable/mscopelogo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/logo_imageview"
-        app:layout_constraintVertical_bias=".1" />
+        app:layout_constraintVertical_bias=".3" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -50,8 +50,8 @@ public class Preferences {
     public static String IQCPlantId="IQCPlantId";
     public static final String COUNTRY_MASTER_ID = "CountryParentId";
     public static final String STORED_CATEGORY_SIZE = "CategorySize";
-    public static final String PARENT_SEED_RECEIPT_ID = "ParentSeedReceiptId";
-    public static final String MALE_PARENT_SEED_AREA = "TotalMaleParentSeeds";
+    public static final String CURRENT_DATE_FOR_GROWER_DOWNLOAD = "growerDownloadDate";
+    public static final String GROWER_DOWNLOAD = "growerIsDownloaded";
     public static final String FEMALE_PARENT_SEED_AREA = "TotalFemaleParentSeeds";
     public Preferences(Context context) {
     }

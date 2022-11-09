@@ -2,16 +2,16 @@ package mahyco.mipl.nxg.view.downloadcategories;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
 
 import com.google.gson.JsonObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import mahyco.mipl.nxg.BuildConfig;
 import mahyco.mipl.nxg.R;
 import mahyco.mipl.nxg.model.CategoryChildModel;
 import mahyco.mipl.nxg.model.CategoryModel;
@@ -72,6 +72,7 @@ public class DownloadCategoryActivity extends BaseActivity implements View.OnCli
     final String PARENT_SEED_RECEIPT_MASTER_DATABASE = "ParentSeedReceiptMaster";
     final String GET_ALL_SEED_DISTRIBUTION_MASTER_DATABASE = "GetAllSeedDistributionMaster";
 
+    private androidx.appcompat.widget.Toolbar toolbar;
 
     @Override
     protected int getLayout() {
@@ -80,9 +81,20 @@ public class DownloadCategoryActivity extends BaseActivity implements View.OnCli
 
     @Override
     protected void init() {
+        toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("Download");
+        setSupportActionBar(toolbar);
 
-        setTitle("Download");
+        TextView versionTextView = findViewById(R.id.textView8);
+        versionTextView.setText(getString(R.string.version_code, BuildConfig.VERSION_CODE));
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         mContext = this;
 
         mCategoryMaster = findViewById(R.id.download_category_master_layout);
@@ -333,7 +345,7 @@ public class DownloadCategoryActivity extends BaseActivity implements View.OnCli
             try {
                 mJsonObjectCategory = null;
                 mJsonObjectCategory = new JsonObject();
-                mJsonObjectCategory.addProperty("filterValue", "1");
+                mJsonObjectCategory.addProperty("filterValue", Preferences.get(mContext, Preferences.COUNTRYCODE));
                 mJsonObjectCategory.addProperty("FilterOption", "CountryId");
                 mDownloadCategoryApi.getSeason(mJsonObjectCategory);
             } catch (Exception e) {
@@ -348,8 +360,8 @@ public class DownloadCategoryActivity extends BaseActivity implements View.OnCli
             try {
                 mJsonObjectCategory = null;
                 mJsonObjectCategory = new JsonObject();
-                mJsonObjectCategory.addProperty("filterValue", "");
-                mJsonObjectCategory.addProperty("FilterOption", "");
+                mJsonObjectCategory.addProperty("filterValue", Preferences.get(mContext, Preferences.COUNTRYCODE));
+                mJsonObjectCategory.addProperty("FilterOption", "CountryId");
                 mDownloadCategoryApi.getCrop(mJsonObjectCategory);
             } catch (Exception e) {
             }
@@ -363,8 +375,8 @@ public class DownloadCategoryActivity extends BaseActivity implements View.OnCli
             try {
                 mJsonObjectCategory = null;
                 mJsonObjectCategory = new JsonObject();
-                mJsonObjectCategory.addProperty("filterValue", "");
-                mJsonObjectCategory.addProperty("FilterOption", "");
+                mJsonObjectCategory.addProperty("filterValue", Preferences.get(mContext, Preferences.COUNTRYCODE));
+                mJsonObjectCategory.addProperty("FilterOption", "CountryId");
                 mDownloadCategoryApi.getProductionCluster(mJsonObjectCategory);
             } catch (Exception e) {
             }
@@ -378,8 +390,8 @@ public class DownloadCategoryActivity extends BaseActivity implements View.OnCli
             try {
                 mJsonObjectCategory = null;
                 mJsonObjectCategory = new JsonObject();
-                mJsonObjectCategory.addProperty("filterValue", "");
-                mJsonObjectCategory.addProperty("FilterOption", "");
+                mJsonObjectCategory.addProperty("filterValue", Preferences.get(mContext, Preferences.COUNTRYCODE));
+                mJsonObjectCategory.addProperty("FilterOption", "CountryId");
                 mDownloadCategoryApi.getProductCode(mJsonObjectCategory);
             } catch (Exception e) {
             }
@@ -393,8 +405,8 @@ public class DownloadCategoryActivity extends BaseActivity implements View.OnCli
             try {
                 mJsonObjectCategory = null;
                 mJsonObjectCategory = new JsonObject();
-                mJsonObjectCategory.addProperty("filterValue", "");
-                mJsonObjectCategory.addProperty("FilterOption", "");
+                mJsonObjectCategory.addProperty("filterValue", Preferences.get(mContext, Preferences.COUNTRYCODE));
+                mJsonObjectCategory.addProperty("FilterOption", "CountryId");
                 mDownloadCategoryApi.getSeedBatchNo(mJsonObjectCategory);
             } catch (Exception e) {
             }
@@ -408,8 +420,8 @@ public class DownloadCategoryActivity extends BaseActivity implements View.OnCli
             try {
                 mJsonObjectCategory = null;
                 mJsonObjectCategory = new JsonObject();
-                mJsonObjectCategory.addProperty("filterValue", "");
-                mJsonObjectCategory.addProperty("FilterOption", "");
+                mJsonObjectCategory.addProperty("filterValue", Preferences.get(mContext, Preferences.COUNTRYCODE));
+                mJsonObjectCategory.addProperty("FilterOption", "CountryId");
                 mDownloadCategoryApi.getCropType(mJsonObjectCategory);
             } catch (Exception e) {
             }
@@ -423,8 +435,8 @@ public class DownloadCategoryActivity extends BaseActivity implements View.OnCli
             try {
                 mJsonObjectCategory = null;
                 mJsonObjectCategory = new JsonObject();
-                mJsonObjectCategory.addProperty("filterValue", "");
-                mJsonObjectCategory.addProperty("FilterOption", "");
+                mJsonObjectCategory.addProperty("filterValue", Preferences.get(mContext, Preferences.COUNTRYCODE));
+                mJsonObjectCategory.addProperty("FilterOption", "CountryId");
                 mDownloadCategoryApi.getSeedReceiptNo(mJsonObjectCategory);
             } catch (Exception e) {
             }
@@ -432,13 +444,14 @@ public class DownloadCategoryActivity extends BaseActivity implements View.OnCli
             showNoInternetDialog(mContext, "Please check your internet connection");
         }
     }
+
     private void downloadAllSeedDistributionMasterData() {
         if (checkInternetConnection(mContext)) {
             try {
                 mJsonObjectCategory = null;
                 mJsonObjectCategory = new JsonObject();
-                mJsonObjectCategory.addProperty("filterValue", "");
-                mJsonObjectCategory.addProperty("FilterOption", "");
+                mJsonObjectCategory.addProperty("filterValue", Preferences.get(mContext, Preferences.COUNTRYCODE));
+                mJsonObjectCategory.addProperty("FilterOption", "CountryId");
                 mDownloadCategoryApi.getAllSeedDistributionList(mJsonObjectCategory);
             } catch (Exception e) {
             }
@@ -457,7 +470,7 @@ public class DownloadCategoryActivity extends BaseActivity implements View.OnCli
                 switch (mDatabaseName) {
                     case LOCATION_MASTER_DATABASE:
                         database.trucateTable("tbl_locationmaster");
-                        Preferences.save(mContext, Preferences.COUNTRY_MASTER_ID,"");
+                        Preferences.save(mContext, Preferences.COUNTRY_MASTER_ID, "");
                         for (CategoryChildModel param : mLocationMasterList) {
                             if (param.getParentId() == 0) {
                                 Preferences.save(mContext, Preferences.COUNTRY_MASTER_ID, "" + param.getCountryMasterId());
@@ -470,8 +483,10 @@ public class DownloadCategoryActivity extends BaseActivity implements View.OnCli
                         database.trucateTable("tbl_categorymaster");
                         Preferences.save(mContext, Preferences.STORED_CATEGORY_SIZE, "");
                         for (CategoryModel param : mCategoryMasterList) {
-                            Preferences.save(mContext, Preferences.STORED_CATEGORY_SIZE, "" + mCategoryMasterList.size());
                             database.addCategory(param);
+                        }
+                        if (mCategoryMasterList.size() > 0) {
+                            Preferences.save(mContext, Preferences.STORED_CATEGORY_SIZE, "" + mCategoryMasterList.size());
                         }
                         break;
                     case GROWER_MASTER_DATABASE:
@@ -486,6 +501,15 @@ public class DownloadCategoryActivity extends BaseActivity implements View.OnCli
 
                         for (DownloadGrowerModel param : mGrowerMasterList) {
                             database.addGrower(param);
+                        }
+                        Preferences.save(mContext, Preferences.GROWER_DOWNLOAD, "");
+                        Preferences.save(mContext, Preferences.CURRENT_DATE_FOR_GROWER_DOWNLOAD, "");
+                        if (mGrowerMasterList.size() > 0) {
+                            Preferences.save(mContext, Preferences.CURRENT_DATE_FOR_GROWER_DOWNLOAD, getCurrentDate());
+                            Preferences.save(mContext, Preferences.GROWER_DOWNLOAD, "Yes");
+                        } else {
+                            Preferences.save(mContext, Preferences.CURRENT_DATE_FOR_GROWER_DOWNLOAD, getCurrentDate());
+                            Preferences.save(mContext, Preferences.GROWER_DOWNLOAD, "emptyList");
                         }
                         break;
                     case SEASON_MASTER_DATABASE:
@@ -534,11 +558,11 @@ public class DownloadCategoryActivity extends BaseActivity implements View.OnCli
                         database = new SqlightDatabase(mContext);
                         database.trucateTable("tbl_seedreciptmaster");
                         for (SeedReceiptModel param : mParentSeedReceiptList) {
-                            Preferences.saveInt(mContext, Preferences.PARENT_SEED_RECEIPT_ID+param.getParentSeedReceiptId(), param.getParentSeedReceiptId());
+                           /* Preferences.saveInt(mContext, Preferences.PARENT_SEED_RECEIPT_ID+param.getParentSeedReceiptId(), param.getParentSeedReceiptId());
                             Preferences.saveFloat(mContext, Preferences.MALE_PARENT_SEED_AREA + param.getParentSeedReceiptId()
                                     , Float.parseFloat(""+param.getMaleParentSeedArea()));
                             Preferences.saveFloat(mContext, Preferences.FEMALE_PARENT_SEED_AREA + param.getParentSeedReceiptId()
-                                    , Float.parseFloat(""+param.getFemaleParentSeedsArea()));
+                                    , Float.parseFloat(""+param.getFemaleParentSeedsArea()));*/
                             database.addSeedReceipt(param);
                         }
                         break;

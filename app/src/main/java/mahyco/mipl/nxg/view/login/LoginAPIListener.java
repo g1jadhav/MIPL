@@ -6,4 +6,5 @@ public interface LoginAPIListener {
     public void onResult(String result);
 
     public void onListResponce(List result);
+    public void onCountryListResponce(List result);
 }

@@ -14,19 +14,19 @@ public class SeedReceiptModel {
     private int CropTypeId;
     private int CropId;
     private int ProductId;
-    private int PlannedArea;
-    private int PlannedProcessedQty;
-    private int PlannedUnprocessedQty;
-    private int NoofFemalePkts;
-    private int NoofMalePkts;
-    private int FemaleSeedRate;
-    private int FemaleSeedPacking;
-    private int MaleSeedRate;
-    private int MaleSeedPacking;
-    private int FemaleParentSeedsArea;
-    private int MaleParentSeedArea;
-    private int TotalFemaleParentSeeds;
-    private int TotalMaleParentSeeds;
+    private float PlannedArea;
+    private float PlannedProcessedQty;
+    private float PlannedUnprocessedQty;
+    private float NoofFemalePkts;
+    private float NoofMalePkts;
+    private float FemaleSeedRate;
+    private float FemaleSeedPacking;
+    private float MaleSeedRate;
+    private float MaleSeedPacking;
+    private float FemaleParentSeedsArea;
+    private float MaleParentSeedArea;
+    private float TotalFemaleParentSeeds;
+    private float TotalMaleParentSeeds;
     private String STONo_DeliveryChallanNo;
     private String ParentSeedReceiptDt;
     /*    IsDelete: false,*/
@@ -43,7 +43,7 @@ public class SeedReceiptModel {
     private String OrganizerName;
     private String ProductName;
 
-    public SeedReceiptModel(int parentSeedReceiptId, int seedProductionTargetId, String productionCode, String parentSeedReceiptType, int countryId, int productionClusterId, int userId, String plantingYear, int seasonId, int cropTypeId, int cropId, int productId, int plannedArea, int plannedProcessedQty, int plannedUnprocessedQty, int noofFemalePkts, int noofMalePkts, int femaleSeedRate, int femaleSeedPacking, int maleSeedRate, int maleSeedPacking, int femaleParentSeedsArea, int maleParentSeedArea, int totalFemaleParentSeeds, int totalMaleParentSeeds, String sTONo_DeliveryChallanNo, String parentSeedReceiptDt, String createdBy, String createdDt, String modifiedBy, String modifiedDt, String countryName, String season, String cropCode, String cropName, String cropType, String productionCluster, String organizerName, String productName, String fullName) {
+    public SeedReceiptModel(int parentSeedReceiptId, int seedProductionTargetId, String productionCode, String parentSeedReceiptType, int countryId, int productionClusterId, int userId, String plantingYear, int seasonId, int cropTypeId, int cropId, int productId, float plannedArea, float plannedProcessedQty, float plannedUnprocessedQty, float noofFemalePkts, float noofMalePkts, float femaleSeedRate, float femaleSeedPacking, float maleSeedRate, float maleSeedPacking, float femaleParentSeedsArea, float maleParentSeedArea, float totalFemaleParentSeeds, float totalMaleParentSeeds, String sTONo_DeliveryChallanNo, String parentSeedReceiptDt, String createdBy, String createdDt, String modifiedBy, String modifiedDt, String countryName, String season, String cropCode, String cropName, String cropType, String productionCluster, String organizerName, String productName, String fullName) {
         ParentSeedReceiptId = parentSeedReceiptId;
         SeedProductionTargetId = seedProductionTargetId;
         ProductionCode = productionCode;
@@ -182,63 +182,63 @@ public class SeedReceiptModel {
         ProductId = productId;
     }
 
-    public int getPlannedArea() {
+    public float getPlannedArea() {
         return PlannedArea;
     }
 
-    public void setPlannedArea(int plannedArea) {
+    public void setPlannedArea(float plannedArea) {
         PlannedArea = plannedArea;
     }
 
-    public int getPlannedProcessedQty() {
+    public float getPlannedProcessedQty() {
         return PlannedProcessedQty;
     }
 
-    public void setPlannedProcessedQty(int plannedProcessedQty) {
+    public void setPlannedProcessedQty(float plannedProcessedQty) {
         PlannedProcessedQty = plannedProcessedQty;
     }
 
-    public int getPlannedUnprocessedQty() {
+    public float getPlannedUnprocessedQty() {
         return PlannedUnprocessedQty;
     }
 
-    public void setPlannedUnprocessedQty(int plannedUnprocessedQty) {
+    public void setPlannedUnprocessedQty(float plannedUnprocessedQty) {
         PlannedUnprocessedQty = plannedUnprocessedQty;
     }
 
-    public int getNoofFemalePkts() {
+    public float getNoofFemalePkts() {
         return NoofFemalePkts;
     }
 
-    public void setNoofFemalePkts(int noofFemalePkts) {
+    public void setNoofFemalePkts(float noofFemalePkts) {
         NoofFemalePkts = noofFemalePkts;
     }
 
-    public int getNoofMalePkts() {
+    public float getNoofMalePkts() {
         return NoofMalePkts;
     }
 
-    public void setNoofMalePkts(int noofMalePkts) {
+    public void setNoofMalePkts(float noofMalePkts) {
         NoofMalePkts = noofMalePkts;
     }
 
-    public int getFemaleSeedRate() {
+    public float getFemaleSeedRate() {
         return FemaleSeedRate;
     }
 
-    public void setFemaleSeedRate(int femaleSeedRate) {
+    public void setFemaleSeedRate(float femaleSeedRate) {
         FemaleSeedRate = femaleSeedRate;
     }
 
-    public int getFemaleSeedPacking() {
+    public float getFemaleSeedPacking() {
         return FemaleSeedPacking;
     }
 
-    public void setFemaleSeedPacking(int femaleSeedPacking) {
+    public void setFemaleSeedPacking(float femaleSeedPacking) {
         FemaleSeedPacking = femaleSeedPacking;
     }
 
-    public int getMaleSeedRate() {
+    public float getMaleSeedRate() {
         return MaleSeedRate;
     }
 
@@ -246,43 +246,43 @@ public class SeedReceiptModel {
         MaleSeedRate = maleSeedRate;
     }
 
-    public int getMaleSeedPacking() {
+    public float getMaleSeedPacking() {
         return MaleSeedPacking;
     }
 
-    public void setMaleSeedPacking(int maleSeedPacking) {
+    public void setMaleSeedPacking(float maleSeedPacking) {
         MaleSeedPacking = maleSeedPacking;
     }
 
-    public int getFemaleParentSeedsArea() {
+    public float getFemaleParentSeedsArea() {
         return FemaleParentSeedsArea;
     }
 
-    public void setFemaleParentSeedsArea(int femaleParentSeedsArea) {
+    public void setFemaleParentSeedsArea(float femaleParentSeedsArea) {
         FemaleParentSeedsArea = femaleParentSeedsArea;
     }
 
-    public int getMaleParentSeedArea() {
+    public float getMaleParentSeedArea() {
         return MaleParentSeedArea;
     }
 
-    public void setMaleParentSeedArea(int maleParentSeedArea) {
+    public void setMaleParentSeedArea(float maleParentSeedArea) {
         MaleParentSeedArea = maleParentSeedArea;
     }
 
-    public int getTotalFemaleParentSeeds() {
+    public float getTotalFemaleParentSeeds() {
         return TotalFemaleParentSeeds;
     }
 
-    public void setTotalFemaleParentSeeds(int totalFemaleParentSeeds) {
+    public void setTotalFemaleParentSeeds(float totalFemaleParentSeeds) {
         TotalFemaleParentSeeds = totalFemaleParentSeeds;
     }
 
-    public int getTotalMaleParentSeeds() {
+    public float getTotalMaleParentSeeds() {
         return TotalMaleParentSeeds;
     }
 
-    public void setTotalMaleParentSeeds(int totalMaleParentSeeds) {
+    public void setTotalMaleParentSeeds(float totalMaleParentSeeds) {
         TotalMaleParentSeeds = totalMaleParentSeeds;
     }
 

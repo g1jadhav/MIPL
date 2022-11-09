@@ -15,9 +15,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.gson.JsonObject;
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import mahyco.mipl.nxg.R;
+import mahyco.mipl.nxg.model.CategoryChildModel;
 import mahyco.mipl.nxg.model.CategoryModel;
 
 public class Registration extends AppCompatActivity implements RegistrationListener {
@@ -56,23 +61,22 @@ public class Registration extends AppCompatActivity implements RegistrationListe
 
         categoryJson = new JsonObject();
         categoryJson.addProperty("filterValue", "0");
-        categoryJson.addProperty("FilterOption", "Position");
-        regisrationAPI.getCategory(categoryJson);
+        categoryJson.addProperty("FilterOption", "GetCountryList");
+//        regisrationAPI.getCategory(categoryJson);
+        regisrationAPI.getCountry(categoryJson);
     }
 
     public void submit(View view) {
         try {
-
             register();
-
         } catch (Exception e) {
-
         }
     }
 
     public void register() {
-
-        if (TextUtils.isEmpty(et_staffname.getText().toString().trim())) {
+        if (sp_country.getSelectedItemPosition() == -1) {
+            Toast.makeText(this, "Please select country", Toast.LENGTH_SHORT).show();
+        } else if (TextUtils.isEmpty(et_staffname.getText().toString().trim())) {
             Toast.makeText(this, "Please enter staff name", Toast.LENGTH_SHORT).show();
             return;
         } else if (TextUtils.isEmpty(et_staffid.getText().toString().trim())) {
@@ -137,17 +141,24 @@ public class Registration extends AppCompatActivity implements RegistrationListe
         jsonObject.addProperty("ParentId", 0);
         jsonObject.addProperty("ParentCode", "");
         jsonObject.addProperty("ParentUserName", "");
-        jsonObject.addProperty("IsActive", true);
+        jsonObject.addProperty("IsActive", false);
         jsonObject.addProperty("IsDelete", false);
         jsonObject.addProperty("CreatedBy", str_staffid);
-        jsonObject.addProperty("CreatedDt", "2022-10-07T04:10:27.070Z");
+        jsonObject.addProperty("CreatedDt", /*"2022-10-07T04:10:27.070Z"*/getCurrentDate());
         jsonObject.addProperty("ModifiedBy", "");
-        jsonObject.addProperty("ModifiedDt", "2022-10-07T04:10:27.070Z");
+        jsonObject.addProperty("ModifiedDt", /*"2022-10-07T04:10:27.070Z"*/getCurrentDate());
         jsonObject.addProperty("CountryName", str_countrycode);
         regisrationAPI.createObservation(jsonObject);
 
     }
 
+    private String getCurrentDate() {
+        Date date = Calendar.getInstance().getTime();
+        String myFormat = "yyyy-MM-dd";
+
+        SimpleDateFormat df = new SimpleDateFormat(myFormat, Locale.getDefault());
+        return df.format(date);
+    }
 
     @Override
     public void onResult(String result) {
@@ -156,6 +167,7 @@ public class Registration extends AppCompatActivity implements RegistrationListe
         finish();
 
     }
+
 
     @Override
     public void onListResponce(List<CategoryModel> result) {
@@ -180,6 +192,27 @@ public class Registration extends AppCompatActivity implements RegistrationListe
 
         } catch (Exception e) {
 
+        }
+    }
+
+    @Override
+    public void onCountryListResponce(List<CategoryChildModel> result) {
+        try {
+            adapter = new ArrayAdapter(context, android.R.layout.simple_list_item_1, result);
+            sp_country.setAdapter(adapter);
+            sp_country.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    CategoryChildModel categoryModel = (CategoryChildModel) parent.getItemAtPosition(position);
+                    //   Toast.makeText(context, "" + categoryModel.getCategoryName(), Toast.LENGTH_SHORT).show();
+                    ccode = categoryModel.getCountryMasterId();
+                }
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+        } catch (Exception e) {
         }
     }
 }

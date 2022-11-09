@@ -23,6 +23,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
@@ -34,15 +35,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.JsonObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import mahyco.mipl.nxg.model.CategoryModel;
-import mahyco.mipl.nxg.view.seeddistribution.OldGrowerSeedDistribution;
 import mahyco.mipl.nxg.util.Preferences;
 import mahyco.mipl.nxg.util.SqlightDatabase;
 import mahyco.mipl.nxg.view.downloadcategories.DownloadCategoryActivity;
 import mahyco.mipl.nxg.view.growerregistration.NewGrowerRegistration;
 import mahyco.mipl.nxg.view.login.Login;
+import mahyco.mipl.nxg.view.seeddistribution.OldGrowerSeedDistribution;
 import mahyco.mipl.nxg.view.uploaddata.NewActivityUpload;
 
 
@@ -62,10 +67,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     String plantid, roleid;
 
     CardView card_downlaodMaster, card_upload_data_layout, card_grower, card_organizer,
-    card_parent_seed_distributin_layout;
+            card_parent_seed_distributin_layout;
     JsonObject jsonObject_Category;
 
-    private Dialog mDialog  = null;
+    private Dialog mDialog = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +92,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void init() {
+
+         TextView versionTextView = findViewById(R.id.textView8);
+         versionTextView.setText(getString(R.string.version_code, BuildConfig.VERSION_CODE));
         rc_viewiqcplant = findViewById(R.id.rc_viewiqcplant);
         mManager = new LinearLayoutManager(context);
         rc_viewiqcplant.setLayoutManager(mManager);
@@ -231,13 +239,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     Toast.makeText(context, "Please download category master data in download master data first", Toast.LENGTH_SHORT).show();
                 } else if (!checkLocationMasterDataDownloaded()) {
                     Toast.makeText(context, "Please download location master data in download master data first", Toast.LENGTH_SHORT).show();
+                } else if (Preferences.get(context, Preferences.GROWER_DOWNLOAD).equalsIgnoreCase("")) {
+                    Toast.makeText(context, "Please download grower master data in download master data first", Toast.LENGTH_SHORT).show();
+                } else if (Preferences.get(context, Preferences.GROWER_DOWNLOAD).equalsIgnoreCase("emptyList")) {
+                    if (!Preferences.get(context, Preferences.CURRENT_DATE_FOR_GROWER_DOWNLOAD).equalsIgnoreCase(getCurrentDate())) {
+                        Toast.makeText(context, "Please download grower master data in download master data first", Toast.LENGTH_SHORT).show();
+                    } else if (checkAutoTimeEnabledOrNot()) {
+                        Intent intent = new Intent(context, NewGrowerRegistration.class);
+                        intent.putExtra("title", "Grower");
+                        startActivity(intent);
+                    } else {
+                        showAutomaticTimeMessage("Please update time setting to automatic");
+                    }
+                } else if (!Preferences.get(context, Preferences.CURRENT_DATE_FOR_GROWER_DOWNLOAD).equalsIgnoreCase(getCurrentDate())) {
+                    Toast.makeText(context, "Please download grower master data in download master data first", Toast.LENGTH_SHORT).show();
                 } else {
                     if (checkAutoTimeEnabledOrNot()) {
                         Intent intent = new Intent(context, NewGrowerRegistration.class);
                         intent.putExtra("title", "Grower");
                         startActivity(intent);
                     } else {
-                        showAutomaticTimeMessage("Please update time setting to automatic");                    }
+                        showAutomaticTimeMessage("Please update time setting to automatic");
+                    }
                 }
                 break;
             }
@@ -246,6 +269,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     Toast.makeText(context, "Please download category master data in download master data first", Toast.LENGTH_SHORT).show();
                 } else if (!checkLocationMasterDataDownloaded()) {
                     Toast.makeText(context, "Please download location master data in download master data first", Toast.LENGTH_SHORT).show();
+                } else if (Preferences.get(context, Preferences.GROWER_DOWNLOAD).equalsIgnoreCase("")) {
+                    Toast.makeText(context, "Please download grower master data in download master data first", Toast.LENGTH_SHORT).show();
+                } else if (Preferences.get(context, Preferences.GROWER_DOWNLOAD).equalsIgnoreCase("emptyList")) {
+                    if (!Preferences.get(context, Preferences.CURRENT_DATE_FOR_GROWER_DOWNLOAD).equalsIgnoreCase(getCurrentDate())) {
+                        Toast.makeText(context, "Please download grower master data in download master data first", Toast.LENGTH_SHORT).show();
+                    } else if (checkAutoTimeEnabledOrNot()) {
+                        Intent intent = new Intent(context, NewGrowerRegistration.class);
+                        intent.putExtra("title", "Organizer");
+                        startActivity(intent);
+                    } else {
+                        showAutomaticTimeMessage("Please update time setting to automatic");
+                    }
+                } else if (!Preferences.get(context, Preferences.CURRENT_DATE_FOR_GROWER_DOWNLOAD).equalsIgnoreCase(getCurrentDate())) {
+                    Toast.makeText(context, "Please download grower master data in download master data first", Toast.LENGTH_SHORT).show();
                 } else {
                     if (checkAutoTimeEnabledOrNot()) {
                         Intent intent = new Intent(context, NewGrowerRegistration.class);
@@ -328,5 +365,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mDialog.dismiss();
         }
         super.onDestroy();
+    }
+
+    private String getCurrentDate() {
+        Date date = Calendar.getInstance().getTime();
+        String myFormat = "yyyy-MM-dd";
+
+        SimpleDateFormat df = new SimpleDateFormat(myFormat, Locale.getDefault());
+        return df.format(date);
     }
 }

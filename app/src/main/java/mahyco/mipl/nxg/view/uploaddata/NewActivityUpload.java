@@ -30,6 +30,7 @@ import mahyco.mipl.nxg.model.SuccessModel;
 import mahyco.mipl.nxg.util.BaseActivity;
 import mahyco.mipl.nxg.util.Constants;
 import mahyco.mipl.nxg.util.MultipartUtility;
+import mahyco.mipl.nxg.util.Preferences;
 import mahyco.mipl.nxg.util.SqlightDatabase;
 import mahyco.mipl.nxg.view.growerregistration.GrowerRegistrationAPI;
 import mahyco.mipl.nxg.view.growerregistration.Listener;
@@ -62,6 +63,8 @@ public class NewActivityUpload extends BaseActivity implements View.OnClickListe
     private int mGrowerListSize;
     private int mOrganizerSize;
 
+    private androidx.appcompat.widget.Toolbar toolbar;
+
     @Override
     protected int getLayout() {
         return R.layout.activity_upload_layout;
@@ -70,7 +73,19 @@ public class NewActivityUpload extends BaseActivity implements View.OnClickListe
     @Override
     protected void init() {
 
-        setTitle("Data Upload");
+        // setTitle("Data Upload");
+
+        toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("Data Upload");
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         mContext = this;
 
@@ -220,7 +235,10 @@ public class NewActivityUpload extends BaseActivity implements View.OnClickListe
             /*if (mGrowerClicked) {*/
 //            Log.e("temporary", "result.getStatus().equalsIgnoreCase(\"Success\")");
             mResponseString = result.getComment();
+            Log.e("temporary","onGrowerRegister mResponseString " + mResponseString);
             new DeleteIfSyncSuccessfully().execute();
+        } else {
+            showNoInternetDialog(mContext, result.getComment());
         }
     }
 
@@ -533,6 +551,7 @@ public class NewActivityUpload extends BaseActivity implements View.OnClickListe
                     stid = 1;
                     new UploadFile().execute(mGrowerList.get(0).getUploadPhoto());
                 } else {
+                    Log.e("temporary","mResponseString " + mResponseString);
                     if (mResponseString.contains("Error")) {
                         showNoInternetDialog(mContext, mResponseString);
                     } else {
@@ -683,7 +702,7 @@ public class NewActivityUpload extends BaseActivity implements View.OnClickListe
         if (mGrowerClicked) {
             jsonObject.addProperty("CountryId", mGrowerList.get(0).getCountryId());
             jsonObject.addProperty("CountryMasterId", mGrowerList.get(0).getCountryMasterId());
-            jsonObject.addProperty("CreatedBy", mGrowerList.get(0).getCreatedBy());
+            jsonObject.addProperty("CreatedBy",/* mGrowerList.get(0).getCreatedBy()*/Preferences.get(mContext, Preferences.USER_ID));
             jsonObject.addProperty("DOB", mGrowerList.get(0).getDOB());
             jsonObject.addProperty("FullName", mGrowerList.get(0).getFullName());
             jsonObject.addProperty("Gender", mGrowerList.get(0).getGender());
@@ -701,7 +720,7 @@ public class NewActivityUpload extends BaseActivity implements View.OnClickListe
         } else {
             jsonObject.addProperty("CountryId", mOrganizerList.get(0).getCountryId());
             jsonObject.addProperty("CountryMasterId", mOrganizerList.get(0).getCountryMasterId());
-            jsonObject.addProperty("CreatedBy", mOrganizerList.get(0).getCreatedBy());
+            jsonObject.addProperty("CreatedBy", /*mOrganizerList.get(0).getCreatedBy()*/Preferences.get(mContext, Preferences.USER_ID));
             jsonObject.addProperty("DOB", mOrganizerList.get(0).getDOB());
             jsonObject.addProperty("FullName", mOrganizerList.get(0).getFullName());
             jsonObject.addProperty("Gender", mOrganizerList.get(0).getGender());
@@ -717,6 +736,7 @@ public class NewActivityUpload extends BaseActivity implements View.OnClickListe
             jsonObject.addProperty("UserType", mOrganizerList.get(0).getUserType());
             jsonObject.addProperty("UniqueId", mOrganizerList.get(0).getUniqueId());
         }
+      //  Log.e("temporary"," jsonobject "+jsonObject);
         registrationAPI.createGrower(jsonObject);
     }
 
@@ -744,7 +764,7 @@ public class NewActivityUpload extends BaseActivity implements View.OnClickListe
         ParentSeedDistributionParameter parentSeedDistributionParameter
                 = new ParentSeedDistributionParameter(list);
 
-       // Log.e("temporary"," list "+parentSeedDistributionParameter.list);
+        // Log.e("temporary"," list "+parentSeedDistributionParameter.list);
 
         /*JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("CountryId", );
@@ -809,8 +829,10 @@ public class NewActivityUpload extends BaseActivity implements View.OnClickListe
 
         @Override
         protected void onPostExecute(Boolean deleted) {
-//            Log.e("temporary", " onPostExecute deleted " + deleted);
             if (deleted) {
+                if (mSeedDistributionList != null && mSeedDistributionList.size() > 0) {
+                    mSeedDistributionList.clear();
+                }
                 mSeedDistributionRecords.setText(getString(R.string.no_of_records_for_upload, 0));
             }
             /*new GetUpadteSeedDistrAfterDeleteAsyncTaskList().execute();*/

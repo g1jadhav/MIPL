@@ -6,9 +6,9 @@ public class SeedBatchNoModel {
     private int CountryId;
     private String ParentType;
     private String BatchNo;
-    private int NoOfPackets;
-    private int QTYInKG;
-    private int SeedArea;
+    private float NoOfPackets;
+    private float QTYInKG;
+    private float SeedArea;
     // IsDelete: false,
     private String CreatedBy;
     private String CreatedDt;
@@ -17,7 +17,8 @@ public class SeedBatchNoModel {
     private String ProductionCode;
     private String ParentSeedReceiptType;
 
-    public SeedBatchNoModel(int parentSeedBatchId, int parentSeedReceiptId, int countryId, String parentType, String batchNo, int noOfPackets, int QTYInKG, int seedArea, String createdBy, String createdDt, String modifiedBy, String modifiedDt, String productionCode, String parentSeedReceiptType) {
+    public SeedBatchNoModel(int parentSeedBatchId, int parentSeedReceiptId, int countryId, String parentType,
+                            String batchNo, float noOfPackets, float QTYInKG, float seedArea, String createdBy, String createdDt, String modifiedBy, String modifiedDt, String productionCode, String parentSeedReceiptType) {
         ParentSeedBatchId = parentSeedBatchId;
         ParentSeedReceiptId = parentSeedReceiptId;
         CountryId = countryId;
@@ -74,27 +75,27 @@ public class SeedBatchNoModel {
         BatchNo = batchNo;
     }
 
-    public int getNoOfPackets() {
+    public float getNoOfPackets() {
         return NoOfPackets;
     }
 
-    public void setNoOfPackets(int noOfPackets) {
+    public void setNoOfPackets(float noOfPackets) {
         NoOfPackets = noOfPackets;
     }
 
-    public int getQTYInKG() {
+    public float getQTYInKG() {
         return QTYInKG;
     }
 
-    public void setQTYInKG(int QTYInKG) {
+    public void setQTYInKG(float QTYInKG) {
         this.QTYInKG = QTYInKG;
     }
 
-    public int getSeedArea() {
+    public float getSeedArea() {
         return SeedArea;
     }
 
-    public void setSeedArea(int seedArea) {
+    public void setSeedArea(float seedArea) {
         SeedArea = seedArea;
     }
 

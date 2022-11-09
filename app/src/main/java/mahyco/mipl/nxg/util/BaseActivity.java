@@ -14,12 +14,14 @@ import android.os.Environment;
 import android.provider.Settings;
 import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,6 +29,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+
+import mahyco.mipl.nxg.R;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
@@ -36,7 +40,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimary));
         setContentView(getLayout());
         init();
     }
@@ -91,7 +97,8 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected String getCurrentDate() {
         Date date = Calendar.getInstance().getTime();
-        String myFormat = "yyyy-MM-dd";
+//        String myFormat = "yyyy-MM-dd";
+        String myFormat = "dd-MM-yyyy";
 
         SimpleDateFormat df = new SimpleDateFormat(myFormat, Locale.getDefault());
         return df.format(date);

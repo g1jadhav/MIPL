@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -55,6 +56,7 @@ import java.util.List;
 import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import mahyco.mipl.nxg.BuildConfig;
 import mahyco.mipl.nxg.R;
 import mahyco.mipl.nxg.adapter.CategoryLoadingAdapter;
 import mahyco.mipl.nxg.adapter.Spinner10Adapter;
@@ -141,6 +143,8 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
     private RadioButton mMaleRadioButton;
     private RadioButton mFemaleRadioButton;
 
+    private androidx.appcompat.widget.Toolbar toolbar;
+
     @Override
     protected int getLayout() {
         return R.layout.activity_new_grower_registration;
@@ -150,13 +154,33 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
     @Override
     protected void init() {
         try {
+            AppCompatTextView mVersionTextView = findViewById(R.id.registration_version_code);
+            mVersionTextView.setText(getString(R.string.version_code, BuildConfig.VERSION_CODE));
 
             mContext = this;
             str_Lable = getIntent().getExtras().getString("title");
             counrtyId = Preferences.get(mContext, Preferences.COUNTRYCODE);
             countryName = Preferences.get(mContext, Preferences.COUNTRYNAME);
 
-            setTitle("New " + str_Lable + " Registration");
+            //setTitle("New " + str_Lable + " Registration");
+
+            toolbar = findViewById(R.id.toolbar);
+            toolbar.setTitle("New " + str_Lable + " Registration");
+            setSupportActionBar(toolbar);
+
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mCodeScannerView != null && mCodeScannerView.getVisibility() == View.VISIBLE) {
+                        mCodeScanner.releaseResources();
+                        hideScannerLayout();
+                    } else {
+                        finish();
+                    }
+                }
+            });
+
             dp_path = front_path = back_path = "";
 
             new GetCategoriesAsyncTask().execute();
@@ -254,7 +278,8 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
                     mCalendar.set(Calendar.MONTH, i1);
                     mCalendar.set(Calendar.DAY_OF_MONTH, i2);
 
-                    String myFormat = "yyyy-MM-dd";
+//                    String myFormat = "yyyy-MM-dd";
+                    String myFormat = "dd-MM-yyyy";
                     SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat, Locale.getDefault());
                     et_dob.setText(dateFormat.format(mCalendar.getTime()));
                 };
@@ -344,54 +369,53 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
     }
 
     public void submit(View v) {
-        if (validation()) {
-            try {
-
-                str_et_landmark = et_landmark.getText().toString();
-                str_et_fullname = et_fullname.getText().toString();
-
-                if (mMaleRadioButton.isChecked()) {
-                    str_et_gender = mMaleRadioButton.getText().toString();
-                } else {
-                    str_et_gender = mFemaleRadioButton.getText().toString();
-                }
-                str_et_dob = et_dob.getText().toString();
-                str_et_mobile = et_mobile.getText().toString();
-                str_et_uniqcode = et_uniqcode.getText().toString();
-                str_et_regdate = et_regdate.getText().toString();
-                str_et_satffname = et_satffname.getText().toString();
-
-
-                growerModel.setLoginId(Integer.parseInt(Preferences.get(mContext, Preferences.LOGINID).trim()));//,
-                growerModel.setCountryId(Integer.parseInt(counrtyId.trim()));//,
-                //village id
-                growerModel.setCountryMasterId(/*26*/mSpinner5List.get(mSearchableSpinner5.getSelectedItemPosition()).getCountryMasterId());//,
-                growerModel.setUniqueId("");//,
-                growerModel.setUserType(str_Lable);//,
-                growerModel.setLandMark(str_et_landmark);//,
-                growerModel.setFullName(str_et_fullname);//,
-                growerModel.setDOB(str_et_dob);//,
-                growerModel.setGender(str_et_gender);//,
-                growerModel.setMobileNo(str_et_mobile);//,
-                growerModel.setUniqueCode(str_et_uniqcode);//,
-                growerModel.setIdProofFrontCopy(front_path);//,
-                growerModel.setIdProofBackCopy(back_path);//,
-                growerModel.setUploadPhoto(dp_path);//,
-                growerModel.setRegDt(str_et_regdate);//,
-                growerModel.setIsSync(0);
-                growerModel.setGrowerImageUpload(0);
-                growerModel.setFrontImageUpload(0);
-                growerModel.setBackImageUpload(0);
-                growerModel.setStaffNameAndId(str_et_satffname);
-                growerModel.setCreatedBy(Preferences.get(mContext, Preferences.USER_NAME));//
-
-                new AddRegistrationAsyncTask().execute();
-//            stid = 1;
-//            new UploadFile().execute(dp_path);
-            } catch (Exception e) {
-                Log.e("temporary ", "Error is " + e.getMessage());
-            }
-        }
+        validation();
+//        if (validation()) {
+//            try {
+//
+//                str_et_landmark = et_landmark.getText().toString();
+//                str_et_fullname = et_fullname.getText().toString();
+//
+//                if (mMaleRadioButton.isChecked()) {
+//                    str_et_gender = mMaleRadioButton.getText().toString();
+//                } else {
+//                    str_et_gender = mFemaleRadioButton.getText().toString();
+//                }
+//                str_et_dob = et_dob.getText().toString();
+//                str_et_mobile = et_mobile.getText().toString();
+//                str_et_uniqcode = et_uniqcode.getText().toString();
+//                str_et_regdate = et_regdate.getText().toString();
+//                str_et_satffname = et_satffname.getText().toString();
+//
+//
+//                growerModel.setLoginId(Integer.parseInt(Preferences.get(mContext, Preferences.LOGINID).trim()));//,
+//                growerModel.setCountryId(Integer.parseInt(counrtyId.trim()));//,
+//                //village id
+//                growerModel.setCountryMasterId(/*26*/mSpinner5List.get(mSearchableSpinner5.getSelectedItemPosition()).getCountryMasterId());//,
+//                growerModel.setUniqueId("");//,
+//                growerModel.setUserType(str_Lable);//,
+//                growerModel.setLandMark(str_et_landmark);//,
+//                growerModel.setFullName(str_et_fullname);//,
+//                growerModel.setDOB(str_et_dob);//,
+//                growerModel.setGender(str_et_gender);//,
+//                growerModel.setMobileNo(str_et_mobile);//,
+//                growerModel.setUniqueCode(str_et_uniqcode);//,
+//                growerModel.setIdProofFrontCopy(front_path);//,
+//                growerModel.setIdProofBackCopy(back_path);//,
+//                growerModel.setUploadPhoto(dp_path);//,
+//                growerModel.setRegDt(str_et_regdate);//,
+//                growerModel.setIsSync(0);
+//                growerModel.setGrowerImageUpload(0);
+//                growerModel.setFrontImageUpload(0);
+//                growerModel.setBackImageUpload(0);
+//                growerModel.setStaffNameAndId(str_et_satffname);
+//                growerModel.setCreatedBy(Preferences.get(mContext, Preferences.USER_NAME));//
+//
+//                new AddRegistrationAsyncTask().execute();
+//            } catch (Exception e) {
+//                Log.e("temporary ", "Error is " + e.getMessage());
+//            }
+//        }
     }
 
     /*private class GetRegistrationAsyncTaskList extends AsyncTask<Void, Void, Void> {
@@ -1274,7 +1298,7 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
         }
     }
 
-    private boolean validation() {
+    /*private boolean validation() {
         if (mGrowerPhotoFile == null) {
             showToast(getString(R.string.please_grower_photo));
             return false;
@@ -1291,7 +1315,7 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
                 showToast(getString(R.string.Please_enter_organizer_name));
             }
             return false;
-        } else if (/*TextUtils.isEmpty(et_gender.getText().toString())*/
+        } else if (*//*TextUtils.isEmpty(et_gender.getText().toString())*//*
                 !mMaleRadioButton.isChecked() && !mFemaleRadioButton.isChecked()) {
             showToast(getString(R.string.Please_select_gender));
             return false;
@@ -1311,13 +1335,218 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
             showToast(getString(R.string.Please_enter_unique_code));
             return false;
         } else {
-            /*return if (checkInternetConnection()) {*/
+            *//*return if (checkInternetConnection()) {*//*
             return true;
-            /*} else {
+            *//*} else {
                 setEnableOrDisable(true)
                 showToast(getString(R.string.err_internet))
                 false
-            }*/
+            }*//*
+        }
+    }*/
+    private /*boolean*/void validation() {
+        if (mGrowerPhotoFile == null) {
+            showToast(getString(R.string.please_grower_photo));
+            //  return false;
+        } else if (mSearchableSpinner5.getSelectedItemPosition() == -1) {
+            showToast("Data not found");
+            // return false;
+        } else if (TextUtils.isEmpty(et_landmark.getText().toString())) {
+            showToast(getString(R.string.Please_enter_landmark));
+            // return false;
+        } else if (TextUtils.isEmpty(et_fullname.getText().toString())) {
+            if (str_Lable.equalsIgnoreCase("Grower")) {
+                showToast(getString(R.string.Please_enter_farmer_name));
+            } else {
+                showToast(getString(R.string.Please_enter_organizer_name));
+            }
+            //  return false;
+        } else if (/*TextUtils.isEmpty(et_gender.getText().toString())*/
+                !mMaleRadioButton.isChecked() && !mFemaleRadioButton.isChecked()) {
+            showToast(getString(R.string.Please_select_gender));
+            // return false;
+        } else if (TextUtils.isEmpty(et_dob.getText().toString().trim())) {
+            showToast(getString(R.string.Please_enter_date_of_birth));
+            //  return false;
+        } else if (TextUtils.isEmpty(et_mobile.getText().toString().trim())) {
+            showToast(getString(R.string.Please_enter_mobile_no));
+            //  return false;
+        } else if (mDocFrontPhotoFile == null) {
+            showToast(getString(R.string.please_capture_national_id_photo_front));
+            // return false;
+        } else if (mDocBackPhotoFile == null) {
+            showToast(getString(R.string.please_capture_national_id_photo_back));
+            // return false;
+        } else if (TextUtils.isEmpty(et_uniqcode.getText().toString().trim())) {
+            showToast(getString(R.string.Please_enter_unique_code));
+            // return false;
+        } /*else if (new SqlightDatabase(mContext).isGrowerRegister(et_uniqcode.getText().toString().trim())) {
+            Dialog mDialog = null;
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
+            alertDialog.setCancelable(false);
+            alertDialog.setTitle("MIPL");
+            alertDialog.setMessage("Record Already Exists.");
+            alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    // finish();
+                    dialogInterface.dismiss();
+                }
+            });
+            mDialog = alertDialog.create();
+            mDialog.show();
+            return false;
+        } else if (new SqlightDatabase(mContext).isGrowerDownloaded(et_uniqcode.getText().toString().trim())) {
+            Dialog mDialog = null;
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
+            alertDialog.setCancelable(false);
+            alertDialog.setTitle("MIPL");
+            alertDialog.setMessage("Record Already Exists.");
+            alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    // finish();
+                    dialogInterface.dismiss();
+                }
+            });
+            mDialog = alertDialog.create();
+            mDialog.show();
+            return false;
+        } */ else {
+            // Log.e("temporary", " validation true");
+            new CheckWithLocalRegistrationAsyncTask().execute();
+            /*return if (checkInternetConnection()) {*/
+            //  return true;
+        /*} else {
+            setEnableOrDisable(true)
+            showToast(getString(R.string.err_internet))
+            false
+        }*/
+        }
+    }
+
+    private class CheckWithLocalRegistrationAsyncTask extends AsyncTask<Void, Void, Boolean> {
+        @Override
+        protected final Boolean doInBackground(Void... voids) {
+            SqlightDatabase database = null;
+            boolean b = false;
+            try {
+                database = new SqlightDatabase(mContext);
+                b = database.isGrowerRegister(et_uniqcode.getText().toString().trim());
+            } finally {
+                if (database != null) {
+                    database.close();
+                }
+            }
+            return b;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean unused) {
+            if (unused) {
+                Dialog mDialog = null;
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
+                alertDialog.setCancelable(false);
+                alertDialog.setTitle("MIPL");
+                alertDialog.setMessage("Record Already Exists.");
+                alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // finish();
+                        dialogInterface.dismiss();
+                    }
+                });
+                mDialog = alertDialog.create();
+                mDialog.show();
+            } else {
+                new CheckWithServerRegistrationAsyncTask().execute();
+            }
+            super.onPostExecute(unused);
+        }
+    }
+
+    private class CheckWithServerRegistrationAsyncTask extends AsyncTask<Void, Void, Boolean> {
+        @Override
+        protected final Boolean doInBackground(Void... voids) {
+            SqlightDatabase database = null;
+            boolean b = false;
+            try {
+                database = new SqlightDatabase(mContext);
+                b = database.isGrowerDownloaded(et_uniqcode.getText().toString().trim());
+            } finally {
+                if (database != null) {
+                    database.close();
+                }
+            }
+            return b;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean unused) {
+            if (unused) {
+                Dialog mDialog = null;
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
+                alertDialog.setCancelable(false);
+                alertDialog.setTitle("MIPL");
+                alertDialog.setMessage("Record Already Exists.");
+                alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                mDialog = alertDialog.create();
+                mDialog.show();
+            } else {
+                saveData();
+            }
+            super.onPostExecute(unused);
+        }
+    }
+
+    private void saveData() {
+        try {
+            str_et_landmark = et_landmark.getText().toString();
+            str_et_fullname = et_fullname.getText().toString();
+
+            if (mMaleRadioButton.isChecked()) {
+                str_et_gender = mMaleRadioButton.getText().toString();
+            } else {
+                str_et_gender = mFemaleRadioButton.getText().toString();
+            }
+            str_et_dob = et_dob.getText().toString();
+            str_et_mobile = et_mobile.getText().toString();
+            str_et_uniqcode = et_uniqcode.getText().toString();
+            str_et_regdate = et_regdate.getText().toString();
+            str_et_satffname = et_satffname.getText().toString();
+
+
+            growerModel.setLoginId(Integer.parseInt(Preferences.get(mContext, Preferences.LOGINID).trim()));//,
+            growerModel.setCountryId(Integer.parseInt(counrtyId.trim()));//,
+            //village id
+            growerModel.setCountryMasterId(/*26*/mSpinner5List.get(mSearchableSpinner5.getSelectedItemPosition()).getCountryMasterId());//,
+            growerModel.setUniqueId("");//,
+            growerModel.setUserType(str_Lable);//,
+            growerModel.setLandMark(str_et_landmark);//,
+            growerModel.setFullName(str_et_fullname);//,
+            growerModel.setDOB(str_et_dob/*getDateToSendServer(mBirthDateToSendServer)*/);//,
+            growerModel.setGender(str_et_gender);//,
+            growerModel.setMobileNo(str_et_mobile);//,
+            growerModel.setUniqueCode(str_et_uniqcode);//,
+            growerModel.setIdProofFrontCopy(front_path);//,
+            growerModel.setIdProofBackCopy(back_path);//,
+            growerModel.setUploadPhoto(dp_path);//,
+            growerModel.setRegDt(str_et_regdate/*getCurrentDateToSendServer()*/);//,
+            growerModel.setIsSync(0);
+            growerModel.setGrowerImageUpload(0);
+            growerModel.setFrontImageUpload(0);
+            growerModel.setBackImageUpload(0);
+            growerModel.setStaffNameAndId(str_et_satffname);
+            growerModel.setCreatedBy(Preferences.get(mContext, Preferences.USER_NAME));//
+
+            new AddRegistrationAsyncTask().execute();
+        } catch (Exception e) {
+            Log.e("temporary ", "Error is " + e.getMessage());
         }
     }
 

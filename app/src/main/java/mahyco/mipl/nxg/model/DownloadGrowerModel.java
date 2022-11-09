@@ -256,6 +256,6 @@ public class DownloadGrowerModel {
     }
 
     public String toString() {
-        return FullName +" "+ UniqueCode;
+        return FullName +" ("+ UniqueCode+")";
     }
 }

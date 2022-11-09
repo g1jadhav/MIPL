@@ -1,7 +1,9 @@
 package mahyco.mipl.nxg.view.seeddistribution;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -10,12 +12,14 @@ import android.provider.Settings;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatSpinner;
 import androidx.appcompat.widget.AppCompatTextView;
@@ -32,6 +36,7 @@ import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import mahyco.mipl.nxg.BuildConfig;
 import mahyco.mipl.nxg.R;
 import mahyco.mipl.nxg.adapter.CropAdapter;
 import mahyco.mipl.nxg.adapter.GrowerAdapter;
@@ -104,6 +109,8 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
     private boolean mGrowerRadioBtnSelected = true;
     private AppCompatTextView mMaleBatchNoTextView;
 
+    private androidx.appcompat.widget.Toolbar toolbar;
+
     @Override
     protected int getLayout() {
         return R.layout.old_grower_seed_distribution;
@@ -112,12 +119,30 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
     @Override
     protected void init() {
 
-        setTitle("Parent Seed Distribution");
+        //setTitle("Parent Seed Distribution");
 
         ArrayList<String> mYearList = new ArrayList<>();
 
-        mContext = this;
+        toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("Parent Seed Distribution");
+        setSupportActionBar(toolbar);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mCodeScannerView != null && mCodeScannerView.getVisibility() == View.VISIBLE) {
+                    mCodeScanner.releaseResources();
+                    hideScannerLayout();
+                } else {
+                    finish();
+                }
+            }
+        });
+
+        mContext = this;
+        AppCompatTextView mVersionTextView = findViewById(R.id.registration_version_code);
+        mVersionTextView.setText(getString(R.string.version_code, BuildConfig.VERSION_CODE));
         mRadioGroup = findViewById(R.id.direct_or_organizer_radio_group);
         mRadioGroup.setOnCheckedChangeListener((radioGroup, i) -> {
             switch (i) {
@@ -323,94 +348,260 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
             break;
 
             case R.id.seed_distribution_submit_btn:
-                if (validation()) {
-                    try {
-                        //   Log.e("temporary", " selection value " + mGrowerList.get(mSearchByIdNameSpinner.getSelectedItemPosition()).getUniqueId());
-                        mOldGrowerSeedDistributionModel.setCountryId(Integer.parseInt(Preferences.get(mContext, Preferences.COUNTRYCODE)));
-                        mOldGrowerSeedDistributionModel.setPlantingYear(mPlantingYearSpinner.getSelectedItem().toString());
-                        mOldGrowerSeedDistributionModel.setSeasonId(mSeasonList.get(mSeasonSpinner.getSelectedItemPosition()).getSeasonId());
-                        mOldGrowerSeedDistributionModel.setCropId(mCropList.get(mCropSpinner.getSelectedItemPosition()).getCropId());
-                        mOldGrowerSeedDistributionModel.setProductionClusterId(mProdClusterList.get(mClusterSpinner.getSelectedItemPosition()).getProductionClusterId());
-
-                        if (!mGrowerRadioBtnSelected) {
-                            mOldGrowerSeedDistributionModel.setOrganizerId(mOrganizerNameList.get(mOrganizerNameSpinner.getSelectedItemPosition()).getUserId());
-                        } else {
-                            mOldGrowerSeedDistributionModel.setOrganizerId(0);
-                        }
-                        mOldGrowerSeedDistributionModel.setGrowerId(mGrowerList.get(mSearchByIdNameSpinner.getSelectedItemPosition()).getUserId());
-                        mOldGrowerSeedDistributionModel.setParentSeedReceiptId(mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getParentSeedReceiptId());
-                        mOldGrowerSeedDistributionModel.setCreatedBy(Preferences.get(mContext, Preferences.USER_ID));
-                        mOldGrowerSeedDistributionModel.setFemaleParentSeedBatchId(mFemaleBatchNoList.get(mFemaleBatchNoSpinner.getSelectedItemPosition()).getParentSeedBatchId());
-
-                        if (mMaleBatchNoSpinner.getVisibility() == View.VISIBLE) {
-
-                            Preferences.saveFloat(mContext, Preferences.MALE_PARENT_SEED_AREA +
-                                            mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getParentSeedReceiptId()
-                                    , Preferences.getFloat(mContext, Preferences.MALE_PARENT_SEED_AREA +
-                                            mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getParentSeedReceiptId()) - Float.parseFloat(mAreaEditText.getText().toString()));
-
-                            mOldGrowerSeedDistributionModel.setMaleParentSeedBatchId(mMaleBatchNoList.get(mMaleBatchNoSpinner.getSelectedItemPosition()).getParentSeedBatchId());
-                        } else {
-                            mOldGrowerSeedDistributionModel.setMaleParentSeedBatchId(0);
-
-                        }
-                        mOldGrowerSeedDistributionModel.setIssueDt(mParentSeedIssueDate.getText().toString());
-                        mOldGrowerSeedDistributionModel.setSeedProductionArea(Float.parseFloat(mAreaEditText.getText().toString()));
-
-                        Preferences.saveFloat(mContext, Preferences.FEMALE_PARENT_SEED_AREA +
-                                        mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getParentSeedReceiptId()
-                                , Preferences.getFloat(mContext, Preferences.FEMALE_PARENT_SEED_AREA +
-                                        mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getParentSeedReceiptId()) - Float.parseFloat(mAreaEditText.getText().toString()));
-                        new AddDataAsyncTask().execute();
-                    } catch (Exception e) {
-                        showToast("Data not found");
-                    }
-                }
+                validation();
+//                if (validation()) {
+//                    try {
+//                        //   Log.e("temporary", " selection value " + mGrowerList.get(mSearchByIdNameSpinner.getSelectedItemPosition()).getUniqueId());
+//                        mOldGrowerSeedDistributionModel.setCountryId(Integer.parseInt(Preferences.get(mContext, Preferences.COUNTRYCODE)));
+//                        mOldGrowerSeedDistributionModel.setPlantingYear(mPlantingYearSpinner.getSelectedItem().toString());
+//                        mOldGrowerSeedDistributionModel.setSeasonId(mSeasonList.get(mSeasonSpinner.getSelectedItemPosition()).getSeasonId());
+//                        mOldGrowerSeedDistributionModel.setCropId(mCropList.get(mCropSpinner.getSelectedItemPosition()).getCropId());
+//                        mOldGrowerSeedDistributionModel.setProductionClusterId(mProdClusterList.get(mClusterSpinner.getSelectedItemPosition()).getProductionClusterId());
+//
+//                        if (!mGrowerRadioBtnSelected) {
+//                            mOldGrowerSeedDistributionModel.setOrganizerId(mOrganizerNameList.get(mOrganizerNameSpinner.getSelectedItemPosition()).getUserId());
+//                        } else {
+//                            mOldGrowerSeedDistributionModel.setOrganizerId(0);
+//                        }
+//                        mOldGrowerSeedDistributionModel.setGrowerId(mGrowerList.get(mSearchByIdNameSpinner.getSelectedItemPosition()).getUserId());
+//                        mOldGrowerSeedDistributionModel.setParentSeedReceiptId(mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getParentSeedReceiptId());
+//                        mOldGrowerSeedDistributionModel.setCreatedBy(Preferences.get(mContext, Preferences.USER_ID));
+//                        mOldGrowerSeedDistributionModel.setFemaleParentSeedBatchId(mFemaleBatchNoList.get(mFemaleBatchNoSpinner.getSelectedItemPosition()).getParentSeedBatchId());
+//
+//                        if (mMaleBatchNoSpinner.getVisibility() == View.VISIBLE) {
+//
+//                            Preferences.saveFloat(mContext, Preferences.MALE_PARENT_SEED_AREA +
+//                                            mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getParentSeedReceiptId()
+//                                    , Preferences.getFloat(mContext, Preferences.MALE_PARENT_SEED_AREA +
+//                                            mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getParentSeedReceiptId()) - Float.parseFloat(mAreaEditText.getText().toString()));
+//
+//                            mOldGrowerSeedDistributionModel.setMaleParentSeedBatchId(mMaleBatchNoList.get(mMaleBatchNoSpinner.getSelectedItemPosition()).getParentSeedBatchId());
+//                        } else {
+//                            mOldGrowerSeedDistributionModel.setMaleParentSeedBatchId(0);
+//
+//                        }
+//                        mOldGrowerSeedDistributionModel.setIssueDt(mParentSeedIssueDate.getText().toString());
+//                        mOldGrowerSeedDistributionModel.setSeedProductionArea(Float.parseFloat(mAreaEditText.getText().toString()));
+//
+//                        Preferences.saveFloat(mContext, Preferences.FEMALE_PARENT_SEED_AREA +
+//                                        mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getParentSeedReceiptId()
+//                                , Preferences.getFloat(mContext, Preferences.FEMALE_PARENT_SEED_AREA +
+//                                        mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getParentSeedReceiptId()) - Float.parseFloat(mAreaEditText.getText().toString()));
+//                        new AddDataAsyncTask().execute();
+//                    } catch (Exception e) {
+//                        showToast("Data not found");
+//                    }
+//                }
                 break;
         }
     }
 
-    private boolean validation() {
+    private /*boolean*/void validation() {
         if (mSearchByIdNameSpinner.getSelectedItemPosition() == -1 || mSearchByIdNameSpinner.getSelectedItemPosition() == 0) {
             showToast("Please search grower first by name or id");
-            return false;
+            //return false;
         } else if (mSeasonSpinner.getSelectedItemPosition() == -1) {
             showToast("Please select season");
-            return false;
+            // return false;
         } else if (mCropSpinner.getSelectedItemPosition() == -1) {
             showToast("Please select crop");
-            return false;
+            // return false;
         } else if (mProductionCodeSpinner.getSelectedItemPosition() == -1) {
             showToast("Please select production code");
-            return false;
+            //  return false;
         } else if (TextUtils.isEmpty(mAreaEditText.getText().toString().trim()) ||
-                mAreaEditText.getText().toString().trim().equalsIgnoreCase(".")) {
+                mAreaEditText.getText().toString().trim().equalsIgnoreCase(".")
+                /*|| mAreaEditText.getText().toString().trim().equalsIgnoreCase("0.")
+                || mAreaEditText.getText().toString().trim().equalsIgnoreCase(".0")
+                || mAreaEditText.getText().toString().trim().equalsIgnoreCase(".00")
+                || mAreaEditText.getText().toString().trim().equalsIgnoreCase("0.0")*/) {
             showToast("Please enter seed production area");
-            return false;
+            // return false;
+        } else if (Float.parseFloat(mAreaEditText.getText().toString().trim()) <= 0) {
+            showToast("Please enter seed production area");
         } else if (mClusterSpinner.getSelectedItemPosition() == -1) {
             showToast("Please select parent seed issue cluster");
-            return false;
+            // return false;
         } else if (mFemaleBatchNoSpinner.getSelectedItemPosition() == -1) {
             showToast("Please select parent seed batch no. female");
-            return false;
-        } else if (Preferences.getFloat(mContext, Preferences.FEMALE_PARENT_SEED_AREA +
-                mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getParentSeedReceiptId())
-                <= Float.parseFloat(mAreaEditText.getText().toString())) {
-            showToast("Remaining Female Parent Seed Area " + Preferences.getFloat(mContext, Preferences.FEMALE_PARENT_SEED_AREA +
-                    mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getParentSeedReceiptId()));
-            return false;
+            //  return false;
+        } else if (/*Preferences.getFloat(mContext, Preferences.FEMALE_PARENT_SEED_AREA +
+                mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getParentSeedReceiptId())*/
+                mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getFemaleParentSeedsArea()
+                        - Float.parseFloat(mAreaEditText.getText().toString()) < 0) {
+            showToast("Female parent seed area " + /*Preferences.getFloat(mContext, Preferences.FEMALE_PARENT_SEED_AREA +*/
+                    mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getFemaleParentSeedsArea())/*)*/;
+            //  return false;
         } else if (mMaleBatchNoSpinner.getVisibility() == View.VISIBLE && mMaleBatchNoSpinner.getSelectedItemPosition() == -1) {
             showToast("Please select parent seed batch no. male");
-            return false;
+            //  return false;
         } else if (mMaleBatchNoSpinner.getVisibility() == View.VISIBLE &&
-                (Preferences.getFloat(mContext, Preferences.MALE_PARENT_SEED_AREA +
-                        mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getParentSeedReceiptId())
-                        <= Float.parseFloat(mAreaEditText.getText().toString()))) {
-            showToast("Remaining Male Parent Seed Area " + Preferences.getFloat(mContext, Preferences.MALE_PARENT_SEED_AREA +
-                    mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getParentSeedReceiptId()));
+                (/*Preferences.getFloat(mContext, Preferences.MALE_PARENT_SEED_AREA +
+                        mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getParentSeedReceiptId())*/
+                        mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getMaleParentSeedArea()
+                                - Float.parseFloat(mAreaEditText.getText().toString()) < 0)) {
+            showToast("Male parent seed area " + /*Preferences.getFloat(mContext, Preferences.MALE_PARENT_SEED_AREA +*/
+                    mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getMaleParentSeedArea())/*)*/;
+            //  return false;
+        } /*else if (new SqlightDatabase(mContext).isSeedDistributionRegister(mGrowerList.get(mSearchByIdNameSpinner.getSelectedItemPosition()).getUserId())) {
+            Dialog mDialog = null;
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
+            alertDialog.setCancelable(false);
+            alertDialog.setTitle("MIPL");
+            alertDialog.setMessage("All Ready Distributed To This Grower");
+            alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    // finish();
+
+                    dialogInterface.dismiss();
+                }
+            });
+            mDialog = alertDialog.create();
+            mDialog.show();
             return false;
+        } else if (new SqlightDatabase(mContext).isSeedDistributionListDownloaded(mGrowerList.get(mSearchByIdNameSpinner.getSelectedItemPosition()).getUserId())) {
+            Dialog mDialog = null;
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
+            alertDialog.setCancelable(false);
+            alertDialog.setTitle("MIPL");
+            alertDialog.setMessage("All Ready Distributed To This Grower");
+            alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    // finish();
+                    dialogInterface.dismiss();
+                }
+            });
+            mDialog = alertDialog.create();
+            mDialog.show();
+            return false;
+        }*/ else {
+            new CheckWithLocalDatabaseAsyncTask().execute();
         }
-        return true;
+        /*return true;*/
+    }
+
+    private class CheckWithLocalDatabaseAsyncTask extends AsyncTask<Void, Void, Boolean> {
+        @Override
+        protected final Boolean doInBackground(Void... voids) {
+            SqlightDatabase database = null;
+            boolean b = false;
+            try {
+                database = new SqlightDatabase(mContext);
+                b = database.isSeedDistributionRegister(mGrowerList.get(mSearchByIdNameSpinner.getSelectedItemPosition()).getUserId());
+            } finally {
+                if (database != null) {
+                    database.close();
+                }
+            }
+            return b;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean unused) {
+            if (unused) {
+                Dialog mDialog = null;
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
+                alertDialog.setCancelable(false);
+                alertDialog.setTitle("MIPL");
+                alertDialog.setMessage("All Ready Distributed To This Grower");
+                alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                mDialog = alertDialog.create();
+                mDialog.show();
+            } else {
+                new CheckWithServerDatabaseAsyncTask().execute();
+            }
+            super.onPostExecute(unused);
+        }
+    }
+
+    private class CheckWithServerDatabaseAsyncTask extends AsyncTask<Void, Void, Boolean> {
+        @Override
+        protected final Boolean doInBackground(Void... voids) {
+            SqlightDatabase database = null;
+            boolean b = false;
+            try {
+                database = new SqlightDatabase(mContext);
+                b = database.isSeedDistributionListDownloaded(mGrowerList.get(mSearchByIdNameSpinner.getSelectedItemPosition()).getUserId());
+            } finally {
+                if (database != null) {
+                    database.close();
+                }
+            }
+            return b;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean unused) {
+            if (unused) {
+                Dialog mDialog = null;
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
+                alertDialog.setCancelable(false);
+                alertDialog.setTitle("MIPL");
+                alertDialog.setMessage("All Ready Distributed To This Grower");
+                alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                mDialog = alertDialog.create();
+                mDialog.show();
+            } else {
+                saveData();
+            }
+            super.onPostExecute(unused);
+        }
+    }
+
+    private void saveData() {
+        try {
+            //   Log.e("temporary", " selection value " + mGrowerList.get(mSearchByIdNameSpinner.getSelectedItemPosition()).getUniqueId());
+            mOldGrowerSeedDistributionModel.setCountryId(Integer.parseInt(Preferences.get(mContext, Preferences.COUNTRYCODE)));
+            mOldGrowerSeedDistributionModel.setPlantingYear(mPlantingYearSpinner.getSelectedItem().toString());
+            mOldGrowerSeedDistributionModel.setSeasonId(mSeasonList.get(mSeasonSpinner.getSelectedItemPosition()).getSeasonId());
+            mOldGrowerSeedDistributionModel.setCropId(mCropList.get(mCropSpinner.getSelectedItemPosition()).getCropId());
+            mOldGrowerSeedDistributionModel.setProductionClusterId(mProdClusterList.get(mClusterSpinner.getSelectedItemPosition()).getProductionClusterId());
+
+            if (!mGrowerRadioBtnSelected) {
+                mOldGrowerSeedDistributionModel.setOrganizerId(mOrganizerNameList.get(mOrganizerNameSpinner.getSelectedItemPosition()).getUserId());
+            } else {
+                mOldGrowerSeedDistributionModel.setOrganizerId(0);
+            }
+            mOldGrowerSeedDistributionModel.setGrowerId(mGrowerList.get(mSearchByIdNameSpinner.getSelectedItemPosition()).getUserId());
+            mOldGrowerSeedDistributionModel.setParentSeedReceiptId(mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getParentSeedReceiptId());
+            mOldGrowerSeedDistributionModel.setCreatedBy(Preferences.get(mContext, Preferences.USER_ID));
+            mOldGrowerSeedDistributionModel.setFemaleParentSeedBatchId(mFemaleBatchNoList.get(mFemaleBatchNoSpinner.getSelectedItemPosition()).getParentSeedBatchId());
+
+            if (mMaleBatchNoSpinner.getVisibility() == View.VISIBLE) {
+
+//                Preferences.saveFloat(mContext, Preferences.MALE_PARENT_SEED_AREA +
+//                                mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getParentSeedReceiptId()
+//                        , Preferences.getFloat(mContext, Preferences.MALE_PARENT_SEED_AREA +
+//                                mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getParentSeedReceiptId()) - Float.parseFloat(mAreaEditText.getText().toString()));
+
+                mOldGrowerSeedDistributionModel.setMaleParentSeedBatchId(mMaleBatchNoList.get(mMaleBatchNoSpinner.getSelectedItemPosition()).getParentSeedBatchId());
+            } else {
+                mOldGrowerSeedDistributionModel.setMaleParentSeedBatchId(0);
+
+            }
+            mOldGrowerSeedDistributionModel.setIssueDt(mParentSeedIssueDate.getText().toString());
+            mOldGrowerSeedDistributionModel.setSeedProductionArea(Float.parseFloat(mAreaEditText.getText().toString()));
+
+//            Preferences.saveFloat(mContext, Preferences.FEMALE_PARENT_SEED_AREA +
+//                            mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getParentSeedReceiptId()
+//                    , Preferences.getFloat(mContext, Preferences.FEMALE_PARENT_SEED_AREA +
+//                            mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getParentSeedReceiptId()) - Float.parseFloat(mAreaEditText.getText().toString()));
+            new AddDataAsyncTask().execute();
+        } catch (Exception e) {
+            showToast("Data not found");
+        }
     }
 
     private class AddDataAsyncTask extends AsyncTask<Void, Void, Void> {
@@ -430,7 +621,78 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
 
         @Override
         protected void onPostExecute(Void unused) {
-            finish();
+            /*Dialog mDialog = null;
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
+            alertDialog.setCancelable(false);
+            alertDialog.setTitle("MIPL");
+            alertDialog.setMessage("Seed distribution data stored successfully");
+            alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    finish();
+                }
+            });
+            mDialog = alertDialog.create();
+            mDialog.show();*/
+            new UpdateParentSeedStockAsyncTask().execute();
+            super.onPostExecute(unused);
+        }
+    }
+
+    private class UpdateParentSeedStockAsyncTask extends AsyncTask<Void, Void, Boolean> {
+        float maleParentSeedArea = 0;
+
+        @Override
+        protected final Boolean doInBackground(Void... voids) {
+            SqlightDatabase database = null;
+            boolean b = false;
+            try {
+               /* runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {*/
+//                        Log.e("temporary", " area " + mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getMaleParentSeedArea());
+                        if (mMaleBatchNoSpinner.getVisibility() == View.VISIBLE) {
+                            maleParentSeedArea = mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getMaleParentSeedArea()
+                                    - Float.parseFloat(mAreaEditText.getText().toString().trim());
+
+//                            Log.e("temporary", "if  maleParentSeedArea " + maleParentSeedArea
+//                            +" Float.parseFloat(mAreaEditText.getText().toString().trim() " +Float.parseFloat(mAreaEditText.getText().toString().trim()));
+                        } else {
+                            maleParentSeedArea = mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getMaleParentSeedArea();
+//                            Log.e("temporary", "else  maleParentSeedArea " + maleParentSeedArea
+//                                    +" mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getMaleParentSeedArea() "+ mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getMaleParentSeedArea());
+                        }
+                  /*  }
+                });*/
+                database = new SqlightDatabase(mContext);
+//                Log.e("temporary","after if else maleParentSeedArea "+ maleParentSeedArea);
+                b = database.updateSeedParentArea(
+                        mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getParentSeedReceiptId(),
+                        (mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getFemaleParentSeedsArea()
+                                - Float.parseFloat(mAreaEditText.getText().toString())), maleParentSeedArea);
+            } finally {
+                if (database != null) {
+                    database.close();
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean unused) {
+            Dialog mDialog = null;
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
+            alertDialog.setCancelable(false);
+            alertDialog.setTitle("MIPL");
+            alertDialog.setMessage("Seed distribution data stored successfully");
+            alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    finish();
+                }
+            });
+            mDialog = alertDialog.create();
+            mDialog.show();
             super.onPostExecute(unused);
         }
     }
@@ -741,11 +1003,11 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
             if (mSeedProductionCodeList != null) {
                 mSeedProductionCodeList.clear();
             }
-//             Log.e("temporary", " result " + result);
+            //  Log.e("temporary", " onPostExecute seed result " + result);
             if (result != null && result.size() > 0) {
                 for (int i = 0; i < result.size(); i++) {
-                    /*Log.e("temporary", " result.get(i).getPlantingYear() " + result.get(i).getPlantingYear()
-                            + " year " + mPlantingYearSpinner.getSelectedItem().toString() +
+                   /* Log.e("temporary", " result.get(i).getFemaleParentSeedsArea() " + result.get(i).getFemaleParentSeedsArea()
+                            + " male area " + result.get(i).getMaleParentSeedArea());*/ /*+
                             "\n result.get(i).getCropName() " + result.get(i).getCropName() + " crop name " + mCropList.get(mCropSpinner.getSelectedItemPosition()).getCropName() +
                             "\nmGrowerRadioBtnSelected " + mGrowerRadioBtnSelected);*/
                     if (result.get(i).getPlantingYear().equalsIgnoreCase(mPlantingYearSpinner.getSelectedItem().toString()) &&

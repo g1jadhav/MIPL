@@ -6,6 +6,23 @@
     android:layout_height="match_parent"
     android:background="@color/login_background">
 
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
     <com.budiyev.android.codescanner.CodeScannerView
         android:id="@+id/seed_distribution_scanner_view"
         android:layout_width="match_parent"
@@ -17,7 +34,7 @@
         android:id="@+id/seed_distribution_main_scrollview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="?attr/actionBarSize"
         android:fillViewport="true"
         app:layout_constraintBottom_toTopOf="@id/seed_distribution_submit_btn"
         app:layout_constraintTop_toTopOf="parent"
@@ -234,16 +251,16 @@
                 android:text="@string/crop_type"
                 android:textColor="@color/black"
                 android:textSize="15sp"
-                android:visibility="gone"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:visibility="gone" />
 
             <com.toptoche.searchablespinnerlibrary.SearchableSpinner
                 android:id="@+id/crop_type_down"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:visibility="gone"
                 android:layout_marginTop="15dp"
-                android:background="@drawable/login_spinner_style" />
+                android:background="@drawable/login_spinner_style"
+                android:visibility="gone" />
 
 
             <androidx.appcompat.widget.AppCompatTextView
@@ -402,9 +419,9 @@
         android:id="@+id/registration_version_code"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="end"
-        android:padding="5dp"
-        android:textColor="@color/btn_color"
+        android:fontFamily="@font/comforta"
+        android:gravity="center"
+        android:padding="10dp"
         android:textSize="15sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent" />
