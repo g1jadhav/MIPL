@@ -102,10 +102,12 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
-            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+            <mahyco.mipl.nxg.spinner.CCFSerachSpinner
                 android:id="@+id/search_grower_by_id_name"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:background="@drawable/login_spinner_style" />
 
             <androidx.appcompat.widget.AppCompatTextView
@@ -187,11 +189,13 @@
                 android:textStyle="bold"
                 android:visibility="gone" />
 
-            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+            <mahyco.mipl.nxg.spinner.CCFSerachSpinner
                 android:id="@+id/organizer_name_drop_down"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginTop="15dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:background="@drawable/login_spinner_style"
                 android:visibility="gone" />
 
@@ -221,11 +225,13 @@
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
-            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+            <mahyco.mipl.nxg.spinner.CCFSerachSpinner
                 android:id="@+id/season_drop_down"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginTop="15dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:background="@drawable/login_spinner_style" />
 
             <androidx.appcompat.widget.AppCompatTextView
@@ -237,11 +243,13 @@
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
-            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+            <mahyco.mipl.nxg.spinner.CCFSerachSpinner
                 android:id="@+id/crop_drop_down"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginTop="15dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:background="@drawable/login_spinner_style" />
 
             <androidx.appcompat.widget.AppCompatTextView
@@ -254,11 +262,13 @@
                 android:textStyle="bold"
                 android:visibility="gone" />
 
-            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+            <mahyco.mipl.nxg.spinner.CCFSerachSpinner
                 android:id="@+id/crop_type_down"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginTop="15dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:background="@drawable/login_spinner_style"
                 android:visibility="gone" />
 
@@ -272,11 +282,13 @@
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
-            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+            <mahyco.mipl.nxg.spinner.CCFSerachSpinner
                 android:id="@+id/production_code_drop_down"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginTop="15dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:background="@drawable/login_spinner_style" />
 
             <androidx.appcompat.widget.AppCompatTextView
@@ -311,11 +323,13 @@
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
-            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+            <mahyco.mipl.nxg.spinner.CCFSerachSpinner
                 android:id="@+id/parent_seed_issue_location_drop_down"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginTop="15dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:background="@drawable/login_spinner_style" />
 
             <androidx.appcompat.widget.AppCompatTextView
@@ -327,11 +341,13 @@
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
-            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+            <mahyco.mipl.nxg.spinner.CCFSerachSpinner
                 android:id="@+id/parent_seed_batch_no_female_drop_down"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginTop="15dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:background="@drawable/login_spinner_style" />
 
             <androidx.appcompat.widget.AppCompatTextView
@@ -344,11 +360,13 @@
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
-            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+            <mahyco.mipl.nxg.spinner.CCFSerachSpinner
                 android:id="@+id/parent_seed_batch_no_male_drop_down"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginTop="15dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:background="@drawable/login_spinner_style" />
 
 
@@ -477,7 +495,7 @@
                 android:textStyle="bold"
                 android:visibility="gone" />
 
-            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+            <mahyco.mipl.nxg.spinner.CCFSerachSpinner
                 android:id="@+id/organizer_name_drop_down"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -513,7 +531,7 @@
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
-            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+            <mahyco.mipl.nxg.spinner.CCFSerachSpinner
                 android:id="@+id/season_drop_down"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -529,7 +547,7 @@
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
-            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+            <mahyco.mipl.nxg.spinner.CCFSerachSpinner
                 android:id="@+id/crop_drop_down"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -545,7 +563,7 @@
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
-            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+            <mahyco.mipl.nxg.spinner.CCFSerachSpinner
                 android:id="@+id/production_code_drop_down"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -584,7 +602,7 @@
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
-            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+            <mahyco.mipl.nxg.spinner.CCFSerachSpinner
                 android:id="@+id/parent_seed_issue_location_drop_down"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -600,7 +618,7 @@
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
-            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+            <mahyco.mipl.nxg.spinner.CCFSerachSpinner
                 android:id="@+id/parent_seed_batch_no_female_drop_down"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -616,7 +634,7 @@
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
-            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+            <mahyco.mipl.nxg.spinner.CCFSerachSpinner
                 android:id="@+id/parent_seed_batch_no_male_drop_down"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"

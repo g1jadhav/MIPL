@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.Html;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -369,7 +370,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private String getCurrentDate() {
         Date date = Calendar.getInstance().getTime();
-        String myFormat = "yyyy-MM-dd";
+//        String myFormat = "yyyy-MM-dd";
+        String myFormat = "dd-MM-yyyy";
 
         SimpleDateFormat df = new SimpleDateFormat(myFormat, Locale.getDefault());
         return df.format(date);

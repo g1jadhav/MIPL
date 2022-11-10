@@ -52,7 +52,17 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected abstract void init();
 
     protected boolean checkInternetConnection(Context context) {
-        boolean result = false;
+        try {
+            ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo activeInfo = connMgr.getActiveNetworkInfo();
+            if (activeInfo != null && activeInfo.isConnected()) {
+                return (activeInfo.getType() == ConnectivityManager.TYPE_WIFI || activeInfo.getType() == ConnectivityManager.TYPE_MOBILE);
+            }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+        return false;
+        /*boolean result = false;
         try {
             ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -75,7 +85,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return result;
+        return result;*/
     }
 
     protected void showNoInternetDialog(Context context, String message) {

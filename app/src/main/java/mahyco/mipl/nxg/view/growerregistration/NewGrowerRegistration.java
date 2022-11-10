@@ -59,20 +59,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import mahyco.mipl.nxg.BuildConfig;
 import mahyco.mipl.nxg.R;
 import mahyco.mipl.nxg.adapter.CategoryLoadingAdapter;
-import mahyco.mipl.nxg.adapter.Spinner10Adapter;
-import mahyco.mipl.nxg.adapter.Spinner1Adapter;
-import mahyco.mipl.nxg.adapter.Spinner2Adapter;
-import mahyco.mipl.nxg.adapter.Spinner3Adapter;
-import mahyco.mipl.nxg.adapter.Spinner4Adapter;
-import mahyco.mipl.nxg.adapter.Spinner5Adapter;
-import mahyco.mipl.nxg.adapter.Spinner6Adapter;
-import mahyco.mipl.nxg.adapter.Spinner7Adapter;
-import mahyco.mipl.nxg.adapter.Spinner8Adapter;
-import mahyco.mipl.nxg.adapter.Spinner9Adapter;
 import mahyco.mipl.nxg.model.CategoryChildModel;
 import mahyco.mipl.nxg.model.CategoryModel;
 import mahyco.mipl.nxg.model.GrowerModel;
 import mahyco.mipl.nxg.model.SuccessModel;
+import mahyco.mipl.nxg.spinner.CCFSerachSpinner;
 import mahyco.mipl.nxg.util.BaseActivity;
 import mahyco.mipl.nxg.util.Constants;
 import mahyco.mipl.nxg.util.MultipartUtility;
@@ -102,19 +93,19 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
     GrowerModel growerModel = new GrowerModel();
     String counrtyId = "0", countryName = "";
 
-    private SearchableSpinner mSpinnerArray[];
+    private CCFSerachSpinner mSpinnerArray[];
     private int[] mSpinnerHeadingTextView;
 
-    private SearchableSpinner mSearchableSpinner1;
-    private SearchableSpinner mSearchableSpinner2;
-    private SearchableSpinner mSearchableSpinner3;
-    private SearchableSpinner mSearchableSpinner4;
-    private SearchableSpinner mSearchableSpinner5;
-    private SearchableSpinner mSearchableSpinner6;
-    private SearchableSpinner mSearchableSpinner7;
-    private SearchableSpinner mSearchableSpinner8;
-    private SearchableSpinner mSearchableSpinner9;
-    private SearchableSpinner mSearchableSpinner10;
+    private CCFSerachSpinner mSearchableSpinner1;
+    private CCFSerachSpinner mSearchableSpinner2;
+    private CCFSerachSpinner mSearchableSpinner3;
+    private CCFSerachSpinner mSearchableSpinner4;
+    private CCFSerachSpinner mSearchableSpinner5;
+    private CCFSerachSpinner mSearchableSpinner6;
+    private CCFSerachSpinner mSearchableSpinner7;
+    private CCFSerachSpinner mSearchableSpinner8;
+    private CCFSerachSpinner mSearchableSpinner9;
+    private CCFSerachSpinner mSearchableSpinner10;
 
     private DatePickerDialog mDatePickerDialog = null;
 
@@ -215,7 +206,7 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
                 }
             });
 
-            mSpinnerArray = new SearchableSpinner[]{mSearchableSpinner1, mSearchableSpinner2, mSearchableSpinner3, mSearchableSpinner4, mSearchableSpinner5, mSearchableSpinner6, mSearchableSpinner7, mSearchableSpinner8, mSearchableSpinner9, mSearchableSpinner10};
+            mSpinnerArray = new CCFSerachSpinner[]{mSearchableSpinner1, mSearchableSpinner2, mSearchableSpinner3, mSearchableSpinner4, mSearchableSpinner5, mSearchableSpinner6, mSearchableSpinner7, mSearchableSpinner8, mSearchableSpinner9, mSearchableSpinner10};
             mSpinnerHeadingTextView = new int[]{R.id.textview1, R.id.textview2, R.id.textview3, R.id.textview4, R.id.textview5, R.id.textview6, R.id.textview7, R.id.textview8, R.id.textview9, R.id.textview10};
 
             et_landmark = (EditText) findViewById(R.id.landmark_edittext);
@@ -877,13 +868,18 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
         switch (mSpinnerPosition) {
             case 1: {
                 mSpinner1List = result;
-                Spinner1Adapter adapter = new Spinner1Adapter(mContext, R.layout.spinner_rows, result);
+//                Spinner1Adapter adapter = new Spinner1Adapter(mContext, R.layout.spinner_rows,
+//                        result);
+                ArrayAdapter<CategoryChildModel> adapter = new ArrayAdapter<>(mContext, R.layout.spinner_rows,
+                        result);
                 mSearchableSpinner1.setAdapter(adapter);
             }
             break;
             case 2: {
                 mSpinner2List = result;
-                Spinner2Adapter adapter = new Spinner2Adapter(mContext, R.layout.spinner_rows, result);
+                //Spinner2Adapter adapter = new Spinner2Adapter(mContext, R.layout.spinner_rows, result);
+                ArrayAdapter<CategoryChildModel> adapter = new ArrayAdapter<>(mContext, R.layout.spinner_rows,
+                        result);
                 mSearchableSpinner2.setAdapter(adapter);
                 mSearchableSpinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
@@ -904,7 +900,9 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
             break;
             case 3: {
                 mSpinner3List = result;
-                Spinner3Adapter adapter = new Spinner3Adapter(mContext, R.layout.spinner_rows, result);
+                // Spinner3Adapter adapter = new Spinner3Adapter(mContext, R.layout.spinner_rows, result);
+                ArrayAdapter<CategoryChildModel> adapter = new ArrayAdapter<>(mContext, R.layout.spinner_rows,
+                        result);
                 mSearchableSpinner3.setAdapter(adapter);
 
                 mSearchableSpinner3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -926,7 +924,9 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
             break;
             case 4: {
                 mSpinner4List = result;
-                Spinner4Adapter adapter = new Spinner4Adapter(mContext, R.layout.spinner_rows, result);
+                //Spinner4Adapter adapter = new Spinner4Adapter(mContext, R.layout.spinner_rows, result);
+                ArrayAdapter<CategoryChildModel> adapter = new ArrayAdapter<>(mContext, R.layout.spinner_rows,
+                        result);
                 mSearchableSpinner4.setAdapter(adapter);
 
                 mSearchableSpinner4.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -948,7 +948,9 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
             break;
             case 5: {
                 mSpinner5List = result;
-                Spinner5Adapter adapter = new Spinner5Adapter(mContext, R.layout.spinner_rows, result);
+                //Spinner5Adapter adapter = new Spinner5Adapter(mContext, R.layout.spinner_rows, result);
+                ArrayAdapter<CategoryChildModel> adapter = new ArrayAdapter<>(mContext, R.layout.spinner_rows,
+                        result);
                 mSearchableSpinner5.setAdapter(adapter);
 
                 mSearchableSpinner5.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -970,7 +972,9 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
             break;
             case 6: {
                 mSpinner6List = result;
-                Spinner6Adapter adapter = new Spinner6Adapter(mContext, R.layout.spinner_rows, result);
+                // Spinner6Adapter adapter = new Spinner6Adapter(mContext, R.layout.spinner_rows, result);
+                ArrayAdapter<CategoryChildModel> adapter = new ArrayAdapter<>(mContext, R.layout.spinner_rows,
+                        result);
                 mSearchableSpinner6.setAdapter(adapter);
 
                 mSearchableSpinner6.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -992,7 +996,9 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
             break;
             case 7: {
                 mSpinner7List = result;
-                Spinner7Adapter adapter = new Spinner7Adapter(mContext, R.layout.spinner_rows, result);
+                //Spinner7Adapter adapter = new Spinner7Adapter(mContext, R.layout.spinner_rows, result);
+                ArrayAdapter<CategoryChildModel> adapter = new ArrayAdapter<>(mContext, R.layout.spinner_rows,
+                        result);
                 mSearchableSpinner7.setAdapter(adapter);
 
                 mSearchableSpinner7.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -1014,7 +1020,9 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
             break;
             case 8: {
                 mSpinner8List = result;
-                Spinner8Adapter adapter = new Spinner8Adapter(mContext, R.layout.spinner_rows, result);
+                // Spinner8Adapter adapter = new Spinner8Adapter(mContext, R.layout.spinner_rows, result);
+                ArrayAdapter<CategoryChildModel> adapter = new ArrayAdapter<>(mContext, R.layout.spinner_rows,
+                        result);
                 mSearchableSpinner8.setAdapter(adapter);
 
                 mSearchableSpinner8.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -1036,7 +1044,9 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
             break;
             case 9: {
                 mSpinner9List = result;
-                Spinner9Adapter adapter = new Spinner9Adapter(mContext, R.layout.spinner_rows, result);
+                // Spinner9Adapter adapter = new Spinner9Adapter(mContext, R.layout.spinner_rows, result);
+                ArrayAdapter<CategoryChildModel> adapter = new ArrayAdapter<>(mContext, R.layout.spinner_rows,
+                        result);
                 mSearchableSpinner9.setAdapter(adapter);
 
                 mSearchableSpinner9.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -1058,7 +1068,9 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
             break;
             case 10: {
                 mSpinner10List = result;
-                Spinner10Adapter adapter = new Spinner10Adapter(mContext, R.layout.spinner_rows, result);
+                // Spinner10Adapter adapter = new Spinner10Adapter(mContext, R.layout.spinner_rows, result);
+                ArrayAdapter<CategoryChildModel> adapter = new ArrayAdapter<>(mContext, R.layout.spinner_rows,
+                        result);
                 mSearchableSpinner10.setAdapter(adapter);
                 mSearchableSpinner10.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override

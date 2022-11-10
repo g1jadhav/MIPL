@@ -15,6 +15,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
@@ -29,7 +30,6 @@ import com.budiyev.android.codescanner.AutoFocusMode;
 import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.ScanMode;
-import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -38,14 +38,6 @@ import java.util.regex.Pattern;
 
 import mahyco.mipl.nxg.BuildConfig;
 import mahyco.mipl.nxg.R;
-import mahyco.mipl.nxg.adapter.CropAdapter;
-import mahyco.mipl.nxg.adapter.GrowerAdapter;
-import mahyco.mipl.nxg.adapter.OrganizerAdapter;
-import mahyco.mipl.nxg.adapter.ProductCodeAdapter;
-import mahyco.mipl.nxg.adapter.ProductionClusterAdapter;
-import mahyco.mipl.nxg.adapter.SeasonAdapter;
-import mahyco.mipl.nxg.adapter.SeedBatchNoFemaleAdapter;
-import mahyco.mipl.nxg.adapter.SeedBatchNoMaleAdapter;
 import mahyco.mipl.nxg.adapter.SeedDistrPlantingYearAdapter;
 import mahyco.mipl.nxg.model.CropModel;
 import mahyco.mipl.nxg.model.DownloadGrowerModel;
@@ -54,6 +46,7 @@ import mahyco.mipl.nxg.model.ProductionClusterModel;
 import mahyco.mipl.nxg.model.SeasonModel;
 import mahyco.mipl.nxg.model.SeedBatchNoModel;
 import mahyco.mipl.nxg.model.SeedReceiptModel;
+import mahyco.mipl.nxg.spinner.CCFSerachSpinner;
 import mahyco.mipl.nxg.util.BaseActivity;
 import mahyco.mipl.nxg.util.Preferences;
 import mahyco.mipl.nxg.util.SqlightDatabase;
@@ -63,14 +56,14 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
     private Context mContext;
 
     private AppCompatSpinner mPlantingYearSpinner;
-    private SearchableSpinner mSeasonSpinner;
-    private SearchableSpinner mCropSpinner;
-    private SearchableSpinner mProductionCodeSpinner;
-    private SearchableSpinner mClusterSpinner;
-    private SearchableSpinner mMaleBatchNoSpinner;
-    private SearchableSpinner mFemaleBatchNoSpinner;
-    private SearchableSpinner mOrganizerNameSpinner;
-    private SearchableSpinner mSearchByIdNameSpinner;
+    private CCFSerachSpinner mSeasonSpinner;
+    private CCFSerachSpinner mCropSpinner;
+    private CCFSerachSpinner mProductionCodeSpinner;
+    private CCFSerachSpinner mClusterSpinner;
+    private CCFSerachSpinner mMaleBatchNoSpinner;
+    private CCFSerachSpinner mFemaleBatchNoSpinner;
+    private CCFSerachSpinner mOrganizerNameSpinner;
+    private CCFSerachSpinner mSearchByIdNameSpinner;
     // private SearchableSpinner mCropTypeSpinner;
 
     private ArrayList<CropModel> mCropList = new ArrayList<>();
@@ -221,6 +214,21 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
             }
         });
 
+        mProductionCodeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//                Log.e("temporary", "selected item called mFirstTimeProductionSelected " + mFirstTimeProductionSelected);
+                mMaleBatchNoSpinner.setAdapter(null);
+                mFemaleBatchNoSpinner.setAdapter(null);
+//                Log.e("temporary", "mSelectedProductionSpinner " + mSelectedProductionSpinner);
+                new GetBatchNoMasterAsyncTask().execute();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
+
         mPlantingYearSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -265,7 +273,7 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
         calendar.add(Calendar.YEAR, -1);
         mYearList.add(String.valueOf(calendar.get(Calendar.YEAR)));
 
-        SeedDistrPlantingYearAdapter adapter = new SeedDistrPlantingYearAdapter(mContext, R.layout.spinner_rows, mYearList);
+        SeedDistrPlantingYearAdapter adapter = new SeedDistrPlantingYearAdapter(mContext, R.layout.planting_year_rows, mYearList);
         mPlantingYearSpinner.setAdapter(adapter);
         mPlantingYearSpinner.setSelection(1);
 
@@ -598,6 +606,7 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
 //                            mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getParentSeedReceiptId()
 //                    , Preferences.getFloat(mContext, Preferences.FEMALE_PARENT_SEED_AREA +
 //                            mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getParentSeedReceiptId()) - Float.parseFloat(mAreaEditText.getText().toString()));
+
             new AddDataAsyncTask().execute();
         } catch (Exception e) {
             showToast("Data not found");
@@ -651,17 +660,17 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
                     @Override
                     public void run() {*/
 //                        Log.e("temporary", " area " + mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getMaleParentSeedArea());
-                        if (mMaleBatchNoSpinner.getVisibility() == View.VISIBLE) {
-                            maleParentSeedArea = mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getMaleParentSeedArea()
-                                    - Float.parseFloat(mAreaEditText.getText().toString().trim());
+                if (mMaleBatchNoSpinner.getVisibility() == View.VISIBLE) {
+                    maleParentSeedArea = mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getMaleParentSeedArea()
+                            - Float.parseFloat(mAreaEditText.getText().toString().trim());
 
 //                            Log.e("temporary", "if  maleParentSeedArea " + maleParentSeedArea
 //                            +" Float.parseFloat(mAreaEditText.getText().toString().trim() " +Float.parseFloat(mAreaEditText.getText().toString().trim()));
-                        } else {
-                            maleParentSeedArea = mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getMaleParentSeedArea();
+                } else {
+                    maleParentSeedArea = mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getMaleParentSeedArea();
 //                            Log.e("temporary", "else  maleParentSeedArea " + maleParentSeedArea
 //                                    +" mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getMaleParentSeedArea() "+ mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getMaleParentSeedArea());
-                        }
+                }
                   /*  }
                 });*/
                 database = new SqlightDatabase(mContext);
@@ -747,7 +756,6 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
 
         @Override
         protected void onPreExecute() {
-            //  Log.e("temporary", "GetGrowerMasterAsyncTask onPreExecute called");
             showProgressDialog(mContext);
             super.onPreExecute();
         }
@@ -786,13 +794,15 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
                     }
                 }
                 if (mGrowerList.size() > 0) {
-                    GrowerAdapter adapter = new GrowerAdapter(mContext, R.layout.spinner_rows, mGrowerList);
+                    // GrowerAdapter adapter = new GrowerAdapter(mContext, R.layout.spinner_rows, mGrowerList);
+                    ArrayAdapter<DownloadGrowerModel> adapter = new ArrayAdapter<>(mContext, R.layout.spinner_rows, mGrowerList);
                     mSearchByIdNameSpinner.setAdapter(adapter);
                 }
 
                 if (mOrganizerNameList.size() > 0) {
-                    OrganizerAdapter adapter1 = new OrganizerAdapter(mContext, R.layout.spinner_rows, mOrganizerNameList);
-                    mOrganizerNameSpinner.setAdapter(adapter1);
+                    // OrganizerAdapter adapter1 = new OrganizerAdapter(mContext, R.layout.spinner_rows, mOrganizerNameList);
+                    ArrayAdapter<DownloadGrowerModel> adapter = new ArrayAdapter<>(mContext, R.layout.spinner_rows, mOrganizerNameList);
+                    mOrganizerNameSpinner.setAdapter(adapter);
                 }
                 super.onPostExecute(result);
             }
@@ -804,7 +814,6 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
 
         @Override
         protected void onPreExecute() {
-            // Log.e("temporary", "GetSeasonMasterAsyncTask onPreExecute called");
             showProgressDialog(mContext);
             super.onPreExecute();
         }
@@ -832,7 +841,8 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
             }
             if (result != null && result.size() > 0) {
                 mSeasonList = result;
-                SeasonAdapter adapter = new SeasonAdapter(mContext, R.layout.spinner_rows, mSeasonList);
+                // SeasonAdapter adapter = new SeasonAdapter(mContext, R.layout.spinner_rows, mSeasonList);
+                ArrayAdapter<SeasonModel> adapter = new ArrayAdapter<>(mContext, R.layout.spinner_rows, mSeasonList);
                 mSeasonSpinner.setAdapter(adapter);
                 super.onPostExecute(result);
             }
@@ -845,7 +855,7 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
 
         @Override
         protected void onPreExecute() {
-            //   Log.e("temporary", "GetCropMasterAsyncTask onPreExecute called");
+//            Log.e("temporary", "GetCropMasterAsyncTask onPreExecute called");
             showProgressDialog(mContext);
             super.onPreExecute();
         }
@@ -873,7 +883,8 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
             }
             if (result != null && result.size() > 0) {
                 mCropList = result;
-                CropAdapter adapter = new CropAdapter(mContext, R.layout.spinner_rows, mCropList);
+                // CropAdapter adapter = new CropAdapter(mContext, R.layout.spinner_rows, mCropList);
+                ArrayAdapter<CropModel> adapter = new ArrayAdapter<>(mContext, R.layout.spinner_rows, mCropList);
                 mCropSpinner.setAdapter(adapter);
                 new GetProductionCodeMasterAsyncTask().execute();
                 super.onPostExecute(result);
@@ -965,7 +976,9 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
             }
             if (result != null && result.size() > 0) {
                 mProdClusterList = result;
-                ProductionClusterAdapter adapter = new ProductionClusterAdapter(mContext, R.layout.spinner_rows, mProdClusterList);
+                // ProductionClusterAdapter adapter = new ProductionClusterAdapter(mContext, R.layout.spinner_rows, mProdClusterList);
+                ArrayAdapter<ProductionClusterModel> adapter = new ArrayAdapter<>(mContext, R.layout.spinner_rows,
+                        mProdClusterList);
                 mClusterSpinner.setAdapter(adapter);
                 super.onPostExecute(result);
             }
@@ -976,7 +989,7 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
 
         @Override
         protected void onPreExecute() {
-            //  Log.e("temporary", "GetSeedReceiptMasterAsyncTask onPreExecute called");
+//           Log.e("temporary", "GetSeedReceiptMasterAsyncTask onPreExecute called");
             showProgressDialog(mContext);
             super.onPreExecute();
         }
@@ -1003,7 +1016,7 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
             if (mSeedProductionCodeList != null) {
                 mSeedProductionCodeList.clear();
             }
-            //  Log.e("temporary", " onPostExecute seed result " + result);
+         //   Log.e("temporary", " onPostExecute seed result " + result);
             if (result != null && result.size() > 0) {
                 for (int i = 0; i < result.size(); i++) {
                    /* Log.e("temporary", " result.get(i).getFemaleParentSeedsArea() " + result.get(i).getFemaleParentSeedsArea()
@@ -1026,7 +1039,9 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
                         }
                     }
                 }
-                ProductCodeAdapter adapter = new ProductCodeAdapter(mContext, R.layout.spinner_rows, mSeedProductionCodeList);
+                // ProductCodeAdapter adapter = new ProductCodeAdapter(mContext, R.layout.spinner_rows, mSeedProductionCodeList);
+                ArrayAdapter<SeedReceiptModel> adapter = new ArrayAdapter<>(mContext, R.layout.spinner_rows,
+                        mSeedProductionCodeList);
                 mProductionCodeSpinner.setAdapter(adapter);
                 if (mSeedProductionCodeList.size() > 0) {
                     if (mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getCropType().equalsIgnoreCase("Hybrid")) {
@@ -1049,7 +1064,7 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
     private class GetBatchNoMasterAsyncTask extends AsyncTask<Void, Void, ArrayList<SeedBatchNoModel>> {
         @Override
         protected void onPreExecute() {
-            //  Log.e("temporary", "GetBatchNoMasterAsyncTask onPreExecute called");
+//          Log.e("temporary", "GetBatchNoMasterAsyncTask onPreExecute called");
             showProgressDialog(mContext);
             super.onPreExecute();
         }
@@ -1061,7 +1076,8 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
             try {
                 database = new SqlightDatabase(mContext);
                 //   Log.e("temporary", "mProdCodeList crop code " + mSeedReceiptList.get(0).getProductionCode());
-                actionModels = database.getSeedBatchNo(mSeedProductionCodeList.get(0).getProductionCode());
+             //   Log.e("temporary", "mProductionCodeSpinner.getSelectedItemPosition() " + mProductionCodeSpinner.getSelectedItemPosition());
+                actionModels = database.getSeedBatchNo(mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getProductionCode());
             } finally {
                 if (database != null) {
                     database.close();
@@ -1079,7 +1095,7 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
             if (mFemaleBatchNoList != null) {
                 mFemaleBatchNoList.clear();
             }
-            //  Log.e("temporary", "result " + result);
+          //  Log.e("temporary", "result " + result);
             if (result != null && result.size() > 0) {
                 for (int i = 0; i < result.size(); i++) {
                     if (result.get(i).getParentType().equalsIgnoreCase("Female Batch No")) {
@@ -1104,10 +1120,16 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
                         }
                     }
                 }
-                SeedBatchNoMaleAdapter adapter = new SeedBatchNoMaleAdapter(mContext, R.layout.spinner_rows, mMaleBatchNoList);
+                //SeedBatchNoMaleAdapter adapter = new SeedBatchNoMaleAdapter(mContext, R.layout.spinner_rows, mMaleBatchNoList);
+
+                ArrayAdapter<SeedBatchNoModel> adapter = new ArrayAdapter<>(mContext, R.layout.spinner_rows,
+                        mMaleBatchNoList);
                 mMaleBatchNoSpinner.setAdapter(adapter);
 
-                SeedBatchNoFemaleAdapter adapter1 = new SeedBatchNoFemaleAdapter(mContext, R.layout.spinner_rows, mFemaleBatchNoList);
+                //SeedBatchNoFemaleAdapter adapter1 = new SeedBatchNoFemaleAdapter(mContext, R.layout.spinner_rows, mFemaleBatchNoList);
+
+                ArrayAdapter<SeedBatchNoModel> adapter1 = new ArrayAdapter<>(mContext, R.layout.spinner_rows,
+                        mFemaleBatchNoList);
                 mFemaleBatchNoSpinner.setAdapter(adapter1);
                 super.onPostExecute(result);
             }

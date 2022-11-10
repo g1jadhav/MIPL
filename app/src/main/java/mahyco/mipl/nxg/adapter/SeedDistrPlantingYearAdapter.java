@@ -47,7 +47,7 @@ public class SeedDistrPlantingYearAdapter extends ArrayAdapter<String> {
         if (rowViews == null) {
 
             holder = new viewHolder();
-            rowViews = flater.inflate(R.layout.spinner_rows, null, false);
+            rowViews = flater.inflate(R.layout.planting_year_rows, null, false);
 
             holder.txtTitle = rowViews.findViewById(R.id.sub);
             rowViews.setTag(holder);
