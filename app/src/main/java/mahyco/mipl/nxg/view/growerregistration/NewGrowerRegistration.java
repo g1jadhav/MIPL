@@ -49,9 +49,11 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -156,7 +158,11 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
             //setTitle("New " + str_Lable + " Registration");
 
             toolbar = findViewById(R.id.toolbar);
-            toolbar.setTitle("New " + str_Lable + " Registration");
+            if(str_Lable.equalsIgnoreCase("Grower")) {
+                toolbar.setTitle("New " + str_Lable + " Registration");
+            } else {
+                toolbar.setTitle("New Coordinator Registration");
+            }
             setSupportActionBar(toolbar);
 
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -221,7 +227,11 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
             et_satffname = findViewById(R.id.staff_name_and_id_textview);
             txt_name = (TextView) findViewById(R.id.txt_name);
             txt_registration_country = (TextView) findViewById(R.id.registration_country_textview);
-            txt_name.setText(str_Lable + " Full Name :");
+            if(str_Lable.equalsIgnoreCase("Grower")) {
+                txt_name.setText(str_Lable + " Full Name :");
+            } else {
+                txt_name.setText("Coordinator Full Name :");
+            }
             txt_registration_country.setText("" + countryName);
             et_satffname.setText("" + Preferences.get(mContext, Preferences.USER_NAME));
             iv_dp = findViewById(R.id.farmer_photo);
@@ -254,6 +264,8 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
         }
     }
 
+    String dob = "";
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -271,6 +283,9 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
 
 //                    String myFormat = "yyyy-MM-dd";
                     String myFormat = "dd-MM-yyyy";
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault());
+                    dob = sdf.format(mCalendar.getTime());
+                  //  Log.e("temporary", "dob " + dob);
                     SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat, Locale.getDefault());
                     et_dob.setText(dateFormat.format(mCalendar.getTime()));
                 };
@@ -313,7 +328,27 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
                             if (results.length > 10 && results[1].contains("MWI")
                             ) {
                                 showToast("Scanner successfully !!");
-                                et_dob.setText(results[9]);
+
+                                try {
+                                    Date date1 = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).parse(results[9]);
+                                    if (date1 != null) {
+                                        dob = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault()).format(date1);
+                                    }
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+
+                                try {
+                                    Date date2 = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).parse(results[9]);
+                                    if (date2 != null) {
+                                        et_dob.setText(new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(date2));
+                                    }
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+
+//                                et_dob.setText(results[9]);
+
                                 // et_gender.setText(results[8]);
                                 if (results[8].equalsIgnoreCase("male")) {
                                     mFemaleRadioButton.setChecked(false);
@@ -1526,13 +1561,14 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
             } else {
                 str_et_gender = mFemaleRadioButton.getText().toString();
             }
-            str_et_dob = et_dob.getText().toString();
+            str_et_dob = /*et_dob.getText().toString();*/dob;
             str_et_mobile = et_mobile.getText().toString();
             str_et_uniqcode = et_uniqcode.getText().toString();
             str_et_regdate = et_regdate.getText().toString();
             str_et_satffname = et_satffname.getText().toString();
 
-
+//            Log.e("temporary", "current date " + getCurrentDateToStoreInDb()
+//            +" dob "+ dob);
             growerModel.setLoginId(Integer.parseInt(Preferences.get(mContext, Preferences.LOGINID).trim()));//,
             growerModel.setCountryId(Integer.parseInt(counrtyId.trim()));//,
             //village id
@@ -1541,14 +1577,14 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
             growerModel.setUserType(str_Lable);//,
             growerModel.setLandMark(str_et_landmark);//,
             growerModel.setFullName(str_et_fullname);//,
-            growerModel.setDOB(str_et_dob/*getDateToSendServer(mBirthDateToSendServer)*/);//,
+            growerModel.setDOB(dob/*getDateToSendServer(mBirthDateToSendServer)*/);//,
             growerModel.setGender(str_et_gender);//,
             growerModel.setMobileNo(str_et_mobile);//,
             growerModel.setUniqueCode(str_et_uniqcode);//,
             growerModel.setIdProofFrontCopy(front_path);//,
             growerModel.setIdProofBackCopy(back_path);//,
             growerModel.setUploadPhoto(dp_path);//,
-            growerModel.setRegDt(str_et_regdate/*getCurrentDateToSendServer()*/);//,
+            growerModel.setRegDt(getCurrentDateToStoreInDb()/*getCurrentDateToSendServer()*/);//,
             growerModel.setIsSync(0);
             growerModel.setGrowerImageUpload(0);
             growerModel.setFrontImageUpload(0);

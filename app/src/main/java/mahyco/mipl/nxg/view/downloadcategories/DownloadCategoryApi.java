@@ -7,7 +7,11 @@ import android.widget.Toast;
 
 import com.google.gson.JsonObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import mahyco.mipl.nxg.model.CategoryChildModel;
 import mahyco.mipl.nxg.model.CategoryModel;
@@ -20,6 +24,7 @@ import mahyco.mipl.nxg.model.ProductionClusterModel;
 import mahyco.mipl.nxg.model.SeasonModel;
 import mahyco.mipl.nxg.model.SeedBatchNoModel;
 import mahyco.mipl.nxg.model.SeedReceiptModel;
+import mahyco.mipl.nxg.util.Preferences;
 import mahyco.mipl.nxg.util.RetrofitClient;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -138,6 +143,10 @@ public class DownloadCategoryApi {
                         } catch (Exception e) {
                             Toast.makeText(context, "Error is " + e.getMessage(), Toast.LENGTH_LONG).show();
                         }
+                    } else {
+                        Toast.makeText(context, "Grower master list is empty " , Toast.LENGTH_LONG).show();
+                        Preferences.save(context, Preferences.CURRENT_DATE_FOR_GROWER_DOWNLOAD, getCurrentDate());
+                        Preferences.save(context, Preferences.GROWER_DOWNLOAD, "emptyList");
                     }
                 }
 
@@ -151,6 +160,14 @@ public class DownloadCategoryApi {
         } catch (Exception e) {
 
         }
+    }
+
+   private String getCurrentDate() {
+        Date date = Calendar.getInstance().getTime();
+        String myFormat = "dd-MM-yyyy";
+
+        SimpleDateFormat df = new SimpleDateFormat(myFormat, Locale.getDefault());
+        return df.format(date);
     }
 
     public void getSeason(JsonObject jsonObject) {
@@ -176,6 +193,8 @@ public class DownloadCategoryApi {
                         } catch (Exception e) {
                             Toast.makeText(context, "Error is " + e.getMessage(), Toast.LENGTH_LONG).show();
                         }
+                    } else {
+                        Toast.makeText(context, "Season master list is empty " , Toast.LENGTH_LONG).show();
                     }
                 }
 
@@ -214,6 +233,8 @@ public class DownloadCategoryApi {
                         } catch (Exception e) {
                             Toast.makeText(context, "Error is " + e.getMessage(), Toast.LENGTH_LONG).show();
                         }
+                    } else {
+                        Toast.makeText(context, "Crop master list is empty " , Toast.LENGTH_LONG).show();
                     }
                 }
 
@@ -252,6 +273,8 @@ public class DownloadCategoryApi {
                         } catch (Exception e) {
                             Toast.makeText(context, "Error is " + e.getMessage(), Toast.LENGTH_LONG).show();
                         }
+                    } else {
+                        Toast.makeText(context, "Production cluster master list is empty " , Toast.LENGTH_LONG).show();
                     }
                 }
 
@@ -290,6 +313,8 @@ public class DownloadCategoryApi {
                         } catch (Exception e) {
                             Toast.makeText(context, "Error is " + e.getMessage(), Toast.LENGTH_LONG).show();
                         }
+                    } else {
+                        Toast.makeText(context, "Parent code master list is empty " , Toast.LENGTH_LONG).show();
                     }
                 }
 
@@ -328,6 +353,8 @@ public class DownloadCategoryApi {
                         } catch (Exception e) {
                             Toast.makeText(context, "Error is " + e.getMessage(), Toast.LENGTH_LONG).show();
                         }
+                    } else {
+                        Toast.makeText(context, "Parent seed receipt master list is empty " , Toast.LENGTH_LONG).show();
                     }
                 }
 
@@ -366,6 +393,8 @@ public class DownloadCategoryApi {
                         } catch (Exception e) {
                             Toast.makeText(context, "Error is " + e.getMessage(), Toast.LENGTH_LONG).show();
                         }
+                    } else {
+                        Toast.makeText(context, "Parent seed batch master list is empty " , Toast.LENGTH_LONG).show();
                     }
                 }
 
@@ -404,6 +433,8 @@ public class DownloadCategoryApi {
                         } catch (Exception e) {
                             Toast.makeText(context, "Error is " + e.getMessage(), Toast.LENGTH_LONG).show();
                         }
+                    } else {
+                        Toast.makeText(context, "Crop type master list is empty " , Toast.LENGTH_LONG).show();
                     }
                 }
 
@@ -442,6 +473,9 @@ public class DownloadCategoryApi {
                         } catch (Exception e) {
                             Toast.makeText(context, "Error is " + e.getMessage(), Toast.LENGTH_LONG).show();
                         }
+                    } else {
+                        Preferences.save(context,Preferences.DISTRIBUTION_LIST_DOWNLOAD,"emptyList");
+                        Toast.makeText(context, "Parent Seed distribution list is empty", Toast.LENGTH_LONG).show();
                     }
                 }
 

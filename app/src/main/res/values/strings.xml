@@ -169,7 +169,7 @@
     <string name="Please_enter_email_address">Please enter email address</string>
     <string name="Please_enter_valid_email_address">Please valid enter email address</string>
     <string name="new_grower_registration">New Grower Registration</string>
-    <string name="new_organizer_registration">New Organizer Registration</string>
+    <string name="new_organizer_registration">New Coordinator Registration</string>
     <string name="download_parent_seed_stock">Download Parent Seed Stock</string>
     <string name="parent_seed_distribution">Parent Seed Distribution</string>
     <string name="download_grower_list">Download Grower List</string>
@@ -199,7 +199,7 @@
     <string name="scan">Open Scanner</string>
     <string name="grower_photo">Capture Photo<font color='#FF0000'>*</font></string>
     <string name="organizer_photo">Organizer Photo<font color='#FF0000'>*</font></string>
-    <string name="Please_enter_organizer_name">Please enter organizer name</string>
+    <string name="Please_enter_organizer_name">Please enter coordinator name</string>
     <string name="please_grower_photo">Please Capture Photo</string>
     <string name="photo_not_captured">No photo captured<font color='#FF0000'>*</font></string>
     <string name="national_id_photo_front">Capture National ID Photo Front Side</string>
@@ -238,8 +238,8 @@
     <string name="gender">Gender<font color='#FF0000'>*</font></string>
     <string name="enter_gender">Enter Gender</string>
     <string name="direct_to_grower">Direct to Grower</string>
-    <string name="by_organiser">By Organizer</string>
-    <string name="organizer_name">Organizer Name<font color='#FF0000'>*</font></string>
+    <string name="by_organiser">By Coordinator</string>
+    <string name="organizer_name">Coordinator Name<font color='#FF0000'>*</font></string>
     <string name="enter_organizer_name">Enter Organizer Name</string>
     <string name="Please_select_organizer_name">Please select organizer name</string>
     <string name="please_organizer_photo">Please capture organizer photo</string>

@@ -22,6 +22,7 @@
         android:roundIcon="@drawable/mipl_final_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.MahycoMarketDemo"
+        android:hardwareAccelerated="false"
         android:usesCleartextTraffic="true">
         <activity
             android:name=".view.growerregistration.NewGrowerRegistration"

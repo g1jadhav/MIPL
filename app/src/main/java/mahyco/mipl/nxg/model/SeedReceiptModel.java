@@ -42,7 +42,7 @@ public class SeedReceiptModel {
     private String ProductionCluster;
     private String OrganizerName;
     private String ProductName;
-
+    public SeedReceiptModel(){}
     public SeedReceiptModel(int parentSeedReceiptId, int seedProductionTargetId, String productionCode, String parentSeedReceiptType, int countryId, int productionClusterId, int userId, String plantingYear, int seasonId, int cropTypeId, int cropId, int productId, float plannedArea, float plannedProcessedQty, float plannedUnprocessedQty, float noofFemalePkts, float noofMalePkts, float femaleSeedRate, float femaleSeedPacking, float maleSeedRate, float maleSeedPacking, float femaleParentSeedsArea, float maleParentSeedArea, float totalFemaleParentSeeds, float totalMaleParentSeeds, String sTONo_DeliveryChallanNo, String parentSeedReceiptDt, String createdBy, String createdDt, String modifiedBy, String modifiedDt, String countryName, String season, String cropCode, String cropName, String cropType, String productionCluster, String organizerName, String productName, String fullName) {
         ParentSeedReceiptId = parentSeedReceiptId;
         SeedProductionTargetId = seedProductionTargetId;

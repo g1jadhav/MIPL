@@ -256,6 +256,12 @@ public class DownloadGrowerModel {
     }
 
     public String toString() {
-        return FullName +" ("+ UniqueCode+")";
+        if (FullName.equalsIgnoreCase("Select")){
+            return "Select";
+        } else if (FullName.equalsIgnoreCase("Search by Name/Id")){
+            return "Search by Name/Id";
+        } else {
+            return FullName + " (" + UniqueCode + ")";
+        }
     }
 }

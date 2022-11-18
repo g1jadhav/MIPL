@@ -23,6 +23,7 @@ import mahyco.mipl.nxg.model.ProductionClusterModel;
 import mahyco.mipl.nxg.model.SeasonModel;
 import mahyco.mipl.nxg.model.SeedBatchNoModel;
 import mahyco.mipl.nxg.model.SeedReceiptModel;
+import mahyco.mipl.nxg.model.StoreAreaModel;
 
 
 public class SqlightDatabase extends SQLiteOpenHelper {
@@ -335,6 +336,21 @@ public class SqlightDatabase extends SQLiteOpenHelper {
 
         db.execSQL(createallseeddistributionmaster);
 
+        String storeAreaDistributionData = "Create table tbl_storestributiondata(\n" +
+                " TempID Integer PRIMARY KEY AUTOINCREMENT,\n" +
+                " ProductionCode text,\n" +
+                " PlantingYear text,\n" +
+                " FemaleBatchNo text,\n" +
+                " MaleBatchNo text,\n"  +
+                " FemaleParentSeedBatchId INTEGER,\n"  +
+                " MaleParentSeedBatchId INTEGER,\n"  +
+                " ParentSeedReceiptId INTEGER,\n"  +
+                " ParentSeedReceiptType text,\n"  +
+                " ClusterId INTEGER,\n"  +
+                " SeedProductionArea REAL)";
+
+        db.execSQL(storeAreaDistributionData);
+
     }
 
     @Override
@@ -353,6 +369,7 @@ public class SqlightDatabase extends SQLiteOpenHelper {
         droptable(db, "tbl_seedbatchnomaster");
         droptable(db, "tbl_croptypemaster");
         droptable(db, "tbl_allseeddistributionmaster");
+        droptable(db, "tbl_storestributiondata");
         onCreate(db);
     }
 
@@ -1225,11 +1242,11 @@ public class SqlightDatabase extends SQLiteOpenHelper {
                     "'" + categoryModel.getMaleoOfPackets() + "'," +
                     "'" + categoryModel.getMaleQTYInKG() + "'," +
                     "'" + categoryModel.getMaleSeedArea() + "')";
-            Log.i("Query is -------> ", "" + q);
+            Log.e("temporary"," seed distribution Query is -------> " + q);
             mydb.execSQL(q);
             return true;
         } catch (Exception e) {
-            Log.i("Error is Product Added ", "" + e.getMessage());
+            Log.e("temporary","Error is Product Added " + e.getMessage());
             return false;
         } finally {
             mydb.close();
@@ -2070,14 +2087,14 @@ public class SqlightDatabase extends SQLiteOpenHelper {
         }
     }
 
-    public boolean isSeedDistributionRegister(int userId) {
+    public boolean isSeedDistributionRegister(int userId, String plantingYear) {
         SQLiteDatabase myDb = null;
         try {
             myDb = this.getReadableDatabase();
 //            String q = "select count(*)as cnt from tbl_parentSeedDistribution where GrowerId="+userId;
-            String q = "SELECT  * FROM tbl_parentSeedDistribution WHERE GrowerId='" + userId + "'";
+            String q = "SELECT  * FROM tbl_parentSeedDistribution WHERE GrowerId='" + userId + "' AND PlantingYear='" + plantingYear + "'";
             Cursor cursorCourses = myDb.rawQuery(q, null);
-            // Log.e("temporary","isSeedDistributionRegister move to first "+ cursorCourses.moveToFirst() +" userId "+userId);
+            Log.e("temporary", "isSeedDistributionRegister move to first " + cursorCourses.moveToFirst() + " userId " + userId);
             if (cursorCourses.moveToFirst()) {
                 return true;
             }
@@ -2089,21 +2106,194 @@ public class SqlightDatabase extends SQLiteOpenHelper {
         }
     }
 
-    public boolean isSeedDistributionListDownloaded(int userId) {
+    public boolean isSeedDistributionListDownloaded(int userId, String plantingYear) {
         SQLiteDatabase myDb = null;
         try {
             myDb = this.getReadableDatabase();
             // String q = "select * from tbl_allseeddistributionmaster where GrowerId="+userId;
-            String q = "SELECT  * FROM tbl_allseeddistributionmaster WHERE GrowerId='" + userId + "'";
+            String q = "SELECT  * FROM tbl_allseeddistributionmaster WHERE GrowerId='" + userId + "' AND PlantingYear='" + plantingYear + "'";
 
             Cursor cursorCourses = myDb.rawQuery(q, null);
-            // Log.e("temporary","isSeedDistributionListDownloaded move to first "+ cursorCourses.moveToFirst() +" userId "+userId);
+            Log.e("temporary", "isSeedDistributionListDownloaded move to first " + cursorCourses.moveToFirst() + " userId " + userId);
             if (cursorCourses.moveToFirst()) {
                 return true;
             }
             return false;
         } catch (Exception e) {
             return false;
+        } finally {
+            myDb.close();
+        }
+    }
+
+    public boolean addAreaData(StoreAreaModel storeAreaModel) {
+       SQLiteDatabase mydb = null;
+        try {
+            mydb = this.getReadableDatabase();
+            String q = "insert into tbl_storestributiondata" +
+                    "(" +
+                    "" +
+                    "plantingYear," +
+                    "productionCode," +
+                    "FemaleBatchNo," +
+                    "MaleBatchNo," +
+                    "FemaleParentSeedBatchId," +
+                    "MaleParentSeedBatchId," +
+                    "ParentSeedReceiptId," +
+                    "ParentSeedReceiptType," +
+                    "ClusterId," +
+                    "SeedProductionArea" +
+                    ") values" +
+                    "('" + storeAreaModel.getPlantingYear() + "'," +
+                    "'" + storeAreaModel.getProductionCode() + "'," +
+                    "'" + storeAreaModel.getFemaleBatchNo() + "'," +
+                    "'" + storeAreaModel.getMaleBatchNo() + "'," +
+                    "'" + storeAreaModel.getFemaleParentSeedBatchId() + "'," +
+                    "'" + storeAreaModel.getMaleParentSeedBatchId() + "'," +
+                    "'" + storeAreaModel.getParentSeedReceiptId() + "'," +
+                    "'" + storeAreaModel.getParentSeedReceiptType() + "'," +
+                    "'" + storeAreaModel.getClusterId() + "'," +
+                    "'" + storeAreaModel.getSeedProductionArea() + "')";
+            Log.e("temporary", "Query is -------> " + q);
+            mydb.execSQL(q);
+            return true;
+        } catch (Exception e) {
+            Log.e("temporary","Error is Product Added " + e.getMessage());
+            return false;
+        } finally {
+            mydb.close();
+        }
+    }
+
+    public boolean updateAreaData(String plantingYear , String productionCode,
+                               String parentSeedReceiptType, int productionClusterId ,
+                               float area) {
+        Log.e("temporary","updateAreaData plantingYear "+plantingYear
+                +" productionCode "+ productionCode+ " parentSeedReceiptType "+ parentSeedReceiptType
+                +" productionClusterId "+ productionClusterId);
+        SQLiteDatabase mydb = null;
+        try {
+            mydb = this.getReadableDatabase();
+            String q = "update tbl_storestributiondata set SeedProductionArea='" + area + "' WHERE PlantingYear='"+plantingYear+
+                    "' AND ProductionCode='"+ productionCode+"' AND ProductionClusterId='"+ productionClusterId+
+                    "' AND ParentSeedReceiptType='"+parentSeedReceiptType+"'";
+            Log.e("temporary","updateAreaData Query is -------> " + q);
+            mydb.execSQL(q);
+            return true;
+        } catch (Exception e) {
+            Log.e("temporary","updateAreaData Error is  Added Order Details : " + e.getMessage());
+            return false;
+        } finally {
+            mydb.close();
+        }
+    }
+
+    public Float getStoreFemaleBatchAreaArea(String plantingYear
+            , String productionCode, String femaleBatchNo, int femaleBatchId/*, int receiptId, String receiptType,
+                                             int clusterId*/){
+        SQLiteDatabase myDb = null;
+        float sum = 0;
+        try {
+            myDb = this.getReadableDatabase();
+            String q1 = "SELECT SUM(SeedProductionArea) FROM tbl_storestributiondata WHERE PlantingYear='"+plantingYear
+                    +"' AND ProductionCode='"+ productionCode+"' AND FemaleBatchNo='"+ femaleBatchNo+"' AND FemaleParentSeedBatchId='"+ femaleBatchId+"'";
+            Cursor cursorCourses = myDb.rawQuery(q1, null);
+            Log.e("temporary", "getStoreArea move to first " + q1);
+            if (cursorCourses.moveToFirst()) {
+                sum = cursorCourses.getFloat(0);
+                Log.e("temporary", "getStoreArea sum " + sum);
+            }
+            return sum;
+        } catch (Exception e) {
+            Log.e("temporary", " Exception e " + e.getCause()+" " + e.getLocalizedMessage());
+            return sum;
+        } finally {
+            myDb.close();
+        }
+    }
+
+    public Float getStoreMaleBatchAreaArea(String plantingYear
+            , String productionCode, String maleBatchNo , int maleBatchId/* , int receiptId, String receiptType,
+                                           int clusterId*/){
+        SQLiteDatabase myDb = null;
+        float sum = 0;
+        try {
+            myDb = this.getReadableDatabase();
+            String q1 = "SELECT SUM(SeedProductionArea) FROM tbl_storestributiondata WHERE PlantingYear='"+plantingYear
+                    +"' AND ProductionCode='"+ productionCode+"' AND MaleBatchNo='"+ maleBatchNo+"' AND MaleParentSeedBatchId='"+ maleBatchId+"'";
+            Cursor cursorCourses = myDb.rawQuery(q1, null);
+            Log.e("temporary", "getStoreArea move to first " + q1);
+            if (cursorCourses.moveToFirst()) {
+                sum = cursorCourses.getFloat(0);
+                Log.e("temporary", "getStoreArea sum " + sum);
+            }
+            return sum;
+        } catch (Exception e) {
+            Log.e("temporary", " Exception e " + e.getCause()+" " + e.getLocalizedMessage());
+            return sum;
+        } finally {
+            myDb.close();
+        }
+    }
+
+    public boolean deleteAreaData() {
+        SQLiteDatabase mydb = null;
+        try {
+            mydb = this.getReadableDatabase();
+            String q = "DELETE from tbl_storestributiondata";
+            Log.e("temporary", " deleted Query is -------> " + q);
+            mydb.execSQL(q);
+            return true;
+        } catch (Exception e) {
+            Log.e("temporary", " deleted Error is Clear List " + e.getMessage());
+            return false;
+        } finally {
+            mydb.close();
+        }
+    }
+
+    public Float totalOfSeedDistribution(String plantingYear
+            , String productionCode, String parentSeedReceiptType, int productionClusterId) {
+        SQLiteDatabase myDb = null;
+        float sum = 0;
+        try {
+            myDb = this.getReadableDatabase();
+            String q1 = "SELECT SUM(SeedProductionArea) FROM tbl_allseeddistributionmaster WHERE PlantingYear='"+plantingYear
+                    +"' AND ProductionCode='"+ productionCode+"' AND ProductionClusterId='"
+                    + productionClusterId+"' AND ParentSeedReceiptType='"+parentSeedReceiptType+"'";
+            Cursor cursorCourses = myDb.rawQuery(q1, null);
+            Log.e("temporary", "totalOfSeedDistribution move to first " + q1);
+            if (cursorCourses.moveToFirst()) {
+                sum = cursorCourses.getFloat(0);
+                Log.e("temporary", "sum " + sum);
+            }
+            return sum;
+        } catch (Exception e) {
+            Log.e("temporary", " Exception e " + sum);
+            return sum;
+        } finally {
+            myDb.close();
+        }
+    }
+
+    public Integer gteStoredDataCount(String plantingYear
+            , String productionCode, String parentSeedReceiptType, int productionClusterId) {
+        SQLiteDatabase myDb = null;
+        int temp = 0;
+        try {
+            myDb = this.getReadableDatabase();
+            String q = "select count(*) from tbl_storestributiondata WHERE PlantingYear='"+plantingYear
+                    +"' AND ProductionCode='"+ productionCode+"' AND ProductionClusterId='"+ productionClusterId
+                    +"' AND ParentSeedReceiptType='"+parentSeedReceiptType+"'";
+            Cursor cursorCourses = myDb.rawQuery(q, null);
+             Log.e("temporary"," gteStoredDataCount move to first "+ cursorCourses.moveToFirst());
+            if (cursorCourses.moveToFirst()) {
+                 temp = cursorCourses.getInt(0);
+                Log.e("temporary", "temp " + temp);
+            }
+            return temp;
+        } catch (Exception e) {
+            return 0;
         } finally {
             myDb.close();
         }

@@ -17,6 +17,7 @@ public class SeedBatchNoModel {
     private String ProductionCode;
     private String ParentSeedReceiptType;
 
+    public SeedBatchNoModel(){}
     public SeedBatchNoModel(int parentSeedBatchId, int parentSeedReceiptId, int countryId, String parentType,
                             String batchNo, float noOfPackets, float QTYInKG, float seedArea, String createdBy, String createdDt, String modifiedBy, String modifiedDt, String productionCode, String parentSeedReceiptType) {
         ParentSeedBatchId = parentSeedBatchId;

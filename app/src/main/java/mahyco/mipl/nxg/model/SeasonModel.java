@@ -2,6 +2,8 @@ package mahyco.mipl.nxg.model;
 
 public class SeasonModel {
 
+    public SeasonModel(){}
+
     public SeasonModel(int seasonId, int countryId, String season, String createdBy, String createdDt, String modifiedBy, String modifiedDt, String countryName) {
         SeasonId = seasonId;
         CountryId = countryId;

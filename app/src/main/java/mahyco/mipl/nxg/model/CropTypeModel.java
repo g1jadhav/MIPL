@@ -10,6 +10,7 @@ public class CropTypeModel {
     private String ModifiedBy;
     private String ModifiedDt;
 
+    public CropTypeModel(){}
     public CropTypeModel(int cropTypeId, String cropType, String createdBy, String createdDt, String modifiedBy, String modifiedDt) {
         CropTypeId = cropTypeId;
         CropType = cropType;

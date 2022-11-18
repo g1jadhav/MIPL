@@ -92,7 +92,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         mDialog = null;
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
         alertDialog.setCancelable(false);
-        alertDialog.setTitle("MIPL");
+        alertDialog.setTitle("MSCOPE");
         alertDialog.setMessage(message);
         alertDialog.setPositiveButton("Ok", (dialogInterface, i) -> dialogInterface.dismiss());
         mDialog = alertDialog.create();
@@ -114,6 +114,13 @@ public abstract class BaseActivity extends AppCompatActivity {
         return df.format(date);
     }
 
+    protected String getCurrentDateToStoreInDb() {
+        Date date = Calendar.getInstance().getTime();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault());
+        return sdf.format(date);
+    }
+
+
     protected boolean checkAutoTimeEnabledOrNot() {
         return Settings.Global.getInt(getContentResolver(), Settings.Global.AUTO_TIME, 0) == 1;
     }
@@ -122,7 +129,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         mDialog = null;
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
         alertDialog.setCancelable(false);
-        alertDialog.setTitle("MIPL");
+        alertDialog.setTitle("MSCOPE");
         alertDialog.setMessage(message);
         alertDialog.setPositiveButton("Settings", (dialogInterface, i) -> startActivity(new Intent(Settings.ACTION_DATE_SETTINGS)));
         mDialog = alertDialog.create();

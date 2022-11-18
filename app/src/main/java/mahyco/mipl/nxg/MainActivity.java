@@ -295,11 +295,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
                 break;
             case R.id.parent_seed_distribution_layout:
-                if (checkAutoTimeEnabledOrNot()) {
-                    Intent intent = new Intent(context, OldGrowerSeedDistribution.class);
-                    startActivity(intent);
+                if (!Preferences.get(context, Preferences.DISTRIBUTION_LIST_DOWNLOAD).equalsIgnoreCase("")) {
+                    if (checkAutoTimeEnabledOrNot()) {
+                        Intent intent = new Intent(context, OldGrowerSeedDistribution.class);
+                        startActivity(intent);
+                    } else {
+                        showAutomaticTimeMessage("Please update time setting to automatic");
+                    }
                 } else {
-                    showAutomaticTimeMessage("Please update time setting to automatic");
+                    Toast.makeText(context, "Please download seed distribution master data in download master data first", Toast.LENGTH_SHORT).show();
                 }
                 break;
         }

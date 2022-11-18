@@ -10,6 +10,8 @@ public class CropModel {
     private  String ModifiedBy;
     private  String ModifiedDt;
 
+    public CropModel(){}
+
     public CropModel(int cropId, String cropCode, String cropName, String createdBy, String createdDt, String modifiedBy, String modifiedDt) {
         CropId = cropId;
         CropCode = cropCode;

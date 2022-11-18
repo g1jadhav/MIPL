@@ -334,16 +334,20 @@
                 android:textColor="@color/black" />
 
             <LinearLayout
+                android:weightSum="2"
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <TextView
                     android:id="@+id/txt_name"
                     style="@style/Widget.AppCompat.Button.Borderless"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:text="@string/farmer_name"
                     android:textAllCaps="false"
+                    android:gravity="start|center"
                     android:textColor="@color/black"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -351,17 +355,19 @@
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/scan_qr_code"
                     style="@style/Widget.AppCompat.Button.Borderless"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="40dp"
                     android:layout_marginStart="10dp"
                     android:drawableStart="@drawable/document_scanner"
                     android:drawablePadding="5dp"
-                    android:gravity="start"
+                    android:gravity="start|center"
                     android:text="@string/scan"
                     android:textColor="@color/link_color_code"
                     android:textSize="15sp"
                     android:textStyle="bold"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                   />
             </LinearLayout>
 
             <androidx.appcompat.widget.AppCompatEditText

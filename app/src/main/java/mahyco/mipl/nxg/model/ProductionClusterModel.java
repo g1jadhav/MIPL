@@ -13,6 +13,8 @@ public class ProductionClusterModel {
     String ModifiedDt;
     String CountryName;
 
+    public ProductionClusterModel(){}
+
     public ProductionClusterModel(int productionClusterId, int countryId, String productionClusterCode, String productionCluster, String createdBy, String createdDt, String modifiedBy, String modifiedDt, String countryName) {
         ProductionClusterId = productionClusterId;
         CountryId = countryId;

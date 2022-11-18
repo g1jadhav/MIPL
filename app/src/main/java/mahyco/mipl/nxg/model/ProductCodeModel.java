@@ -14,6 +14,7 @@ public class ProductCodeModel {
     private  String CropCode;
     private  String CropName;
 
+    public ProductCodeModel(){}
     public ProductCodeModel(int productId, int cropId, String productType, String productCode, String productName, String createdBy, String createdDt, String modifiedBy, String modifiedDt, String cropCode, String cropName) {
         ProductId = productId;
         CropId = cropId;

@@ -52,7 +52,9 @@ public class Preferences {
     public static final String STORED_CATEGORY_SIZE = "CategorySize";
     public static final String CURRENT_DATE_FOR_GROWER_DOWNLOAD = "growerDownloadDate";
     public static final String GROWER_DOWNLOAD = "growerIsDownloaded";
+    public static final String DISTRIBUTION_LIST_DOWNLOAD = "distributionListIsDownloaded";
     public static final String FEMALE_PARENT_SEED_AREA = "TotalFemaleParentSeeds";
+    public static final String UPLOAD_DISTRIBUTION_DATA_AVAILABLE = "uploadDistributionDataAvailable";
     public Preferences(Context context) {
     }
 
