@@ -352,7 +352,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
         alertDialog.setCancelable(false);
-        alertDialog.setTitle("MIPL");
+        alertDialog.setTitle("MSCOPE");
         alertDialog.setMessage(message);
         alertDialog.setPositiveButton("Setting", new DialogInterface.OnClickListener() {
             @Override

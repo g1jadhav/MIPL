@@ -505,7 +505,7 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
             Dialog mDialog = null;
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
             alertDialog.setCancelable(false);
-            alertDialog.setTitle("MIPL");
+            alertDialog.setTitle("MSCOPE");
             alertDialog.setMessage("Registration data stored successfully");
             alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
@@ -1494,7 +1494,7 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
                 Dialog mDialog = null;
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
                 alertDialog.setCancelable(false);
-                alertDialog.setTitle("MIPL");
+                alertDialog.setTitle("MSCOPE");
                 alertDialog.setMessage("Record Already Exists.");
                 alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
@@ -1534,7 +1534,7 @@ public class NewGrowerRegistration extends BaseActivity implements Listener, Vie
                 Dialog mDialog = null;
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
                 alertDialog.setCancelable(false);
-                alertDialog.setTitle("MIPL");
+                alertDialog.setTitle("MSCOPE");
                 alertDialog.setMessage("Record Already Exists.");
                 alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override

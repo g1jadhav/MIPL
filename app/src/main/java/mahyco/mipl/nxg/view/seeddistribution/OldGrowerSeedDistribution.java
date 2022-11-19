@@ -456,6 +456,7 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
             break;
 
             case R.id.seed_distribution_submit_btn:
+               hideKeyboard(mContext);
                 validation();
 //                if (validation()) {
 //                    try {
@@ -553,26 +554,26 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
                 mFemaleBatchNoSpinner.getSelectedItemPosition() == -1) {
             showNoInternetDialog(mContext, "Please select parent seed batch no. female");
             //  return false;
-        } else if (/*Preferences.getFloat(mContext, Preferences.FEMALE_PARENT_SEED_AREA +
-                mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getParentSeedReceiptId())*/
+        } /*else if (*//*Preferences.getFloat(mContext, Preferences.FEMALE_PARENT_SEED_AREA +
+                mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getParentSeedReceiptId())*//*
                 mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getFemaleParentSeedsArea()
                         - Float.parseFloat(mAreaEditText.getText().toString()) < 0) {
-            showNoInternetDialog(mContext, "Female parent seed area is " + /*Preferences.getFloat(mContext, Preferences.FEMALE_PARENT_SEED_AREA +*/
-                    mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getFemaleParentSeedsArea())/*)*/;
+            showNoInternetDialog(mContext, "Female parent seed area is " + *//*Preferences.getFloat(mContext, Preferences.FEMALE_PARENT_SEED_AREA +*//*
+                    mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getFemaleParentSeedsArea())*//*)*//*;
             //  return false;
-        } else if (mMaleBatchNoSpinner.getVisibility() == View.VISIBLE && (mMaleBatchNoSpinner.getSelectedItemPosition() == -1 ||
+        }*/ else if (mMaleBatchNoSpinner.getVisibility() == View.VISIBLE && (mMaleBatchNoSpinner.getSelectedItemPosition() == -1 ||
                 mMaleBatchNoSpinner.getSelectedItemPosition() == 0)) {
             showNoInternetDialog(mContext, "Please select parent seed batch no. male");
             //  return false;
-        } else if (mMaleBatchNoSpinner.getVisibility() == View.VISIBLE &&
-                (/*Preferences.getFloat(mContext, Preferences.MALE_PARENT_SEED_AREA +
-                        mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getParentSeedReceiptId())*/
+        }/* else if (mMaleBatchNoSpinner.getVisibility() == View.VISIBLE &&
+                (*//*Preferences.getFloat(mContext, Preferences.MALE_PARENT_SEED_AREA +
+                        mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getParentSeedReceiptId())*//*
                         mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getMaleParentSeedArea()
                                 - Float.parseFloat(mAreaEditText.getText().toString()) < 0)) {
-            showNoInternetDialog(mContext, "Male parent seed area is " + /*Preferences.getFloat(mContext, Preferences.MALE_PARENT_SEED_AREA +*/
-                    mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getMaleParentSeedArea())/*)*/;
+            showNoInternetDialog(mContext, "Male parent seed area is " + *//*Preferences.getFloat(mContext, Preferences.MALE_PARENT_SEED_AREA +*//*
+                    mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getMaleParentSeedArea())*//*)*//*;
             //  return false;
-        } /*else if (new SqlightDatabase(mContext).isSeedDistributionRegister(mGrowerList.get(mSearchByIdNameSpinner.getSelectedItemPosition()).getUserId())) {
+        }*/ /*else if (new SqlightDatabase(mContext).isSeedDistributionRegister(mGrowerList.get(mSearchByIdNameSpinner.getSelectedItemPosition()).getUserId())) {
             Dialog mDialog = null;
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
             alertDialog.setCancelable(false);
@@ -1361,7 +1362,7 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
 
         @Override
         protected void onPreExecute() {
-            Log.e("temporary", "GetClusterMasterAsyncTask onPreExecute called");
+          //  Log.e("temporary", "GetClusterMasterAsyncTask onPreExecute called");
             showProgressDialog(mContext);
             super.onPreExecute();
         }
@@ -1404,7 +1405,7 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
 
         @Override
         protected void onPreExecute() {
-            Log.e("temporary", "GetSeedReceiptMasterAsyncTask onPreExecute called");
+          //  Log.e("temporary", "GetSeedReceiptMasterAsyncTask onPreExecute called");
             showProgressDialog(mContext);
             super.onPreExecute();
         }
@@ -1445,7 +1446,7 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
 //                             + " id "+ mProdClusterList.get(mClusterSpinner.getSelectedItemPosition()).getProductionClusterId());
                             if (result.get(i).getParentSeedReceiptType().equalsIgnoreCase("Production Cluster Level")
                                     && result.get(i).getProductionClusterId() == mProdClusterList.get(mClusterSpinner.getSelectedItemPosition()).getProductionClusterId()) {
-                                Log.e("temporary", "ProductionCode Production Cluster level " + result.get(i).getParentSeedReceiptId());
+                              //  Log.e("temporary", "ProductionCode Production Cluster level " + result.get(i).getParentSeedReceiptId());
                                 mSeedProductionCodeList.add(result.get(i));
                             }
                         } else {
@@ -1453,15 +1454,15 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
 //                                   " mOrganizerNameSpinner.getSelectedItemPosition()");
                             if (mOrganizerNameSpinner.getSelectedItemPosition() != -1 ||
                                     mOrganizerNameSpinner.getSelectedItemPosition() != 0) {
-                                Log.e("temporary","result.get(i).getUserId() "+
-                                        result.get(i).getUserId() +" selected id "+
-                                        mOrganizerNameList.get(mOrganizerNameSpinner.getSelectedItemPosition()).getUserId()
-                                +" cluster id "+ result.get(i).getProductionClusterId()+" selected cluster id " +
-                                        mProdClusterList.get(mClusterSpinner.getSelectedItemPosition()).getProductionClusterId());
+//                                Log.e("temporary","result.get(i).getUserId() "+
+//                                        result.get(i).getUserId() +" selected id "+
+//                                        mOrganizerNameList.get(mOrganizerNameSpinner.getSelectedItemPosition()).getUserId()
+//                                +" cluster id "+ result.get(i).getProductionClusterId()+" selected cluster id " +
+//                                        mProdClusterList.get(mClusterSpinner.getSelectedItemPosition()).getProductionClusterId());
                                 if (result.get(i).getParentSeedReceiptType().equalsIgnoreCase("Production Organizer Level")
                                         && result.get(i).getUserId() == mOrganizerNameList.get(mOrganizerNameSpinner.getSelectedItemPosition()).getUserId()
                                         && result.get(i).getProductionClusterId() == mProdClusterList.get(mClusterSpinner.getSelectedItemPosition()).getProductionClusterId()) {
-                                    Log.e("temporary", "ProductionCode Production Organizer Level " + result.get(i).getParentSeedReceiptId());
+                                  //  Log.e("temporary", "ProductionCode Production Organizer Level " + result.get(i).getParentSeedReceiptId());
                                     mSeedProductionCodeList.add(result.get(i));
                                 }
                             }
@@ -1559,12 +1560,13 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
                             if (result.get(i).getParentSeedReceiptType().equalsIgnoreCase("Production Cluster Level")
                                     && result.get(i).getParentSeedReceiptId() == mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getParentSeedReceiptId()) {
                                 mFemaleBatchNoList.add(result.get(i));
-                                Log.e("temporary", "Production Cluster level Female Batch  " + result.get(i).getParentSeedBatchId());
+                             //   Log.e("temporary", "Production Cluster level Female Batch  " + result.get(i).getParentSeedBatchId());
                             }
                         } else {
-                            if (result.get(i).getParentSeedReceiptType().equalsIgnoreCase("Production Organizer Level")) {
+                            if (result.get(i).getParentSeedReceiptType().equalsIgnoreCase("Production Organizer Level")
+                                    && result.get(i).getParentSeedReceiptId() == mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getParentSeedReceiptId()) {
                                 mFemaleBatchNoList.add(result.get(i));
-                                Log.e("temporary", "Production Organizer level Female Batch  " + result.get(i).getParentSeedBatchId());
+                              //  Log.e("temporary", "Production Organizer level Female Batch  " + result.get(i).getParentSeedBatchId());
                             }
                         }
                     } else {
@@ -1572,12 +1574,13 @@ public class OldGrowerSeedDistribution extends BaseActivity implements View.OnCl
                             if (result.get(i).getParentSeedReceiptType().equalsIgnoreCase("Production Cluster Level")
                                     && result.get(i).getParentSeedReceiptId() == mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getParentSeedReceiptId()) {
                                 mMaleBatchNoList.add(result.get(i));
-                                Log.e("temporary", "Production Cluster level Male Batch  " + result.get(i).getParentSeedBatchId());
+                             //   Log.e("temporary", "Production Cluster level Male Batch  " + result.get(i).getParentSeedBatchId());
                             }
                         } else {
-                            if (result.get(i).getParentSeedReceiptType().equalsIgnoreCase("Production Organizer Level")) {
+                            if (result.get(i).getParentSeedReceiptType().equalsIgnoreCase("Production Organizer Level")
+                                    && result.get(i).getParentSeedReceiptId() == mSeedProductionCodeList.get(mProductionCodeSpinner.getSelectedItemPosition()).getParentSeedReceiptId()) {
                                 mMaleBatchNoList.add(result.get(i));
-                                Log.e("temporary", "Production Organizer level  Male Batch  " + result.get(i).getParentSeedBatchId());
+                             //   Log.e("temporary", "Production Organizer level  Male Batch  " + result.get(i).getParentSeedBatchId());
                             }
                         }
                     }
